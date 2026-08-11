@@ -60,6 +60,10 @@
       overflow: visible;
     }
 
+    .map-reset-bg {
+      cursor: pointer;
+    }
+
 
     .region-tabs {
       position: absolute;
@@ -23278,6 +23282,20 @@
       applyFilter();
     }
 
+    function resetMapSelection() {
+      const hadSelection = state.activeLine || state.activeDistrict || state.signOnlyDistrict || state.selectedUniversity;
+      if (!hadSelection) return;
+      state.activeLine = null;
+      state.activeDistrict = null;
+      state.signOnlyDistrict = null;
+      state.selectedUniversity = null;
+      linePicker.selectAll(".line-button").classed("active", false);
+      tooltip.classed("visible", false);
+      drawSelectedRoute();
+      applyFilter();
+      renderDefaultPanel();
+    }
+
     function toggleLandmarks() {
       if (state.currentRegion !== "seoul") return;
       state.landmarkMode = !state.landmarkMode;
@@ -23436,7 +23454,12 @@
       state.jejuInsetProjection = null;
       preparePointOffsets(currentUniversities);
 
-      svg.append("rect").attr("width", width).attr("height", height).attr("fill", "var(--map-water)");
+      svg.append("rect")
+        .attr("class", "map-reset-bg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill", "var(--map-water)")
+        .on("click", resetMapSelection);
       if (state.currentRegion === "seoul") {
         svg.append("path").datum(riverLine).attr("class", "river").attr("d", state.path);
       }
@@ -23446,7 +23469,10 @@
         .join("path")
         .attr("class", d => `district${state.currentRegion === "national" ? " national-region" : districtName(d) === "서울" && state.currentRegion === "gyeonggi" ? " seoul-region" : isIncheonDistrictFeature(d) ? " incheon-region" : state.currentRegion === "gyeonggi" ? " gyeonggi-region-part" : ""}`)
         .attr("d", state.path)
-        .on("click", (event, d) => selectDistrict(districtName(d)));
+        .on("click", (event, d) => {
+          event.stopPropagation();
+          selectDistrict(districtName(d));
+        });
       state.districts.append("title").text(d => districtName(d));
       drawJeollaLandGapPatches();
 
@@ -23483,7 +23509,10 @@
         .attr("opacity", dimOpacity)
         .attr("tabindex", 0)
         .on("mouseenter focus", (event, d) => { focusUniversity(d); showTip(event, d); })
-        .on("click", (event, d) => selectUniversity(d, event))
+        .on("click", (event, d) => {
+          event.stopPropagation();
+          selectUniversity(d, event);
+        })
         .on("mouseleave blur", hideTip);
 
       state.labelLinks = svg.append("g").attr("aria-label", "대학교 이름 연결선");
