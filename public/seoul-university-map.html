@@ -464,6 +464,24 @@
       pointer-events: none;
     }
 
+    .island-inset-label {
+      fill: rgba(38, 51, 61, 0.82);
+      font-size: 11px;
+      font-weight: 900;
+      text-anchor: middle;
+      paint-order: stroke;
+      stroke: rgba(255, 255, 255, 0.9);
+      stroke-width: 3px;
+      pointer-events: none;
+    }
+
+    .gyeongsang-island-dot {
+      fill: #ffffff;
+      stroke: #9fb0ba;
+      stroke-width: 1.2;
+      vector-effect: non-scaling-stroke;
+    }
+
     .region-inset-district {
       fill: var(--district);
       stroke: #9fb0ba;
@@ -2678,6 +2696,7 @@
     const gangwonGeoUrl = localAsset("gangwon-sgg-wgs84.json");
     const chungcheongGeoUrl = localAsset("chungcheong-si-28-highres.geojson");
     const gyeongsangGeoUrl = localAsset("gyeongsang-si-highres.geojson");
+    const gyeongsangIslandGeoUrl = localAsset("gyeongsang-ulleung-dokdo-inset.geojson");
     const jeollaGeoUrl = localAsset("jeolla-jeju-highres.geojson");
     const nationalGeoUrl = localAsset("national-regions.geojson");
     const nationalBoundaryUrl = localAsset("national-region-boundaries.geojson");
@@ -2699,7 +2718,7 @@
     const departmentResults = document.querySelector("#departmentResults");
     const departmentPanel = document.querySelector("#departmentPanel");
     const errorBox = document.querySelector("#error");
-    let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
+    let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, gyeongsangIslandGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
 
     const gyeonggiNameMap = {
       Ansan: "안산시",
@@ -23388,13 +23407,14 @@
     }
 
     function drawGyeongsangIslandInset(width, height) {
-      if (state.currentRegion !== "gyeongsang" || !state.mapGeo) return;
-      const islandFeature = state.mapGeo.features.find(isGyeongsangInsetIsland);
-      if (!islandFeature) return;
-      const boxWidth = 156;
-      const boxHeight = 128;
-      const x = Math.max(18, width - 350);
-      const y = 38;
+      if (state.currentRegion !== "gyeongsang" || !state.gyeongsangIslandGeo) return;
+      const islandFeature = state.gyeongsangIslandGeo.features.find(d => d.properties?.name === "울릉도");
+      const dokdoFeature = state.gyeongsangIslandGeo.features.find(d => d.properties?.name === "독도");
+      if (!islandFeature || !dokdoFeature) return;
+      const boxWidth = 188;
+      const boxHeight = 124;
+      const x = Math.max(18, width - 418);
+      const y = Math.max(172, height - boxHeight - 46);
       const inset = svg.append("g").attr("class", "gyeongsang-island-inset");
       inset.append("rect")
         .attr("class", "island-inset-frame")
@@ -23408,17 +23428,42 @@
         .attr("class", "island-inset-title")
         .attr("x", x + boxWidth / 2)
         .attr("y", y + 20)
-        .text("울릉군");
-      const projection = d3.geoMercator().fitExtent([[x + 18, y + 32], [x + boxWidth - 18, y + boxHeight - 14]], islandFeature);
+        .text("울릉도·독도");
+      const projection = d3.geoMercator().fitExtent([[x + 18, y + 36], [x + 104, y + boxHeight - 18]], islandFeature);
       const insetPath = d3.geoPath(projection);
       inset.append("path")
         .datum(islandFeature)
-        .attr("class", "gyeongsang-island-district")
+        .attr("class", "region-inset-district")
         .classed("active", state.activeDistrict === "울릉군")
         .attr("d", insetPath)
         .on("click", () => selectDistrict("울릉군"))
         .append("title")
         .text("울릉군");
+      inset.append("circle")
+        .datum(dokdoFeature)
+        .attr("class", "gyeongsang-island-dot")
+        .attr("cx", x + 142)
+        .attr("cy", y + 66)
+        .attr("r", 8)
+        .on("click", () => selectDistrict("울릉군"))
+        .append("title")
+        .text("독도");
+      inset.append("circle")
+        .attr("class", "gyeongsang-island-dot")
+        .attr("cx", x + 153)
+        .attr("cy", y + 61)
+        .attr("r", 4.2)
+        .on("click", () => selectDistrict("울릉군"));
+      inset.append("text")
+        .attr("class", "island-inset-label")
+        .attr("x", x + 61)
+        .attr("y", y + boxHeight - 8)
+        .text("울릉도");
+      inset.append("text")
+        .attr("class", "island-inset-label")
+        .attr("x", x + 149)
+        .attr("y", y + 91)
+        .text("독도");
     }
 
     function drawJejuInset(width, height) {
@@ -23729,6 +23774,7 @@
         .attr("class", "active-district-outline")
         .attr("display", "none");
       drawJejuInset(width, height);
+      drawGyeongsangIslandInset(width, height);
       state.landmarkRiver = svg.append("path").datum(riverLine).attr("class", "landmark-river").attr("d", state.path).attr("display", "none");
 
       state.points = svg.append("g")
@@ -23804,13 +23850,14 @@
       d3.json(gangwonGeoUrl),
       d3.json(chungcheongGeoUrl),
       d3.json(gyeongsangGeoUrl),
+      d3.json(gyeongsangIslandGeoUrl),
       d3.json(jeollaGeoUrl),
       d3.json(nationalGeoUrl),
       d3.json(nationalBoundaryUrl),
       d3.json(nationalJejuGeoUrl),
       d3.csv(stationCsvUrl).catch(() => [])
     ])
-      .then(([seoulGeo, gyeonggiGeoRaw, incheonGeoRaw, gangwonGeo, chungcheongGeo, gyeongsangGeo, jeollaGeo, nationalGeo, nationalBoundary, nationalJejuGeo, stations]) => {
+      .then(([seoulGeo, gyeonggiGeoRaw, incheonGeoRaw, gangwonGeo, chungcheongGeo, gyeongsangGeo, gyeongsangIslandGeo, jeollaGeo, nationalGeo, nationalBoundary, nationalJejuGeo, stations]) => {
         const gyeonggiGeo = {
           type: "FeatureCollection",
           features: [...gyeonggiGeoRaw.features, ...incheonGeoRaw.features]
@@ -23818,6 +23865,7 @@
         state.geos = { seoul: seoulGeo, gyeonggi: gyeonggiGeo, gangwon: gangwonGeo, chungcheong: chungcheongGeo, gyeongsang: gyeongsangGeo, jeolla: jeollaGeo, national: rewindNationalGeo(nationalGeo) };
         state.nationalBoundary = nationalBoundary;
         state.nationalJejuGeo = rewindNationalGeo(nationalJejuGeo);
+        state.gyeongsangIslandGeo = gyeongsangIslandGeo;
         state.cheonanInternalBoundary = null;
         state.chungcheongOuterBoundaries = null;
         state.geo = state.geos[state.currentRegion];
