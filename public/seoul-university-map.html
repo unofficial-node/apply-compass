@@ -21696,6 +21696,33 @@
       return `${escapeHtml(text.slice(0, index))}<mark>${escapeHtml(text.slice(index, end))}</mark>${escapeHtml(text.slice(end))}`;
     }
 
+    function startsWithDepartment(name, terms) {
+      return terms.some(term =>
+        name === term ||
+        name.startsWith(`${term}(`) ||
+        name.startsWith(`${term} `) ||
+        name.startsWith(`${term}·`) ||
+        name.startsWith(`${term}전공`)
+      );
+    }
+
+    function favoriteDepartmentMatched(name) {
+      if (state.currentRegion !== "national" || !state.activeFavorite || state.activeFavorite === "science") return false;
+      const matchers = {
+        medical: dept => startsWithDepartment(dept, ["의예과", "의학과"]) || dept === "의학과(의예과)",
+        dental: dept => startsWithDepartment(dept, ["치의예과", "치의학과"]),
+        pharmacy: dept => startsWithDepartment(dept, ["약학과", "약학부", "약학전공", "제약학과", "제약학전공", "산업제약학과", "한약학과", "미래산업약학전공"]),
+        "korean-medicine": dept => startsWithDepartment(dept, ["한의예과", "한의학과"]),
+        veterinary: dept => startsWithDepartment(dept, ["수의예과", "수의학과"])
+      };
+      return Boolean(matchers[state.activeFavorite]?.(String(name || "")));
+    }
+
+    function departmentNameMarkup(name, query, favoriteMatched) {
+      if (query) return highlightMatch(name, query);
+      return favoriteMatched ? `<mark>${escapeHtml(name)}</mark>` : escapeHtml(name);
+    }
+
     function renderDepartmentPanel(d) {
       const data = departmentData[departmentKey(d)] || [];
       const departmentQuery = departmentSearch.value.trim().toLowerCase();
@@ -21709,7 +21736,8 @@
             <h3>${highlightMatch(group.college, departmentQuery)}</h3>
             <ul>${group.departments.map(name => {
               const matched = departmentQuery && name.toLowerCase().includes(departmentQuery);
-              return `<li class="${matched ? "highlighted-department" : ""}">${highlightMatch(name, departmentQuery)}</li>`;
+              const favoriteMatched = !departmentQuery && favoriteDepartmentMatched(name);
+              return `<li class="${matched || favoriteMatched ? "highlighted-department" : ""}">${departmentNameMarkup(name, departmentQuery, favoriteMatched)}</li>`;
             }).join("")}</ul>
           `).join("")
         : `<p class="department-empty">학과정보 데이터가 아직 준비되지 않았습니다. 나중에 <code>departmentData</code>에 이 대학의 학과를 추가하면 이곳에 표시됩니다.</p>`;
