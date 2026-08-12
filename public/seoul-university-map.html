@@ -23429,8 +23429,11 @@
         .attr("x", x + boxWidth / 2)
         .attr("y", y + 20)
         .text("울릉도·독도");
-      const projection = d3.geoMercator().fitExtent([[x + 18, y + 36], [x + 104, y + boxHeight - 18]], islandFeature);
+      const insetGeo = { type: "FeatureCollection", features: [islandFeature, dokdoFeature] };
+      const projection = d3.geoMercator().fitExtent([[x + 18, y + 36], [x + boxWidth - 18, y + boxHeight - 18]], insetGeo);
       const insetPath = d3.geoPath(projection);
+      const [dokdoX, dokdoY] = projection(dokdoFeature.geometry.coordinates);
+      const [ulleungX, ulleungY] = insetPath.centroid(islandFeature);
       inset.append("path")
         .datum(islandFeature)
         .attr("class", "region-inset-district")
@@ -23442,27 +23445,21 @@
       inset.append("circle")
         .datum(dokdoFeature)
         .attr("class", "gyeongsang-island-dot")
-        .attr("cx", x + 142)
-        .attr("cy", y + 66)
-        .attr("r", 8)
+        .attr("cx", dokdoX)
+        .attr("cy", dokdoY)
+        .attr("r", 3.8)
         .on("click", () => selectDistrict("울릉군"))
         .append("title")
         .text("독도");
-      inset.append("circle")
-        .attr("class", "gyeongsang-island-dot")
-        .attr("cx", x + 153)
-        .attr("cy", y + 61)
-        .attr("r", 4.2)
-        .on("click", () => selectDistrict("울릉군"));
       inset.append("text")
         .attr("class", "island-inset-label")
-        .attr("x", x + 61)
-        .attr("y", y + boxHeight - 8)
+        .attr("x", ulleungX)
+        .attr("y", ulleungY + 28)
         .text("울릉도");
       inset.append("text")
         .attr("class", "island-inset-label")
-        .attr("x", x + 149)
-        .attr("y", y + 91)
+        .attr("x", dokdoX)
+        .attr("y", dokdoY + 16)
         .text("독도");
     }
 
