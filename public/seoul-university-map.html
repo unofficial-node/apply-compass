@@ -23407,7 +23407,7 @@
     }
 
     function drawGyeongsangIslandInset(width, height) {
-      if (state.currentRegion !== "gyeongsang" || !state.gyeongsangIslandGeo) return;
+      if (state.currentRegion !== "national" || !state.gyeongsangIslandGeo) return;
       const islandFeature = state.gyeongsangIslandGeo.features.find(d => d.properties?.name === "울릉도");
       const dokdoFeature = state.gyeongsangIslandGeo.features.find(d => d.properties?.name === "독도");
       if (!islandFeature || !dokdoFeature) return;
@@ -23437,9 +23437,7 @@
       inset.append("path")
         .datum(islandFeature)
         .attr("class", "region-inset-district")
-        .classed("active", state.activeDistrict === "울릉군")
         .attr("d", insetPath)
-        .on("click", () => selectDistrict("울릉군"))
         .append("title")
         .text("울릉군");
       inset.append("circle")
@@ -23448,7 +23446,6 @@
         .attr("cx", dokdoX)
         .attr("cy", dokdoY)
         .attr("r", 3.8)
-        .on("click", () => selectDistrict("울릉군"))
         .append("title")
         .text("독도");
       inset.append("text")
