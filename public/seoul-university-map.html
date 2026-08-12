@@ -3044,7 +3044,6 @@
 
     function districtName(d) {
       if (state.currentRegion === "national" && d?.properties?.REGION) return d.properties.REGION;
-      if (state.currentRegion === "capital" && d?.properties?.REGION === "서울") return "서울";
       if (d?.properties?.merged && d.properties.NAME_1 === "Incheon") return "인천";
       if (d?.properties?.sidonm === "인천광역시") return "인천";
       if (d?.properties?.sggnm) return normalizedGyeonggiDistrictName(d.properties.sggnm);
@@ -3172,8 +3171,10 @@
         };
       }
       if (state.currentRegion === "chungcheong") return state.geo;
-      if (state.currentRegion !== "gyeonggi") return state.geo;
-      return { type: "FeatureCollection", features: displayGyeonggiFeatures(state.geo, state.geos.seoul ? mergedDistrictFeature("서울", state.geos.seoul.features) : null) };
+      if (["gyeonggi", "capital"].includes(state.currentRegion)) {
+        return { type: "FeatureCollection", features: displayGyeonggiFeatures(state.geo, state.geos.seoul ? mergedDistrictFeature("서울", state.geos.seoul.features) : null) };
+      }
+      return state.geo;
     }
 
     function displayGyeonggiFeatures(geo, seoulFeature) {
@@ -3293,32 +3294,13 @@
           features: featureCollection.features.filter(d => !isGyeongsangInsetIsland(d))
         };
       }
-      if (state.currentRegion === "capital") {
-        const universitiesForFit = activeUniversities();
-        const lonExtent = d3.extent(universitiesForFit, d => d.lon);
-        const latExtent = d3.extent(universitiesForFit, d => d.lat);
-        if (lonExtent.every(Number.isFinite) && latExtent.every(Number.isFinite)) {
-          return {
-            type: "FeatureCollection",
-            features: [
-              {
-                type: "Feature",
-                properties: {},
-                geometry: { type: "Point", coordinates: [lonExtent[0] - 0.08, latExtent[0] - 0.06] }
-              },
-              {
-                type: "Feature",
-                properties: {},
-                geometry: { type: "Point", coordinates: [lonExtent[1] + 0.08, latExtent[1] + 0.06] }
-              }
-            ]
-          };
-        }
-      }
-      if (state.currentRegion !== "gyeonggi") return featureCollection;
+      if (!["gyeonggi", "capital"].includes(state.currentRegion)) return featureCollection;
+      const universitiesForFit = state.currentRegion === "capital"
+        ? [...gyeonggiUniversities, ...incheonUniversities]
+        : activeUniversities();
       return {
         type: "FeatureCollection",
-        features: activeUniversities().map(d => ({
+        features: universitiesForFit.map(d => ({
           type: "Feature",
           properties: {},
           geometry: { type: "Point", coordinates: [d.lon, d.lat] }
@@ -23826,13 +23808,7 @@
           type: "FeatureCollection",
           features: [...gyeonggiGeoRaw.features, ...incheonGeoRaw.features]
         };
-        const capitalSeoulFeature = rewindNationalGeo(nationalGeo).features.find(feature => feature.properties?.REGION === "서울") || mergedDistrictFeature("서울", seoulGeo.features);
-        capitalSeoulFeature.properties = { ...capitalSeoulFeature.properties, name: "서울" };
-        const capitalGeo = {
-          type: "FeatureCollection",
-          features: displayGyeonggiFeatures(gyeonggiGeo, capitalSeoulFeature)
-        };
-        state.geos = { seoul: seoulGeo, gyeonggi: gyeonggiGeo, capital: capitalGeo, gangwon: gangwonGeo, chungcheong: chungcheongGeo, gyeongsang: gyeongsangGeo, jeolla: jeollaGeo, national: rewindNationalGeo(nationalGeo) };
+        state.geos = { seoul: seoulGeo, gyeonggi: gyeonggiGeo, capital: gyeonggiGeo, gangwon: gangwonGeo, chungcheong: chungcheongGeo, gyeongsang: gyeongsangGeo, jeolla: jeollaGeo, national: rewindNationalGeo(nationalGeo) };
         state.nationalBoundary = nationalBoundary;
         state.nationalJejuGeo = rewindNationalGeo(nationalJejuGeo);
         state.cheonanInternalBoundary = null;
