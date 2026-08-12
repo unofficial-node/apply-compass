@@ -21603,8 +21603,7 @@
 
     function universitySearchText(d) {
       const aliases = universitySearchAliases[d.name] || "";
-      if (state.currentRegion === "national") return `${d.name} ${aliases}`.toLowerCase();
-      return `${d.name} ${aliases} ${d.district} ${d.line} ${d.lines.join(" ")} ${d.station}`.toLowerCase();
+      return `${d.name} ${aliases}`.toLowerCase();
     }
 
     function departmentSearchText(d) {
