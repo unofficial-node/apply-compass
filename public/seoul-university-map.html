@@ -23007,6 +23007,7 @@
     }
 
     function nationalInsetGeo(name) {
+      if (state.currentRegion === "capital" && name === "서울") return state.geos.seoul || null;
       if (state.currentRegion !== "national") return null;
       if (name === "서울") return state.geos.seoul || null;
       if (name === "경기") {
@@ -23142,7 +23143,8 @@
       state.districtInset.classList.remove("national-inset");
       d3.select(state.districtInsetMap).selectAll("*").remove();
       state.districtInsetTitle.textContent = "";
-      if (state.currentRegion !== "national") return;
+      const isCapitalSeoulInset = state.currentRegion === "capital" && state.activeDistrict === "서울";
+      if (state.currentRegion !== "national" && !isCapitalSeoulInset) return;
       const selected = selectedDistrictFeature();
       if (!selected) {
         state.districtInset.hidden = true;
@@ -23155,19 +23157,20 @@
 
       const isIncheon = selected.properties.NAME_1 === "Incheon";
       const isNational = state.currentRegion === "national";
-      const width = isNational ? 800 : isIncheon ? 800 : 470;
-      const height = isNational ? 520 : isIncheon ? 560 : 330;
+      const isLargeRegionInset = isNational || isCapitalSeoulInset;
+      const width = isLargeRegionInset ? 800 : isIncheon ? 800 : 470;
+      const height = isLargeRegionInset ? 520 : isIncheon ? 560 : 330;
       const mini = d3.select(state.districtInsetMap);
       const schools = insetUniversities();
       const regionInsetGeo = nationalInsetGeo(state.activeDistrict);
-      const insetFeature = isNational && regionInsetGeo
+      const insetFeature = isLargeRegionInset && regionInsetGeo
         ? regionInsetGeo
         : isIncheon
         ? removeIncheonInsetIslands(selected)
         : cleanNationalInsetIslands(selected, schools);
       state.districtInset.hidden = false;
       state.districtInset.classList.toggle("incheon-inset", isIncheon);
-      state.districtInset.classList.toggle("national-inset", isNational);
+      state.districtInset.classList.toggle("national-inset", isLargeRegionInset);
       state.districtInsetTitle.textContent = state.activeDistrict;
       mini.attr("viewBox", `0 0 ${width} ${height}`).selectAll("*").remove();
 
@@ -23194,7 +23197,7 @@
         const [x, y] = projection([school.lon, school.lat]);
         return { ...school, x, y };
       });
-      if (isIncheon || isNational) spreadInsetPoints(points, width, height, isNational ? 19 : 24);
+      if (isIncheon || isLargeRegionInset) spreadInsetPoints(points, width, height, isLargeRegionInset ? 19 : 24);
       const labeledPoints = layoutInsetLabels(points, width, height);
 
       mini.append("g")
