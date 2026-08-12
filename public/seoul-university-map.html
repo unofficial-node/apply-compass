@@ -21602,7 +21602,9 @@
     };
 
     function universitySearchText(d) {
-      return `${d.name} ${universitySearchAliases[d.name] || ""} ${d.district} ${d.line} ${d.lines.join(" ")} ${d.station}`.toLowerCase();
+      const aliases = universitySearchAliases[d.name] || "";
+      if (state.currentRegion === "national") return `${d.name} ${aliases}`.toLowerCase();
+      return `${d.name} ${aliases} ${d.district} ${d.line} ${d.lines.join(" ")} ${d.station}`.toLowerCase();
     }
 
     function departmentSearchText(d) {
