@@ -920,12 +920,12 @@
         <div class="region-tabs" aria-label="지역 지도 선택">
           <button class="region-tab active" type="button" data-region="seoul" aria-current="page">서울</button>
           <button class="region-tab pending" type="button" data-region="gyeonggi">경기권</button>
-          <button class="region-tab pending" type="button" data-region="capital">수도권</button>
           <button class="region-tab pending" type="button" data-region="gangwon">강원권</button>
           <button class="region-tab pending" type="button" data-region="chungcheong">충청권</button>
           <button class="region-tab pending" type="button" data-region="gyeongsang">영남권</button>
           <button class="region-tab pending" type="button" data-region="jeolla">호남권</button>
           <button class="region-tab pending" type="button" data-region="national">전국</button>
+          <button class="region-tab pending" type="button" data-region="capital">수도권</button>
         </div>
         <div id="linePicker" class="line-picker" aria-label="지하철 노선 선택"></div>
         <div id="favoritePicker" class="favorite-picker" aria-label="전국 즐겨찾기 선택"></div>
@@ -3291,6 +3291,28 @@
           type: "FeatureCollection",
           features: featureCollection.features.filter(d => !isGyeongsangInsetIsland(d))
         };
+      }
+      if (state.currentRegion === "capital") {
+        const universitiesForFit = activeUniversities();
+        const lonExtent = d3.extent(universitiesForFit, d => d.lon);
+        const latExtent = d3.extent(universitiesForFit, d => d.lat);
+        if (lonExtent.every(Number.isFinite) && latExtent.every(Number.isFinite)) {
+          return {
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                properties: {},
+                geometry: { type: "Point", coordinates: [lonExtent[0] - 0.08, latExtent[0] - 0.06] }
+              },
+              {
+                type: "Feature",
+                properties: {},
+                geometry: { type: "Point", coordinates: [lonExtent[1] + 0.08, latExtent[1] + 0.06] }
+              }
+            ]
+          };
+        }
       }
       if (state.currentRegion !== "gyeonggi") return featureCollection;
       return {
