@@ -190,9 +190,10 @@
       align-items: center;
       gap: 8px;
       min-height: 34px;
-      padding: 3px 4px 3px 0;
+      padding: 3px 8px 3px 0;
       border: 0;
-      background: transparent;
+      border-radius: 0 7px 7px 0;
+      background: linear-gradient(90deg, transparent 0 5px, transparent 5px);
       color: #263843;
       cursor: pointer;
       font: inherit;
@@ -200,7 +201,7 @@
       font-weight: 900;
       line-height: 1.1;
       text-align: left;
-      transition: transform 140ms ease, color 140ms ease;
+      transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
     }
 
     .favorite-button:hover,
@@ -210,8 +211,9 @@
     }
 
     .favorite-button.active {
-      color: var(--favorite-color);
-      transform: translateX(5px);
+      color: #fff;
+      background: var(--favorite-color);
+      box-shadow: 0 8px 18px rgba(31, 48, 65, 0.16);
     }
 
     .favorite-tab {
@@ -221,6 +223,11 @@
       background: var(--favorite-color);
       box-shadow: 0 2px 6px rgba(31, 48, 65, 0.12);
       flex: 0 0 auto;
+    }
+
+    .favorite-button.active .favorite-tab {
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: none;
     }
 
     .favorite-label {
