@@ -475,6 +475,17 @@
       pointer-events: none;
     }
 
+    .national-island-label {
+      fill: rgba(38, 51, 61, 0.72);
+      font-size: 10px;
+      font-weight: 900;
+      text-anchor: middle;
+      paint-order: stroke;
+      stroke: rgba(255, 255, 255, 0.95);
+      stroke-width: 3px;
+      pointer-events: none;
+    }
+
     .gyeongsang-island-dot {
       fill: #ffffff;
       stroke: #9fb0ba;
@@ -3272,6 +3283,15 @@
     }
 
     function gyeonggiFitFeature(featureCollection) {
+      if (state.currentRegion === "national" && state.gyeongsangIslandGeo) {
+        return {
+          type: "FeatureCollection",
+          features: [
+            ...featureCollection.features,
+            ...state.gyeongsangIslandGeo.features
+          ]
+        };
+      }
       if (state.currentRegion === "gyeongsang") {
         const universitiesForFit = activeUniversities();
         const lonExtent = d3.extent(universitiesForFit, d => d.lon);
@@ -23406,57 +23426,37 @@
       state.routeLayer.append("path").datum(feature).attr("class", "subway-line").attr("stroke", lineMeta[state.activeLine].color).attr("d", state.path).append("title").text(state.activeLine);
     }
 
-    function drawGyeongsangIslandInset(width, height) {
+    function drawNationalEastSeaIslands() {
       if (state.currentRegion !== "national" || !state.gyeongsangIslandGeo) return;
       const islandFeature = state.gyeongsangIslandGeo.features.find(d => d.properties?.name === "울릉도");
       const dokdoFeature = state.gyeongsangIslandGeo.features.find(d => d.properties?.name === "독도");
       if (!islandFeature || !dokdoFeature) return;
-      const boxWidth = 188;
-      const boxHeight = 124;
-      const x = Math.max(18, width - 510);
-      const y = 14;
-      const inset = svg.append("g").attr("class", "gyeongsang-island-inset");
-      inset.append("rect")
-        .attr("class", "island-inset-frame")
-        .attr("x", x)
-        .attr("y", y)
-        .attr("width", boxWidth)
-        .attr("height", boxHeight)
-        .attr("rx", 6)
-        .attr("ry", 6);
-      inset.append("text")
-        .attr("class", "island-inset-title")
-        .attr("x", x + boxWidth / 2)
-        .attr("y", y + 20)
-        .text("울릉도·독도");
-      const insetGeo = { type: "FeatureCollection", features: [islandFeature, dokdoFeature] };
-      const projection = d3.geoMercator().fitExtent([[x + 18, y + 36], [x + boxWidth - 18, y + boxHeight - 18]], insetGeo);
-      const insetPath = d3.geoPath(projection);
-      const [dokdoX, dokdoY] = projection(dokdoFeature.geometry.coordinates);
-      const [ulleungX, ulleungY] = insetPath.centroid(islandFeature);
-      inset.append("path")
+      const islandLayer = svg.append("g").attr("class", "national-east-sea-islands");
+      const [dokdoX, dokdoY] = state.projection(dokdoFeature.geometry.coordinates);
+      const [ulleungX, ulleungY] = state.path.centroid(islandFeature);
+      islandLayer.append("path")
         .datum(islandFeature)
         .attr("class", "region-inset-district")
-        .attr("d", insetPath)
+        .attr("d", state.path)
         .append("title")
         .text("울릉군");
-      inset.append("circle")
+      islandLayer.append("circle")
         .datum(dokdoFeature)
         .attr("class", "gyeongsang-island-dot")
         .attr("cx", dokdoX)
         .attr("cy", dokdoY)
-        .attr("r", 3.8)
+        .attr("r", 2.6)
         .append("title")
         .text("독도");
-      inset.append("text")
-        .attr("class", "island-inset-label")
+      islandLayer.append("text")
+        .attr("class", "national-island-label")
         .attr("x", ulleungX)
-        .attr("y", ulleungY + 28)
+        .attr("y", ulleungY + 13)
         .text("울릉도");
-      inset.append("text")
-        .attr("class", "island-inset-label")
+      islandLayer.append("text")
+        .attr("class", "national-island-label")
         .attr("x", dokdoX)
-        .attr("y", dokdoY + 16)
+        .attr("y", dokdoY + 10)
         .text("독도");
     }
 
@@ -23768,7 +23768,7 @@
         .attr("class", "active-district-outline")
         .attr("display", "none");
       drawJejuInset(width, height);
-      drawGyeongsangIslandInset(width, height);
+      drawNationalEastSeaIslands();
       state.landmarkRiver = svg.append("path").datum(riverLine).attr("class", "landmark-river").attr("d", state.path).attr("display", "none");
 
       state.points = svg.append("g")
