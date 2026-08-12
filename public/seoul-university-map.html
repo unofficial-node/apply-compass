@@ -21592,6 +21592,19 @@
       return admissionLinks[d.name] || admissionLinks[baseUniversityName(d.name)] || "";
     }
 
+    const universitySearchAliases = {
+      "한국과학기술원": "KAIST 카이스트",
+      "울산과학기술원": "UNIST 유니스트",
+      "대구경북과학기술원": "DGIST 디지스트",
+      "한국에너지공과대학교": "KENTECH 켄텍",
+      "포항공과대학교": "POSTECH 포스텍",
+      "광주과학기술원": "GIST 지스트"
+    };
+
+    function universitySearchText(d) {
+      return `${d.name} ${universitySearchAliases[d.name] || ""} ${d.district} ${d.line} ${d.lines.join(" ")} ${d.station}`.toLowerCase();
+    }
+
     function departmentSearchText(d) {
       const groups = departmentData[departmentKey(d)] || [];
       return groups
@@ -23337,7 +23350,7 @@
       const departmentQuery = departmentSearch.value.trim().toLowerCase();
       if (state.currentRegion === "national" && !query && !departmentQuery && !state.activeFavorite) return [];
       return activeUniversities().filter(d => {
-        const universityMatch = `${d.name} ${d.district} ${d.line} ${d.lines.join(" ")} ${d.station}`.toLowerCase().includes(query);
+        const universityMatch = universitySearchText(d).includes(query);
         return universityMatch && hasMatchingDepartment(d, departmentQuery) && favoriteMatch(d);
       });
     }
