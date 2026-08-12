@@ -23001,38 +23001,39 @@
     }
 
     function boundaryLinesFromFeatures(features) {
-      const containsAny = point => features.some(feature => d3.geoContains(feature, point));
-      const isOuterSegment = (a, b) => {
-        const mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-        const dx = b[0] - a[0];
-        const dy = b[1] - a[1];
-        const length = Math.hypot(dx, dy);
-        if (!length) return false;
-        const epsilon = 0.00008;
-        const normal = [-dy / length * epsilon, dx / length * epsilon];
-        const leftInside = containsAny([mid[0] + normal[0], mid[1] + normal[1]]);
-        const rightInside = containsAny([mid[0] - normal[0], mid[1] - normal[1]]);
-        return leftInside !== rightInside;
+      const segmentMap = new Map();
+      const roundedPoint = point => `${Number(point[0]).toFixed(6)},${Number(point[1]).toFixed(6)}`;
+      const segmentKey = (a, b) => {
+        const first = roundedPoint(a);
+        const second = roundedPoint(b);
+        return first < second ? `${first}|${second}` : `${second}|${first}`;
       };
-      const lines = [];
       features.forEach(feature => {
         featurePolygons(feature).forEach(polygon => {
           polygon.forEach(ring => {
             for (let i = 0; i < ring.length - 1; i++) {
               const a = ring[i];
               const b = ring[i + 1];
-              if (isOuterSegment(a, b)) lines.push([a, b]);
+              const key = segmentKey(a, b);
+              const current = segmentMap.get(key);
+              if (current) {
+                current.count += 1;
+              } else {
+                segmentMap.set(key, { count: 1, coordinates: [a, b] });
+              }
             }
           });
         });
       });
       return {
         type: "FeatureCollection",
-        features: lines.map(coordinates => ({
-          type: "Feature",
-          properties: {},
-          geometry: { type: "LineString", coordinates }
-        }))
+        features: [...segmentMap.values()]
+          .filter(segment => segment.count === 1)
+          .map(segment => ({
+            type: "Feature",
+            properties: {},
+            geometry: { type: "LineString", coordinates: segment.coordinates }
+          }))
       };
     }
 
