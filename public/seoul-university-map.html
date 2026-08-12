@@ -158,6 +158,75 @@
     .line-name { flex: 1; text-align: left; white-space: nowrap; }
     .line-button svg { width: 72px; height: 24px; min-height: 0; display: block; }
 
+    .favorite-picker {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 2;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      width: 154px;
+      max-width: calc(100% - 28px);
+      padding-left: 10px;
+      border-left: 1px solid rgba(87, 119, 119, 0.28);
+    }
+
+    .favorite-picker.visible {
+      display: flex;
+    }
+
+    .favorite-title {
+      margin: 0 0 5px;
+      color: #263843;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .favorite-button {
+      --favorite-color: #6f7f85;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 3px 4px 3px 0;
+      border: 0;
+      background: transparent;
+      color: #263843;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.1;
+      text-align: left;
+      transition: transform 140ms ease, color 140ms ease;
+    }
+
+    .favorite-button:hover,
+    .favorite-button:focus {
+      color: var(--favorite-color);
+      outline: none;
+    }
+
+    .favorite-button.active {
+      color: var(--favorite-color);
+      transform: translateX(5px);
+    }
+
+    .favorite-tab {
+      width: 5px;
+      height: 23px;
+      border-radius: 0 5px 5px 0;
+      background: var(--favorite-color);
+      box-shadow: 0 2px 6px rgba(31, 48, 65, 0.12);
+      flex: 0 0 auto;
+    }
+
+    .favorite-label {
+      white-space: nowrap;
+    }
+
     .landmark-toggle {
       display: flex;
       align-items: center;
@@ -802,6 +871,9 @@
       .district-name-badge { top: -31px; right: 12px; min-width: 72px; height: 26px; padding: 4px 10px; font-size: 12px; }
       .line-picker { width: 128px; gap: 5px; padding: 8px; }
       .line-button { height: 31px; padding: 4px 6px; gap: 6px; font-size: 11px; }
+      .favorite-picker { width: 128px; gap: 4px; }
+      .favorite-title { font-size: 12px; }
+      .favorite-button { min-height: 31px; font-size: 12px; gap: 7px; }
       .landmark-toggle { min-height: 32px; font-size: 12px; }
       .landmark-panel { left: 12px; top: 466px; width: 128px; padding: 8px; }
       .line-icon, .line-button svg { width: 62px; height: 22px; }
@@ -836,6 +908,7 @@
           <button class="region-tab pending" type="button" data-region="national">전국</button>
         </div>
         <div id="linePicker" class="line-picker" aria-label="지하철 노선 선택"></div>
+        <div id="favoritePicker" class="favorite-picker" aria-label="전국 즐겨찾기 선택"></div>
         <div id="landmarkPanel" class="landmark-panel">
           <button id="landmarkToggle" class="landmark-toggle" type="button" aria-pressed="false"><span class="landmark-star">★</span><span>서울에 가면</span></button>
         </div>
@@ -2607,6 +2680,7 @@
     const svg = d3.select("#map");
     const tooltip = d3.select("#tooltip");
     const linePicker = d3.select("#linePicker");
+    const favoritePicker = d3.select("#favoritePicker");
     const landmarkToggle = document.querySelector("#landmarkToggle");
     const landmarkPanel = document.querySelector("#landmarkPanel");
     const mainEl = document.querySelector("main");
@@ -2617,7 +2691,7 @@
     const departmentResults = document.querySelector("#departmentResults");
     const departmentPanel = document.querySelector("#departmentPanel");
     const errorBox = document.querySelector("#error");
-    let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, selectedUniversity: null };
+    let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
 
     const gyeonggiNameMap = {
       Ansan: "안산시",
@@ -2794,6 +2868,64 @@
         ];
       }
       return [];
+    }
+
+    const favoriteGroups = [
+      {
+        key: "science",
+        label: "과기원",
+        fullLabel: "과학기술원",
+        color: "#7b4bc2",
+        names: new Set(["광주과학기술원", "대구경북과학기술원", "울산과학기술원", "포항공과대학교", "한국과학기술원", "한국에너지공과대학교"])
+      },
+      {
+        key: "medical",
+        label: "의",
+        fullLabel: "의대",
+        color: "#d84b4b",
+        names: new Set(["가천대학교(인천)", "가톨릭관동대학교", "가톨릭대학교(서울)", "강원대학교(춘천삼척)", "건국대학교(글로컬)", "건양대학교(대전)", "경북대학교(대구)", "경상국립대학교(진주)", "경희대학교(서울)", "계명대학교", "고려대학교(서울)", "고신대학교", "단국대학교(천안)", "대구가톨릭대학교", "동국대학교(WISE)", "동아대학교", "부산대학교(양산밀양)", "서울대학교", "성균관대학교(수원)", "순천향대학교", "아주대학교", "연세대학교(미래)", "연세대학교(서울)", "영남대학교", "울산대학교", "원광대학교", "을지대학교(대전)", "이화여자대학교", "인제대학교", "인하대학교", "전남대학교(광주)", "전북대학교", "제주대학교", "조선대학교", "중앙대학교(서울)", "차의과학대학교", "충남대학교", "충북대학교", "한림대학교", "한양대학교(서울)"])
+      },
+      {
+        key: "dental",
+        label: "치",
+        fullLabel: "치대",
+        color: "#35a4d4",
+        names: new Set(["강원대학교(강릉원주)", "경북대학교(대구)", "경희대학교(서울)", "단국대학교(천안)", "부산대학교(양산밀양)", "서울대학교", "연세대학교(서울)", "원광대학교", "전남대학교(광주)", "전북대학교", "조선대학교"])
+      },
+      {
+        key: "pharmacy",
+        label: "약",
+        fullLabel: "약대",
+        color: "#294f93",
+        names: new Set(["가천대학교(인천)", "가톨릭대학교(부천)", "강원대학교(춘천삼척)", "경북대학교(대구)", "경상국립대학교(진주)", "경성대학교", "경희대학교(서울)", "계명대학교", "고려대학교(세종)", "국립목포대학교", "국립순천대학교", "단국대학교(천안)", "대구가톨릭대학교", "덕성여자대학교", "동국대학교(고양)", "동덕여자대학교", "부산대학교(부산)", "삼육대학교", "서울대학교", "성균관대학교(수원)", "숙명여자대학교", "아주대학교", "연세대학교(인천)", "영남대학교", "우석대학교(삼례)", "원광대학교", "이화여자대학교", "인제대학교", "전남대학교(광주)", "전북대학교", "제주대학교", "조선대학교", "중앙대학교(서울)", "차의과학대학교", "충남대학교", "충북대학교", "한양대학교(ERICA)"])
+      },
+      {
+        key: "korean-medicine",
+        label: "한",
+        fullLabel: "한의대",
+        color: "#3e9f66",
+        names: new Set(["가천대학교(성남)", "경희대학교(서울)", "대구한의대학교", "대전대학교", "동국대학교(WISE)", "동신대학교", "동의대학교", "부산대학교(양산밀양)", "상지대학교", "세명대학교", "우석대학교(삼례)", "원광대학교"])
+      },
+      {
+        key: "veterinary",
+        label: "수",
+        fullLabel: "수의대",
+        color: "#d98135",
+        names: new Set(["강원대학교(춘천삼척)", "건국대학교(서울)", "경북대학교(대구)", "경상국립대학교(진주)", "서울대학교", "전남대학교(광주)", "전북대학교", "제주대학교", "충남대학교", "충북대학교"])
+      }
+    ];
+
+    function favoriteGroup(key = state.activeFavorite) {
+      return favoriteGroups.find(group => group.key === key) || null;
+    }
+
+    function favoriteMatch(d) {
+      const group = favoriteGroup();
+      return !group || group.names.has(d.name);
+    }
+
+    function activeFavoriteColor() {
+      return state.currentRegion === "national" ? favoriteGroup()?.color : null;
     }
 
     function nationalGeoFromRegions(geos) {
@@ -23014,6 +23146,7 @@
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)
         .attr("r", 4.8)
+        .attr("fill", activeFavoriteColor() || null)
         .attr("tabindex", 0)
         .attr("role", "button")
         .attr("aria-label", d => `${d.name}, ${d.district}`)
@@ -23054,7 +23187,8 @@
       if (state.points) {
         state.points.attr("display", d => !state.landmarkMode && filtered.includes(d) ? null : "none")
           .attr("opacity", dimOpacity)
-          .attr("r", pointRadius);
+          .attr("r", pointRadius)
+          .attr("fill", activeFavoriteColor() || null);
       }
       if (state.labelLinks) {
         state.labelLinks.selectAll("line")
@@ -23158,11 +23292,20 @@
     function currentFiltered() {
       const query = search.value.trim().toLowerCase();
       const departmentQuery = departmentSearch.value.trim().toLowerCase();
-      if (state.currentRegion === "national" && !query && !departmentQuery) return [];
+      if (state.currentRegion === "national" && !query && !departmentQuery && !state.activeFavorite) return [];
       return activeUniversities().filter(d => {
         const universityMatch = `${d.name} ${d.district} ${d.line} ${d.lines.join(" ")} ${d.station}`.toLowerCase().includes(query);
-        return universityMatch && hasMatchingDepartment(d, departmentQuery);
+        return universityMatch && hasMatchingDepartment(d, departmentQuery) && favoriteMatch(d);
       });
+    }
+
+    function handleSearchInput() {
+      if (state.activeFavorite) {
+        state.activeFavorite = null;
+        renderFavoritePicker();
+        renderDefaultPanel();
+      }
+      applyFilter();
     }
 
     function applyFilter() {
@@ -23283,13 +23426,15 @@
     }
 
     function resetMapSelection() {
-      const hadSelection = state.activeLine || state.activeDistrict || state.signOnlyDistrict || state.selectedUniversity;
+      const hadSelection = state.activeLine || state.activeDistrict || state.signOnlyDistrict || state.activeFavorite || state.selectedUniversity;
       if (!hadSelection) return;
       state.activeLine = null;
       state.activeDistrict = null;
       state.signOnlyDistrict = null;
+      state.activeFavorite = null;
       state.selectedUniversity = null;
       linePicker.selectAll(".line-button").classed("active", false);
+      renderFavoritePicker();
       tooltip.classed("visible", false);
       drawSelectedRoute();
       applyFilter();
@@ -23333,12 +23478,41 @@
       updateLandmarkToggle();
     }
 
+    function renderFavoritePicker() {
+      favoritePicker.html(`<p class="favorite-title">즐겨찾기</p>`);
+      favoritePicker.selectAll(".favorite-button")
+        .data(favoriteGroups)
+        .join("button")
+        .attr("class", "favorite-button")
+        .classed("active", d => d.key === state.activeFavorite)
+        .attr("type", "button")
+        .attr("aria-pressed", d => d.key === state.activeFavorite ? "true" : "false")
+        .attr("aria-label", d => `${d.fullLabel} 표시`)
+        .style("--favorite-color", d => d.color)
+        .html(d => `<span class="favorite-tab" aria-hidden="true"></span><span class="favorite-label">${d.label}</span>`)
+        .on("click", (event, d) => selectFavorite(d.key));
+    }
+
+    function selectFavorite(key) {
+      if (state.currentRegion !== "national") return;
+      state.activeFavorite = state.activeFavorite === key ? null : key;
+      search.value = "";
+      departmentSearch.value = "";
+      departmentResults.classList.remove("visible");
+      departmentResults.innerHTML = "";
+      state.selectedUniversity = null;
+      renderFavoritePicker();
+      renderDefaultPanel();
+      applyFilter();
+    }
+
     function renderDefaultPanel() {
       if (state.currentRegion === "national") {
+        const group = favoriteGroup();
         departmentPanel.innerHTML = `
           <h2>전국 대학 학과정보</h2>
           <p class="meta">서울·경기·강원·충청·영남·호남 권역별 대학 정보를 한 화면에서 확인할 수 있습니다.</p>
-          <p class="department-empty">학과를 검색하면 해당 학과가 포함된 전국 대학 스팟이 지도에 표시됩니다.</p>
+          <p class="department-empty">${group ? `${escapeHtml(group.fullLabel)}에 해당하는 대학 스팟이 전국지도에 표시됩니다.` : "학과를 검색하거나 왼쪽 즐겨찾기를 선택하면 해당 대학 스팟이 지도에 표시됩니다."}</p>
         `;
         return;
       }
@@ -23401,6 +23575,8 @@
         }
       });
       linePicker.style("display", state.currentRegion === "seoul" ? null : "none");
+      favoritePicker.classed("visible", state.currentRegion === "national");
+      renderFavoritePicker();
       mapWrap.classList.toggle("region-gyeonggi", state.currentRegion === "gyeonggi");
       mapWrap.classList.toggle("region-gangwon", state.currentRegion === "gangwon");
       mapWrap.classList.toggle("region-chungcheong", state.currentRegion === "chungcheong");
@@ -23417,6 +23593,7 @@
       state.activeLine = null;
       state.activeDistrict = null;
       state.signOnlyDistrict = null;
+      state.activeFavorite = null;
       state.selectedUniversity = null;
       search.value = "";
       departmentSearch.value = "";
@@ -23595,8 +23772,8 @@
         });
         draw();
         window.addEventListener("resize", () => draw());
-        search.addEventListener("input", applyFilter);
-        departmentSearch.addEventListener("input", applyFilter);
+        search.addEventListener("input", handleSearchInput);
+        departmentSearch.addEventListener("input", handleSearchInput);
         if (landmarkToggle) landmarkToggle.addEventListener("click", toggleLandmarks);
         if (state.districtInsetClose) {
           state.districtInsetClose.addEventListener("click", () => {
