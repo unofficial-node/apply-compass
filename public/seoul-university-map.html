@@ -920,6 +920,7 @@
         <div class="region-tabs" aria-label="지역 지도 선택">
           <button class="region-tab active" type="button" data-region="seoul" aria-current="page">서울</button>
           <button class="region-tab pending" type="button" data-region="gyeonggi">경기권</button>
+          <button class="region-tab pending" type="button" data-region="capital">수도권</button>
           <button class="region-tab pending" type="button" data-region="gangwon">강원권</button>
           <button class="region-tab pending" type="button" data-region="chungcheong">충청권</button>
           <button class="region-tab pending" type="button" data-region="gyeongsang">영남권</button>
@@ -2871,6 +2872,7 @@
     function activeUniversities() {
       if (state.currentRegion === "seoul") return universities;
       if (state.currentRegion === "gyeonggi") return [...gyeonggiUniversities, ...incheonUniversities];
+      if (state.currentRegion === "capital") return [...universities, ...gyeonggiUniversities, ...incheonUniversities];
       if (state.currentRegion === "gangwon") return gangwonUniversities;
       if (state.currentRegion === "chungcheong") return chungcheongUniversities;
       if (state.currentRegion === "gyeongsang") return gyeongsangUniversities;
@@ -3380,6 +3382,7 @@
     function activeMatch(d) {
       if (state.activeLine) return d.lines.includes(state.activeLine);
       if (state.currentRegion === "national" && state.activeDistrict) return universityNationalRegion(d) === state.activeDistrict;
+      if (state.currentRegion === "capital" && state.activeDistrict === "서울") return universities.includes(d);
       if (state.activeDistrict === "인천") return ["계양구", "남동구", "동구", "미추홀구", "부평구", "서구", "연수구", "중구", "강화군", "옹진군"].includes(d.district);
       if (state.currentRegion === "chungcheong" && state.activeDistrict === "대전시") return ["동구", "중구", "서구", "유성구", "대덕구", "대전시"].includes(d.district);
       if (state.currentRegion === "chungcheong" && state.activeDistrict === "청주시") return ["청주시상당구", "청주시서원구", "청주시흥덕구", "청주시청원구", "청주시"].includes(d.district);
@@ -3443,7 +3446,7 @@
     function baseUniversityName(name) { return name.replace(/\([^)]*\)$/u, ""); }
     function isFeaturedUniversity(d) { return featuredUniversities.has(baseUniversityName(d.name)); }
     function labelVisible(d) {
-      if (state.currentRegion === "national") return false;
+      if (["capital", "national"].includes(state.currentRegion) && !state.activeDistrict) return false;
       if (state.activeLine || state.activeDistrict) return activeMatch(d);
       return isFeaturedUniversity(d);
     }
@@ -23290,7 +23293,7 @@
           .attr("d", state.path);
       }
       if (state.activeDistrictOutline) {
-        const hideSeoulSubdistrictOutline = state.currentRegion === "gyeonggi" && state.activeDistrict === "서울";
+        const hideSeoulSubdistrictOutline = ["gyeonggi", "capital"].includes(state.currentRegion) && state.activeDistrict === "서울";
         const hideNationalPartOutline = state.currentRegion === "national";
         state.activeDistrictOutline
           .datum(activeFeature || { type: "FeatureCollection", features: [] })
@@ -23360,7 +23363,7 @@
     function currentFiltered() {
       const query = search.value.trim().toLowerCase();
       const departmentQuery = departmentSearch.value.trim().toLowerCase();
-      if (state.currentRegion === "national" && !query && !departmentQuery && !state.activeFavorite) return [];
+      if (["capital", "national"].includes(state.currentRegion) && !query && !departmentQuery && !state.activeFavorite) return [];
       return activeUniversities().filter(d => {
         const universityMatch = universitySearchText(d).includes(query);
         return universityMatch && hasMatchingDepartment(d, departmentQuery) && favoriteMatch(d);
@@ -23550,6 +23553,14 @@
         `;
         return;
       }
+      if (state.currentRegion === "capital") {
+        departmentPanel.innerHTML = `
+          <h2>수도권 대학 학과정보</h2>
+          <p class="meta">서울·인천·경기 대학을 한 화면에서 검색해볼 수 있습니다.</p>
+          <p class="department-empty">대학교 검색이나 학과 검색을 하면 해당 대학 스팟이 지도에 표시됩니다.</p>
+        `;
+        return;
+      }
       if (state.currentRegion === "gangwon") {
         departmentPanel.innerHTML = `
           <h2>강원권 대학 학과정보</h2>
@@ -23611,7 +23622,7 @@
       linePicker.style("display", state.currentRegion === "seoul" ? null : "none");
       favoritePicker.classed("visible", state.currentRegion === "national");
       renderFavoritePicker();
-      mapWrap.classList.toggle("region-gyeonggi", state.currentRegion === "gyeonggi");
+      mapWrap.classList.toggle("region-gyeonggi", ["gyeonggi", "capital"].includes(state.currentRegion));
       mapWrap.classList.toggle("region-gangwon", state.currentRegion === "gangwon");
       mapWrap.classList.toggle("region-chungcheong", state.currentRegion === "chungcheong");
       mapWrap.classList.toggle("region-gyeongsang", state.currentRegion === "gyeongsang");
@@ -23678,7 +23689,7 @@
         .selectAll("path")
         .data(mapGeo.features)
         .join("path")
-        .attr("class", d => `district${state.currentRegion === "national" ? " national-region" : districtName(d) === "서울" && state.currentRegion === "gyeonggi" ? " seoul-region" : isIncheonDistrictFeature(d) ? " incheon-region" : state.currentRegion === "gyeonggi" ? " gyeonggi-region-part" : ""}`)
+        .attr("class", d => `district${state.currentRegion === "national" ? " national-region" : districtName(d) === "서울" && ["gyeonggi", "capital"].includes(state.currentRegion) ? " seoul-region" : isIncheonDistrictFeature(d) ? " incheon-region" : ["gyeonggi", "capital"].includes(state.currentRegion) ? " gyeonggi-region-part" : ""}`)
         .attr("d", state.path)
         .on("click", (event, d) => {
           event.stopPropagation();
@@ -23792,7 +23803,11 @@
           type: "FeatureCollection",
           features: [...gyeonggiGeoRaw.features, ...incheonGeoRaw.features]
         };
-        state.geos = { seoul: seoulGeo, gyeonggi: gyeonggiGeo, gangwon: gangwonGeo, chungcheong: chungcheongGeo, gyeongsang: gyeongsangGeo, jeolla: jeollaGeo, national: rewindNationalGeo(nationalGeo) };
+        const capitalGeo = {
+          type: "FeatureCollection",
+          features: displayGyeonggiFeatures(gyeonggiGeo, mergedDistrictFeature("서울", seoulGeo.features))
+        };
+        state.geos = { seoul: seoulGeo, gyeonggi: gyeonggiGeo, capital: capitalGeo, gangwon: gangwonGeo, chungcheong: chungcheongGeo, gyeongsang: gyeongsangGeo, jeolla: jeollaGeo, national: rewindNationalGeo(nationalGeo) };
         state.nationalBoundary = nationalBoundary;
         state.nationalJejuGeo = rewindNationalGeo(nationalJejuGeo);
         state.cheonanInternalBoundary = null;
