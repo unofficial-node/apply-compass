@@ -3044,6 +3044,7 @@
 
     function districtName(d) {
       if (state.currentRegion === "national" && d?.properties?.REGION) return d.properties.REGION;
+      if (state.currentRegion === "capital" && d?.properties?.REGION === "서울") return "서울";
       if (d?.properties?.merged && d.properties.NAME_1 === "Incheon") return "인천";
       if (d?.properties?.sidonm === "인천광역시") return "인천";
       if (d?.properties?.sggnm) return normalizedGyeonggiDistrictName(d.properties.sggnm);
@@ -23729,7 +23730,7 @@
 
       state.routeLayer = svg.append("g").attr("aria-label", "선택한 지하철 노선");
       svg.append("path")
-        .datum({ type: "FeatureCollection", features: mapGeo.features.filter(d => !(state.currentRegion === "gyeonggi" && districtName(d) === "서울")) })
+        .datum({ type: "FeatureCollection", features: mapGeo.features.filter(d => !(["gyeonggi", "capital"].includes(state.currentRegion) && districtName(d) === "서울")) })
         .attr("class", "seoul-outline")
         .attr("d", state.path);
       state.activeDistrictFill = svg.append("path")
@@ -23825,9 +23826,11 @@
           type: "FeatureCollection",
           features: [...gyeonggiGeoRaw.features, ...incheonGeoRaw.features]
         };
+        const capitalSeoulFeature = rewindNationalGeo(nationalGeo).features.find(feature => feature.properties?.REGION === "서울") || mergedDistrictFeature("서울", seoulGeo.features);
+        capitalSeoulFeature.properties = { ...capitalSeoulFeature.properties, name: "서울" };
         const capitalGeo = {
           type: "FeatureCollection",
-          features: displayGyeonggiFeatures(gyeonggiGeo, mergedDistrictFeature("서울", seoulGeo.features))
+          features: displayGyeonggiFeatures(gyeonggiGeo, capitalSeoulFeature)
         };
         state.geos = { seoul: seoulGeo, gyeonggi: gyeonggiGeo, capital: capitalGeo, gangwon: gangwonGeo, chungcheong: chungcheongGeo, gyeongsang: gyeongsangGeo, jeolla: jeollaGeo, national: rewindNationalGeo(nationalGeo) };
         state.nationalBoundary = nationalBoundary;
