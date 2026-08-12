@@ -736,6 +736,14 @@
       opacity: 0.98;
     }
 
+    .inset-outer-boundary {
+      fill: none;
+      stroke: #5f7884;
+      stroke-width: 2.1;
+      vector-effect: non-scaling-stroke;
+      pointer-events: none;
+    }
+
     .inset-point {
       fill: var(--point);
       stroke: #fff;
@@ -22992,6 +23000,43 @@
       return { type: "FeatureCollection", features: features.filter(Boolean) };
     }
 
+    function boundaryLinesFromFeatures(features) {
+      const segmentMap = new Map();
+      const roundedPoint = point => `${Number(point[0]).toFixed(6)},${Number(point[1]).toFixed(6)}`;
+      const segmentKey = (a, b) => {
+        const first = roundedPoint(a);
+        const second = roundedPoint(b);
+        return first < second ? `${first}|${second}` : `${second}|${first}`;
+      };
+      features.forEach(feature => {
+        featurePolygons(feature).forEach(polygon => {
+          polygon.forEach(ring => {
+            for (let i = 0; i < ring.length - 1; i++) {
+              const a = ring[i];
+              const b = ring[i + 1];
+              const key = segmentKey(a, b);
+              const current = segmentMap.get(key);
+              if (current) {
+                current.count += 1;
+              } else {
+                segmentMap.set(key, { count: 1, coordinates: [a, b] });
+              }
+            }
+          });
+        });
+      });
+      return {
+        type: "FeatureCollection",
+        features: [...segmentMap.values()]
+          .filter(segment => segment.count === 1)
+          .map(segment => ({
+            type: "Feature",
+            properties: {},
+            geometry: { type: "LineString", coordinates: segment.coordinates }
+          }))
+      };
+    }
+
     function jeollaMainlandFeatures() {
       return (state.geos.jeolla?.features || [])
         .filter(feature => feature?.properties?.province !== "제주")
@@ -23190,6 +23235,13 @@
         .join("path")
         .attr("class", `inset-district${isCapitalSeoulInset ? " seoul-fill-only" : ""}`)
         .attr("d", path);
+
+      if (isCapitalSeoulInset) {
+        mini.append("path")
+          .datum(boundaryLinesFromFeatures(insetFeatures))
+          .attr("class", "inset-outer-boundary")
+          .attr("d", path);
+      }
 
       if (!schools.length) {
         mini.append("text")
