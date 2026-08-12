@@ -731,6 +731,11 @@
       pointer-events: none;
     }
 
+    .inset-district.seoul-fill-only {
+      stroke: none;
+      opacity: 0.98;
+    }
+
     .inset-point {
       fill: var(--point);
       stroke: #fff;
@@ -23008,9 +23013,7 @@
 
     function nationalInsetGeo(name) {
       if (state.currentRegion === "capital" && name === "서울") {
-        const nationalSeoulFeature = (state.geos.national?.features || [])
-          .find(feature => feature?.properties?.REGION === "서울" || feature?.properties?.name === "서울");
-        return nationalSeoulFeature || (state.geos.seoul ? mergedDistrictFeature("서울", state.geos.seoul.features) : null);
+        return state.geos.seoul || null;
       }
       if (state.currentRegion !== "national") return null;
       if (name === "서울") return state.geos.seoul || null;
@@ -23185,7 +23188,7 @@
         .selectAll("path")
         .data(insetFeatures)
         .join("path")
-        .attr("class", "inset-district")
+        .attr("class", `inset-district${isCapitalSeoulInset ? " seoul-fill-only" : ""}`)
         .attr("d", path);
 
       if (!schools.length) {
