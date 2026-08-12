@@ -23007,7 +23007,9 @@
     }
 
     function nationalInsetGeo(name) {
-      if (state.currentRegion === "capital" && name === "서울") return state.geos.seoul || null;
+      if (state.currentRegion === "capital" && name === "서울") {
+        return state.geos.seoul ? mergedDistrictFeature("서울", state.geos.seoul.features) : null;
+      }
       if (state.currentRegion !== "national") return null;
       if (name === "서울") return state.geos.seoul || null;
       if (name === "경기") {
