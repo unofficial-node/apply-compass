@@ -23263,6 +23263,13 @@
     }
 
     function selectUniversity(d, event) {
+      if (state.selectedUniversity?.name === d.name) {
+        state.selectedUniversity = null;
+        tooltip.classed("visible", false);
+        refreshVisuals(currentFiltered());
+        renderDefaultPanel();
+        return;
+      }
       state.selectedUniversity = d;
       focusUniversity(d);
       showTip(event, d);
