@@ -313,7 +313,7 @@
     .application-table-header,
     .application-selection-item.application-table-row {
       display: grid;
-      grid-template-columns: 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px 48px;
+      grid-template-columns: 48px 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
       gap: 6px;
       align-items: stretch;
     }
@@ -1239,7 +1239,7 @@
       .application-remove-button { grid-column: 2; grid-row: 1 / span 3; }
       .application-selection-item.general-purpose.application-table-row,
       .application-selection-item.special-purpose.application-table-row {
-        grid-template-columns: 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px 48px;
+        grid-template-columns: 48px 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
         width: 100%;
         margin-left: 0;
       }
@@ -22214,10 +22214,10 @@
 
       const tableHeader = `
         <div class="application-table-header" aria-hidden="true">
-          <span>순서</span><span>대학명</span><span>전형유형</span><span>세부전형명</span>
+          <span>삭제</span><span>순서</span><span>대학명</span><span>전형유형</span><span>세부전형명</span>
           <span>지원학과(선발인원)</span><span>전형방법</span><span>수능최저</span><span>등급컷</span>
           <span>경쟁률</span><span>원서접수</span><span>1단계</span><span>면접일/논술일</span>
-          <span>최종발표일</span><span>기타 참고사항</span><span>삭제</span>
+          <span>최종발표일</span><span>기타 참고사항</span>
         </div>`;
 
       const renderItems = (items, specialPurpose = false) => items.length
@@ -22231,6 +22231,7 @@
             </div>`;
           return `
         <div class="application-selection-item application-table-row${specialPurpose ? " special-purpose" : " general-purpose"}" data-selection-key="${escapeHtml(item.key)}">
+          <button class="application-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">삭제</button>
           ${orderControls}
           <div class="application-university-cell"><strong>${escapeHtml(item.university)}</strong><small>${escapeHtml(item.college)}</small></div>
           ${detailInput(item, "admissionType", "예: 학생부종합")}
@@ -22245,7 +22246,6 @@
           ${detailInput(item, "interviewDate", "면접일/논술일")}
           ${detailInput(item, "finalAnnouncement", "최종발표일")}
           ${detailInput(item, "notes", "기타 참고사항", true)}
-          <button class="application-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">삭제</button>
         </div>
       `;
         }).join("")
