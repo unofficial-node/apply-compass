@@ -215,8 +215,19 @@
       font-weight: 800;
     }
     .application-remove-button:hover, .application-remove-button:focus { background: #fff1f1; outline: none; }
-    main.application-mode { grid-template-columns: minmax(0, 1fr); }
+    main.application-mode {
+      grid-template-columns: minmax(0, 1fr);
+      height: auto;
+      min-height: calc(100vh - 96px);
+    }
     main.application-mode aside { display: none; }
+    main.application-mode .map-wrap { height: auto; }
+    main.application-mode .application-status-view {
+      position: relative;
+      inset: auto;
+      min-height: 650px;
+      overflow: visible;
+    }
 
     .line-picker {
       position: absolute;
