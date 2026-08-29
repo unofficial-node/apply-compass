@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>대학교 모아보기</title>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <style>
     :root {
       --ink: #17212b;
@@ -153,6 +154,7 @@
       text-align: left;
     }
     .application-status-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .application-title-group { display: flex; align-items: center; gap: 12px; }
     .application-status-card h2 { margin: 0; color: #173f3e; font-size: 28px; }
     .application-status-card p { margin: 0; color: var(--muted); line-height: 1.7; }
     .application-count {
@@ -165,6 +167,30 @@
       font-size: 12px;
       font-weight: 900;
     }
+    .student-export-controls { display: flex; align-items: end; justify-content: flex-end; gap: 7px; flex-wrap: wrap; }
+    .student-export-controls label { margin: 0; color: #52636d; font-size: 10px; }
+    .student-export-controls input {
+      display: block;
+      width: 58px;
+      min-height: 34px;
+      margin-top: 3px;
+      padding: 5px 7px;
+      font-size: 12px;
+    }
+    .student-export-controls .student-name-input { width: 104px; }
+    .excel-export-button {
+      min-height: 34px;
+      padding: 7px 14px;
+      border: 0;
+      border-radius: 7px;
+      color: #fff;
+      background: #18723b;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .excel-export-button:hover, .excel-export-button:focus { background: #10552b; outline: none; }
     .application-status-intro { margin-top: 10px !important; }
     .application-selection-list { display: grid; gap: 10px; margin-top: 22px; }
     .application-selection-section { min-width: 0; }
@@ -1300,6 +1326,8 @@
       .application-direct-add-form.application-table-row {
         grid-template-columns: 48px 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
       }
+      .application-status-heading { align-items: flex-start; flex-direction: column; }
+      .student-export-controls { justify-content: flex-start; }
     }
 
     @media (max-width: 560px) {
@@ -1352,8 +1380,17 @@
         <section id="applicationStatusView" class="application-status-view" aria-labelledby="applicationStatusTitle" hidden>
           <div class="application-status-card">
             <div class="application-status-heading">
-              <h2 id="applicationStatusTitle">원서현황</h2>
-              <span id="applicationCount" class="application-count">선택 0개</span>
+              <div class="application-title-group">
+                <h2 id="applicationStatusTitle">원서현황</h2>
+                <span id="applicationCount" class="application-count">선택 0개</span>
+              </div>
+              <div class="student-export-controls" aria-label="학생 정보 및 엑셀 저장">
+                <label>학년<input id="studentGrade" type="text" inputmode="numeric" maxlength="1" required></label>
+                <label>반<input id="studentClass" type="text" inputmode="numeric" maxlength="2" required></label>
+                <label>번호<input id="studentNumber" type="text" inputmode="numeric" maxlength="2" required></label>
+                <label>이름<input id="studentName" class="student-name-input" type="text" maxlength="20" required></label>
+                <button id="excelExportButton" class="excel-export-button" type="button">Excel 저장</button>
+              </div>
             </div>
             <p class="application-status-intro">지역별 지도에서 선택한 대학과 학과를 확인하고 지원 조합을 완성하세요. 이 목록은 현재 노트북의 브라우저에 자동으로 보관됩니다.</p>
             <div id="applicationSelectionList" class="application-selection-list" aria-live="polite"></div>
@@ -3142,6 +3179,11 @@
     const applicationStatusView = document.querySelector("#applicationStatusView");
     const applicationSelectionList = document.querySelector("#applicationSelectionList");
     const applicationCount = document.querySelector("#applicationCount");
+    const studentGrade = document.querySelector("#studentGrade");
+    const studentClass = document.querySelector("#studentClass");
+    const studentNumber = document.querySelector("#studentNumber");
+    const studentName = document.querySelector("#studentName");
+    const excelExportButton = document.querySelector("#excelExportButton");
     const search = document.querySelector("#search");
     const departmentSearch = document.querySelector("#departmentSearch");
     const departmentResults = document.querySelector("#departmentResults");
@@ -3150,6 +3192,7 @@
     let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
     const applicationSelections = [];
     const applicationStorageKey = "applyCompass.applicationSelections.v1";
+    const studentProfileStorageKey = "applyCompass.studentProfile.v1";
     const applicationDetailFields = [
       "admissionType", "detailedAdmission", "method", "csatMinimum", "gradeCut",
       "competitionRate", "applicationPeriod", "firstStageDate", "interviewDate",
@@ -22253,6 +22296,97 @@
       }
     }
 
+    function studentProfile() {
+      return {
+        grade: studentGrade.value.trim(),
+        className: studentClass.value.trim(),
+        number: studentNumber.value.trim(),
+        name: studentName.value.trim()
+      };
+    }
+
+    function saveStudentProfile() {
+      try {
+        localStorage.setItem(studentProfileStorageKey, JSON.stringify(studentProfile()));
+      } catch (error) {
+        console.warn("학생 정보를 브라우저에 저장하지 못했습니다.", error);
+      }
+    }
+
+    function loadStudentProfile() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(studentProfileStorageKey) || "{}");
+        studentGrade.value = typeof saved.grade === "string" ? saved.grade : "";
+        studentClass.value = typeof saved.className === "string" ? saved.className : "";
+        studentNumber.value = typeof saved.number === "string" ? saved.number : "";
+        studentName.value = typeof saved.name === "string" ? saved.name : "";
+      } catch (error) {
+        console.warn("저장된 학생 정보를 불러오지 못했습니다.", error);
+      }
+    }
+
+    function exportApplicationsToExcel() {
+      const profile = studentProfile();
+      const requiredInputs = [studentGrade, studentClass, studentNumber, studentName];
+      const missingInput = requiredInputs.find(input => !input.value.trim());
+      if (missingInput) {
+        alert("학년, 반, 번호, 이름을 모두 입력해주세요.");
+        missingInput.focus();
+        return;
+      }
+      if (!window.XLSX) {
+        alert("Excel 저장 기능을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 다시 시도해주세요.");
+        return;
+      }
+
+      const headers = [
+        "구분", "순번", "대학명", "단과대", "전형유형", "세부전형명", "지원학과(선발인원)",
+        "전형방법", "수능최저", "등급컷", "경쟁률", "원서접수", "1단계", "면접일/논술일",
+        "최종발표일", "기타 참고사항"
+      ];
+      const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
+      const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
+      const rowFor = (item, category, index) => [
+        category,
+        category === "일반대학" ? index + 1 : "",
+        item.university,
+        item.college,
+        item.admissionType || "",
+        item.detailedAdmission || "",
+        item.department,
+        item.method || "",
+        item.csatMinimum || "",
+        item.gradeCut || "",
+        item.competitionRate || "",
+        item.applicationPeriod || "",
+        item.firstStageDate || "",
+        item.interviewDate || "",
+        item.finalAnnouncement || "",
+        item.notes || ""
+      ];
+      const rows = [
+        ["수시 원서 희망 현황"],
+        ["학년", profile.grade, "반", profile.className, "번호", profile.number, "이름", profile.name],
+        [],
+        headers,
+        ...generalSelections.map((item, index) => rowFor(item, "일반대학", index)),
+        ...specialSelections.map((item, index) => rowFor(item, "특수목적대학", index))
+      ];
+      const worksheet = XLSX.utils.aoa_to_sheet(rows);
+      worksheet["!merges"] = [XLSX.utils.decode_range("A1:P1")];
+      worksheet["!autofilter"] = { ref: `A4:P${Math.max(4, rows.length)}` };
+      worksheet["!cols"] = [
+        14, 7, 24, 20, 18, 20, 24, 28, 16, 14, 14, 20, 18, 20, 18, 34
+      ].map(wch => ({ wch }));
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "원서현황");
+      workbook.Props = { Title: "수시 원서 희망 현황", Subject: `${profile.name} 학생 대입 지원 희망 목록` };
+
+      const studentId = `${profile.grade}${profile.className}${profile.number.padStart(2, "0")}`;
+      const safeName = profile.name.replace(/[\\/:*?"<>|]/g, "_");
+      XLSX.writeFile(workbook, `${studentId}_${safeName}_수시원서희망.xlsx`, { compression: true });
+    }
+
     function renderApplicationSelections() {
       const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
       const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
@@ -24600,6 +24734,11 @@
           const input = event.target.closest(".application-detail-input");
           if (input) updateApplicationDetail(input.dataset.selectionKey, input.dataset.field, input.value);
         });
+        [studentGrade, studentClass, studentNumber, studentName].forEach(input => {
+          input.addEventListener("input", saveStudentProfile);
+        });
+        excelExportButton.addEventListener("click", exportApplicationsToExcel);
+        loadStudentProfile();
         loadApplicationSelections();
         renderApplicationSelections();
         draw();
