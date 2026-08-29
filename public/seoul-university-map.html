@@ -222,6 +222,19 @@
       font-weight: 900;
     }
     .application-direct-add-toggle:hover, .application-direct-add-toggle:focus { color: #fff; background: #245b57; outline: none; }
+    .application-selection-reset-button {
+      padding: 6px 10px;
+      border: 1px solid rgba(143, 43, 43, 0.34);
+      border-radius: 7px;
+      color: #8f2b2b;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .application-selection-reset-button:hover, .application-selection-reset-button:focus { background: #fff1f1; outline: none; }
+    .application-selection-reset-button:disabled { opacity: 0.42; cursor: default; }
     .application-direct-add-form {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr auto auto;
@@ -22469,6 +22482,7 @@
             <div class="application-selection-section-actions">
               <span>${generalSelections.length}개</span>
               <button class="application-direct-add-toggle" type="button" data-category="general">직접추가</button>
+              <button class="application-selection-reset-button" type="button" data-category="general" ${generalSelections.length ? "" : "disabled"}>초기화</button>
             </div>
           </div>
           <div class="application-table-scroll"><div class="application-table-content">${tableHeader}<div class="application-selection-items">${renderItems(generalSelections)}${renderDirectAddRow("general")}</div></div></div>
@@ -22479,6 +22493,7 @@
             <div class="application-selection-section-actions">
               <span>수시 6회 외 별도 지원 · ${specialSelections.length}개</span>
               <button class="application-direct-add-toggle" type="button" data-category="special">직접추가</button>
+              <button class="application-selection-reset-button" type="button" data-category="special" ${specialSelections.length ? "" : "disabled"}>초기화</button>
             </div>
           </div>
           <div class="application-table-scroll"><div class="application-table-content">${tableHeader}<div class="application-selection-items">${renderItems(specialSelections, true)}${renderDirectAddRow("special")}</div></div></div>
@@ -22555,6 +22570,20 @@
       const index = applicationSelections.findIndex(item => item.key === key);
       if (index < 0) return;
       applicationSelections.splice(index, 1);
+      saveApplicationSelections();
+      renderApplicationSelections();
+      if (state.selectedUniversity) renderDepartmentPanel(state.selectedUniversity);
+    }
+
+    function resetApplicationSelections(category) {
+      const specialPurpose = category === "special";
+      const selectionCount = applicationSelections.filter(item => isSpecialPurposeSelection(item) === specialPurpose).length;
+      if (!selectionCount) return;
+      const categoryLabel = specialPurpose ? "특수목적대학" : "일반대학";
+      if (!window.confirm(`${categoryLabel} 원서현황 ${selectionCount}개를 모두 초기화할까요?`)) return;
+      for (let index = applicationSelections.length - 1; index >= 0; index -= 1) {
+        if (isSpecialPurposeSelection(applicationSelections[index]) === specialPurpose) applicationSelections.splice(index, 1);
+      }
       saveApplicationSelections();
       renderApplicationSelections();
       if (state.selectedUniversity) renderDepartmentPanel(state.selectedUniversity);
@@ -24720,6 +24749,11 @@
             const form = toggle.closest(".application-selection-section").querySelector(".application-direct-add-form");
             form.hidden = !form.hidden;
             if (!form.hidden) form.elements.university.focus();
+            return;
+          }
+          const resetButton = event.target.closest(".application-selection-reset-button");
+          if (resetButton) {
+            resetApplicationSelections(resetButton.dataset.category);
             return;
           }
           const button = event.target.closest(".application-remove-button");
