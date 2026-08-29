@@ -232,6 +232,23 @@
       line-height: 1;
     }
     .application-direct-add-close:hover, .application-direct-add-close:focus { color: #173f3e; background: #e7f1ee; outline: none; }
+    .application-direct-add-form.application-table-row {
+      grid-template-columns: 48px 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
+      gap: 6px;
+      align-items: stretch;
+      margin: 4px 0 0;
+      padding: 6px 8px;
+      border-style: dashed;
+      background: #eef7f4;
+    }
+    .application-direct-add-form.application-table-row .application-detail-input { min-height: 32px; padding: 4px 6px; }
+    .application-direct-add-form.application-table-row .application-direct-add-close,
+    .application-direct-add-form.application-table-row .application-direct-add-submit {
+      width: 100%;
+      min-height: 32px;
+      padding: 0;
+    }
+    .application-direct-add-form.application-table-row .application-direct-add-submit { font-size: 18px; }
     .application-selection-items { display: grid; gap: 10px; }
     .application-selection-empty {
       padding: 42px 20px;
@@ -1280,6 +1297,9 @@
       .application-selection-item.application-table-row > span,
       .application-selection-item.application-table-row .application-remove-button { grid-column: auto; grid-row: auto; }
       .application-direct-add-form { grid-template-columns: 1fr; }
+      .application-direct-add-form.application-table-row {
+        grid-template-columns: 48px 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
+      }
     }
 
     @media (max-width: 560px) {
@@ -22284,13 +22304,27 @@
         }).join("")
         : `<div class="application-selection-empty"><p>선택한 대학이 없습니다.</p></div>`;
 
-      const renderDirectAddForm = category => `
-        <form class="application-direct-add-form" data-category="${category}" hidden>
-          <input name="university" type="text" placeholder="대학교명" aria-label="대학교명" required>
-          <input name="college" type="text" placeholder="단과대명 (선택)" aria-label="단과대명">
-          <input name="department" type="text" placeholder="학과·전공명" aria-label="학과 또는 전공명" required>
-          <button class="application-direct-add-submit" type="submit">추가</button>
+      const directInput = (name, placeholder, multiline = false) => multiline
+        ? `<textarea class="application-detail-input" name="${name}" placeholder="${placeholder}" aria-label="${placeholder}" rows="1"></textarea>`
+        : `<input class="application-detail-input" name="${name}" type="text" placeholder="${placeholder}" aria-label="${placeholder}">`;
+
+      const renderDirectAddRow = category => `
+        <form class="application-direct-add-form application-table-row" data-category="${category}" hidden>
           <button class="application-direct-add-close" type="button" aria-label="직접추가 입력란 닫기">×</button>
+          <button class="application-direct-add-submit" type="submit" aria-label="직접 입력한 대학 추가">+</button>
+          <input class="application-detail-input" name="university" type="text" placeholder="대학교명" aria-label="대학교명" required>
+          ${directInput("admissionType", "전형유형")}
+          ${directInput("detailedAdmission", "세부전형명")}
+          <input class="application-detail-input" name="department" type="text" placeholder="학과명과 선발인원" aria-label="지원학과와 선발인원" required>
+          ${directInput("method", "단계별 전형방법", true)}
+          ${directInput("csatMinimum", "수능최저")}
+          ${directInput("gradeCut", "등급컷")}
+          ${directInput("competitionRate", "경쟁률")}
+          ${directInput("applicationPeriod", "원서접수 기간")}
+          ${directInput("firstStageDate", "1단계 발표")}
+          ${directInput("interviewDate", "면접일/논술일")}
+          ${directInput("finalAnnouncement", "최종발표일")}
+          ${directInput("notes", "기타 참고사항", true)}
         </form>`;
 
       applicationSelectionList.innerHTML = `
@@ -22302,8 +22336,7 @@
               <button class="application-direct-add-toggle" type="button" data-category="general">직접추가</button>
             </div>
           </div>
-          ${renderDirectAddForm("general")}
-          <div class="application-table-scroll"><div class="application-table-content">${tableHeader}<div class="application-selection-items">${renderItems(generalSelections)}</div></div></div>
+          <div class="application-table-scroll"><div class="application-table-content">${tableHeader}<div class="application-selection-items">${renderItems(generalSelections)}${renderDirectAddRow("general")}</div></div></div>
         </section>
         <section class="application-selection-section" aria-labelledby="specialUniversityTitle">
           <div class="application-selection-section-heading">
@@ -22313,8 +22346,7 @@
               <button class="application-direct-add-toggle" type="button" data-category="special">직접추가</button>
             </div>
           </div>
-          ${renderDirectAddForm("special")}
-          <div class="application-table-scroll"><div class="application-table-content">${tableHeader}<div class="application-selection-items">${renderItems(specialSelections, true)}</div></div></div>
+          <div class="application-table-scroll"><div class="application-table-content">${tableHeader}<div class="application-selection-items">${renderItems(specialSelections, true)}${renderDirectAddRow("special")}</div></div></div>
         </section>
       `;
     }
@@ -22345,8 +22377,15 @@
       const existing = applicationSelections.find(item => item.key === key);
       if (existing) {
         existing.category = category;
+        applicationDetailFields.forEach(field => {
+          existing[field] = String(formData.get(field) || "").trim();
+        });
       } else {
-        applicationSelections.push({ key, university, college, department, category });
+        const newSelection = { key, university, college, department, category };
+        applicationDetailFields.forEach(field => {
+          newSelection[field] = String(formData.get(field) || "").trim();
+        });
+        applicationSelections.push(newSelection);
       }
       saveApplicationSelections();
       renderApplicationSelections();
