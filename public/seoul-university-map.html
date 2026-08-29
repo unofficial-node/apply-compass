@@ -161,6 +161,21 @@
     }
     .application-status-intro { margin-top: 10px !important; }
     .application-selection-list { display: grid; gap: 10px; margin-top: 22px; }
+    .application-selection-section + .application-selection-section {
+      margin-top: 26px;
+      padding-top: 24px;
+      border-top: 2px solid rgba(36, 91, 87, 0.14);
+    }
+    .application-selection-section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .application-selection-section-heading h3 { margin: 0; color: #243944; font-size: 16px; }
+    .application-selection-section-heading span { color: var(--muted); font-size: 11px; }
+    .application-selection-items { display: grid; gap: 10px; }
     .application-selection-empty {
       padding: 42px 20px;
       border: 1px dashed rgba(36, 91, 87, 0.28);
@@ -177,6 +192,10 @@
       border: 1px solid rgba(36, 91, 87, 0.14);
       border-radius: 10px;
       background: #fff;
+    }
+    .application-selection-item.special-purpose {
+      border-color: rgba(160, 104, 35, 0.24);
+      background: #fffaf1;
     }
     .application-selection-item strong { color: #172636; font-size: 14px; }
     .application-selection-item span { color: #52636d; font-size: 12px; }
@@ -2865,6 +2884,18 @@
     let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
     const applicationSelections = [];
     const applicationStorageKey = "applyCompass.applicationSelections.v1";
+    const specialPurposeUniversities = new Set([
+      "한국과학기술원",
+      "울산과학기술원",
+      "광주과학기술원",
+      "대구경북과학기술원",
+      "한국에너지공과대학교",
+      "육군사관학교",
+      "공군사관학교",
+      "해군사관학교",
+      "국군간호사관학교",
+      "한국전통문화대학교"
+    ]);
 
     const gyeonggiNameMap = {
       Ansan: "안산시",
@@ -21943,19 +21974,41 @@
     }
 
     function renderApplicationSelections() {
-      applicationCount.textContent = `선택 ${applicationSelections.length}개`;
+      const generalSelections = applicationSelections.filter(item => !specialPurposeUniversities.has(item.university));
+      const specialSelections = applicationSelections.filter(item => specialPurposeUniversities.has(item.university));
+      applicationCount.textContent = `전체 ${applicationSelections.length}개`;
       if (!applicationSelections.length) {
         applicationSelectionList.innerHTML = `<div class="application-selection-empty"><p>아직 선택한 대학과 학과가 없습니다.<br>지역별 지도에서 대학을 고른 뒤 학과 옆의 <strong>선택</strong> 버튼을 눌러주세요.</p></div>`;
         return;
       }
-      applicationSelectionList.innerHTML = applicationSelections.map(item => `
-        <div class="application-selection-item">
+
+      const renderItems = (items, specialPurpose = false) => items.length
+        ? items.map(item => `
+        <div class="application-selection-item${specialPurpose ? " special-purpose" : ""}">
           <strong>${escapeHtml(item.university)}</strong>
           <span>${escapeHtml(item.college)}</span>
           <span>${escapeHtml(item.department)}</span>
           <button class="application-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">삭제</button>
         </div>
-      `).join("");
+      `).join("")
+        : `<div class="application-selection-empty"><p>선택한 대학이 없습니다.</p></div>`;
+
+      applicationSelectionList.innerHTML = `
+        <section class="application-selection-section" aria-labelledby="generalUniversityTitle">
+          <div class="application-selection-section-heading">
+            <h3 id="generalUniversityTitle">일반대학</h3>
+            <span>${generalSelections.length}개</span>
+          </div>
+          <div class="application-selection-items">${renderItems(generalSelections)}</div>
+        </section>
+        <section class="application-selection-section" aria-labelledby="specialUniversityTitle">
+          <div class="application-selection-section-heading">
+            <h3 id="specialUniversityTitle">특수목적대학</h3>
+            <span>수시 6회 외 별도 지원 · ${specialSelections.length}개</span>
+          </div>
+          <div class="application-selection-items">${renderItems(specialSelections, true)}</div>
+        </section>
+      `;
     }
 
     function addApplicationSelection(button) {
