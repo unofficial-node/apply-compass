@@ -194,7 +194,7 @@
     .application-direct-add-toggle:hover, .application-direct-add-toggle:focus { color: #fff; background: #245b57; outline: none; }
     .application-direct-add-form {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr auto;
+      grid-template-columns: 1fr 1fr 1fr auto auto;
       gap: 8px;
       margin-bottom: 10px;
       padding: 12px;
@@ -215,6 +215,20 @@
       font-size: 12px;
       font-weight: 900;
     }
+    .application-direct-add-close {
+      width: 36px;
+      min-height: 36px;
+      padding: 0;
+      border: 1px solid rgba(36, 91, 87, 0.25);
+      border-radius: 7px;
+      color: #52636d;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 21px;
+      line-height: 1;
+    }
+    .application-direct-add-close:hover, .application-direct-add-close:focus { color: #173f3e; background: #e7f1ee; outline: none; }
     .application-selection-items { display: grid; gap: 10px; }
     .application-selection-empty {
       padding: 42px 20px;
@@ -22052,6 +22066,7 @@
           <input name="college" type="text" placeholder="단과대명 (선택)" aria-label="단과대명">
           <input name="department" type="text" placeholder="학과·전공명" aria-label="학과 또는 전공명" required>
           <button class="application-direct-add-submit" type="submit">추가</button>
+          <button class="application-direct-add-close" type="button" aria-label="직접추가 입력란 닫기">×</button>
         </form>`;
 
       applicationSelectionList.innerHTML = `
@@ -24267,6 +24282,11 @@
           if (button) addApplicationSelection(button);
         });
         applicationSelectionList.addEventListener("click", event => {
+          const closeButton = event.target.closest(".application-direct-add-close");
+          if (closeButton) {
+            closeButton.closest(".application-direct-add-form").hidden = true;
+            return;
+          }
           const toggle = event.target.closest(".application-direct-add-toggle");
           if (toggle) {
             const form = toggle.closest(".application-selection-section").querySelector(".application-direct-add-form");
