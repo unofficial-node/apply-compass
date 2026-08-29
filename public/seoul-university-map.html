@@ -1413,11 +1413,25 @@
       .application-table-header,
       .application-direct-add-form.application-table-row,
       .application-selection-item.application-table-row {
-        grid-template-columns: 34px 26px 72px 58px 68px 78px 86px 48px 44px 44px 62px 54px 58px 54px minmax(105px, 1fr);
+        grid-template-columns:
+          34px 26px minmax(65px, 1.05fr) minmax(55px, .9fr) minmax(60px, 1fr)
+          minmax(72px, 1.15fr) minmax(76px, 1.25fr) minmax(44px, .75fr)
+          minmax(42px, .7fr) minmax(42px, .7fr) minmax(55px, .9fr)
+          minmax(50px, .82fr) minmax(54px, .9fr) minmax(50px, .82fr)
+          minmax(88px, 1.35fr);
         gap: 3px;
         width: 100%;
         break-inside: avoid;
         page-break-inside: avoid;
+      }
+      .application-selection-item.application-table-row > * {
+        grid-column: auto !important;
+        grid-row: auto !important;
+      }
+      .application-selection-item.general-purpose.application-table-row > .application-print-value,
+      .application-selection-item.special-purpose.application-table-row > .application-print-value {
+        grid-column: auto !important;
+        grid-row: auto !important;
       }
       .application-table-header { padding: 0 4px; font-size: 8pt; }
       .application-table-header span { min-height: 28px; }
@@ -1434,13 +1448,13 @@
       .application-print-value {
         display: block;
         min-width: 0;
-        min-height: 32px;
-        padding: 5px 6px;
+        min-height: 30px;
+        padding: 4px 5px;
         border: 1px solid #cbd7da;
         border-radius: 6px;
         color: #243944;
         background: #fff;
-        font-size: 8pt;
+        font-size: 8.5pt;
         line-height: 1.3;
         white-space: pre-wrap;
         overflow-wrap: anywhere;
