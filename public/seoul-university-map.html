@@ -909,10 +909,40 @@
     .department-panel .meta { margin: 6px 0 12px; color: var(--muted); font-size: 12px; line-height: 1.45; }
     .department-panel h3 { margin: 14px 0 8px; color: #2d3e4b; font-size: 13px; }
     .department-panel ul { margin: 0; padding-left: 18px; color: #263843; font-size: 12px; line-height: 1.55; }
-    .department-panel li + li { margin-top: 3px; }
+    .department-panel li {
+      position: relative;
+      min-height: 28px;
+      padding: 5px 58px 5px 2px;
+      border-radius: 6px;
+    }
+    .department-panel li + li { margin-top: 1px; }
+    .department-panel li:hover, .department-panel li:focus-within { background: rgba(36, 91, 87, 0.08); }
+    .department-select-button {
+      position: absolute;
+      top: 50%;
+      right: 2px;
+      min-width: 48px;
+      padding: 4px 8px;
+      transform: translateY(-50%);
+      border: 1px solid #245b57;
+      border-radius: 6px;
+      color: #fff;
+      background: #245b57;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.2;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 120ms ease, background 120ms ease;
+    }
+    .department-panel li:hover .department-select-button,
+    .department-panel li:focus-within .department-select-button { opacity: 1; pointer-events: auto; }
+    .department-select-button:hover, .department-select-button:focus { background: #173f3e; outline: none; }
     .department-panel li.highlighted-department {
       margin-left: -4px;
-      padding: 2px 4px;
+      padding-left: 6px;
       border-radius: 5px;
       background: rgba(255, 225, 103, 0.26);
       font-weight: 800;
@@ -927,6 +957,10 @@
     .department-empty { color: var(--muted); font-size: 12px; line-height: 1.55; }
     .note { color: var(--muted); font-size: 12px; line-height: 1.5; }
     .error { position: absolute; inset: 0; display: none; place-items: center; padding: 24px; color: #8f2b2b; background: rgba(255, 255, 255, 0.82); text-align: center; font-weight: 700; }
+
+    @media (hover: none) {
+      .department-select-button { opacity: 1; pointer-events: auto; }
+    }
 
     @media (max-width: 940px) {
       header { align-items: stretch; flex-direction: column; }
@@ -21833,7 +21867,9 @@
             <ul>${group.departments.map(name => {
               const matched = departmentQuery && name.toLowerCase().includes(departmentQuery);
               const favoriteMatched = !departmentQuery && favoriteDepartmentMatched(name);
-              return `<li class="${matched || favoriteMatched ? "highlighted-department" : ""}">${departmentNameMarkup(name, departmentQuery, favoriteMatched)}</li>`;
+              const departmentName = departmentNameMarkup(name, departmentQuery, favoriteMatched);
+              const buttonLabel = `${d.name} ${name} 선택`;
+              return `<li class="${matched || favoriteMatched ? "highlighted-department" : ""}"><span>${departmentName}</span><button class="department-select-button" type="button" data-university="${escapeHtml(d.name)}" data-college="${escapeHtml(group.college)}" data-department="${escapeHtml(name)}" aria-label="${escapeHtml(buttonLabel)}">선택</button></li>`;
             }).join("")}</ul>
           `).join("")
         : `<p class="department-empty">학과정보 데이터가 아직 준비되지 않았습니다. 나중에 <code>departmentData</code>에 이 대학의 학과를 추가하면 이곳에 표시됩니다.</p>`;
