@@ -1070,7 +1070,7 @@
               <h2 id="applicationStatusTitle">원서현황</h2>
               <span id="applicationCount" class="application-count">선택 0개</span>
             </div>
-            <p class="application-status-intro">지역별 지도에서 선택한 대학과 학과를 확인하고 지원 조합을 완성하세요.</p>
+            <p class="application-status-intro">지역별 지도에서 선택한 대학과 학과를 확인하고 지원 조합을 완성하세요. 이 목록은 현재 노트북의 브라우저에 자동으로 보관됩니다.</p>
             <div id="applicationSelectionList" class="application-selection-list" aria-live="polite"></div>
           </div>
         </section>
@@ -2864,6 +2864,7 @@
     const errorBox = document.querySelector("#error");
     let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
     const applicationSelections = [];
+    const applicationStorageKey = "applyCompass.applicationSelections.v1";
 
     const gyeonggiNameMap = {
       Ansan: "안산시",
@@ -21917,6 +21918,30 @@
       return applicationSelections.some(item => item.key === key);
     }
 
+    function saveApplicationSelections() {
+      try {
+        localStorage.setItem(applicationStorageKey, JSON.stringify(applicationSelections));
+      } catch (error) {
+        console.warn("원서현황을 브라우저에 저장하지 못했습니다.", error);
+      }
+    }
+
+    function loadApplicationSelections() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(applicationStorageKey) || "[]");
+        if (!Array.isArray(saved)) return;
+        const uniqueSelections = new Map();
+        saved.forEach(item => {
+          if (!item || typeof item.university !== "string" || typeof item.college !== "string" || typeof item.department !== "string") return;
+          const key = applicationSelectionKey(item.university, item.college, item.department);
+          uniqueSelections.set(key, { key, university: item.university, college: item.college, department: item.department });
+        });
+        applicationSelections.splice(0, applicationSelections.length, ...uniqueSelections.values());
+      } catch (error) {
+        console.warn("저장된 원서현황을 불러오지 못했습니다.", error);
+      }
+    }
+
     function renderApplicationSelections() {
       applicationCount.textContent = `선택 ${applicationSelections.length}개`;
       if (!applicationSelections.length) {
@@ -21940,6 +21965,7 @@
       const key = applicationSelectionKey(university, college, department);
       if (!applicationSelections.some(item => item.key === key)) {
         applicationSelections.push({ key, university, college, department });
+        saveApplicationSelections();
       }
       button.textContent = "선택됨";
       button.classList.add("selected");
@@ -21951,6 +21977,7 @@
       const index = applicationSelections.findIndex(item => item.key === key);
       if (index < 0) return;
       applicationSelections.splice(index, 1);
+      saveApplicationSelections();
       renderApplicationSelections();
       if (state.selectedUniversity) renderDepartmentPanel(state.selectedUniversity);
     }
@@ -24103,6 +24130,7 @@
           const button = event.target.closest(".application-remove-button");
           if (button) removeApplicationSelection(button.dataset.selectionKey);
         });
+        loadApplicationSelections();
         renderApplicationSelections();
         draw();
         window.addEventListener("resize", () => draw());
