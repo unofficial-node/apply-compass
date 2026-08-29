@@ -403,7 +403,7 @@
       color: #fff;
       line-height: 1.25;
     }
-    .application-table-header span:nth-child(-n+4) {
+    .application-table-header span:nth-child(-n+6) {
       position: sticky;
       z-index: 5;
       background: #2e6759;
@@ -411,7 +411,9 @@
     .application-table-header span:nth-child(1) { left: 0; }
     .application-table-header span:nth-child(2) { left: 54px; }
     .application-table-header span:nth-child(3) { left: 92px; }
-    .application-table-header span:nth-child(4) { left: 238px; box-shadow: 10px 0 12px -10px rgba(23, 63, 62, 0.8); }
+    .application-table-header span:nth-child(4) { left: 238px; }
+    .application-table-header span:nth-child(5) { left: 409px; }
+    .application-table-header span:nth-child(6) { left: 540px; box-shadow: 10px 0 12px -10px rgba(23, 63, 62, 0.8); }
     .application-selection-item.general-purpose.application-table-row,
     .application-selection-item.special-purpose.application-table-row {
       width: 100%;
@@ -455,7 +457,9 @@
     .application-table-row .application-remove-button,
     .application-table-row .application-order-controls,
     .application-table-row .application-university-cell,
-    .application-table-row .application-detail-input[data-field="department"] {
+    .application-table-row .application-detail-input[data-field="department"],
+    .application-table-row .application-detail-input[data-field="admissionType"],
+    .application-table-row .application-detail-input[data-field="detailedAdmission"] {
       position: sticky;
       z-index: 3;
       background: #fff;
@@ -463,8 +467,10 @@
     .application-table-row .application-remove-button { left: 0; }
     .application-table-row .application-order-controls { left: 54px; }
     .application-table-row .application-university-cell { left: 92px; }
-    .application-table-row .application-detail-input[data-field="department"] {
-      left: 238px;
+    .application-table-row .application-detail-input[data-field="department"] { left: 238px; }
+    .application-table-row .application-detail-input[data-field="admissionType"] { left: 409px; }
+    .application-table-row .application-detail-input[data-field="detailedAdmission"] {
+      left: 540px;
       box-shadow: 10px 0 12px -10px rgba(23, 63, 62, 0.35);
     }
     .application-table-row.special-purpose .application-remove-button,
