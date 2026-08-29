@@ -1440,6 +1440,10 @@
       .print-student-profile span { white-space: nowrap; }
       .print-report-total { margin-left: auto; font-weight: 800; white-space: nowrap; }
       .print-report-section { margin-top: 3mm; }
+      .print-report-section.print-schedule-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
       .print-report-section h2 { margin: 0 0 1.5mm; color: #173f3e; font-size: 11pt; break-after: avoid; page-break-after: avoid; }
       .print-report-table {
         width: 100%;
@@ -22588,7 +22592,7 @@
             </tbody>
           </table>
         </section>
-        <section class="print-report-section">
+        <section class="print-report-section print-schedule-section">
           <h2>전형 일정 및 참고사항</h2>
           <table class="print-report-table">
             <colgroup><col style="width:5%"><col style="width:13%"><col style="width:14%"><col style="width:11%"><col style="width:14%"><col style="width:12%"><col style="width:31%"></colgroup>
