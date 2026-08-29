@@ -248,41 +248,52 @@
       background: #fff;
     }
     .application-selection-item.general-purpose {
-      grid-template-columns: 28px 38px minmax(180px, 1fr) minmax(150px, 0.8fr) minmax(200px, 1.2fr) auto;
+      position: relative;
+      width: calc(100% - 54px);
+      margin-left: 54px;
+      grid-template-columns: 58px minmax(180px, 1fr) minmax(150px, 0.8fr) minmax(200px, 1.2fr) auto;
     }
-    .application-selection-item.dragging { opacity: 0.45; }
-    .application-selection-item.drag-over { border-color: #245b57; box-shadow: 0 0 0 2px rgba(36, 91, 87, 0.12); }
-    .application-drag-handle {
+    .application-order-controls {
+      display: flex;
+      gap: 4px;
+    }
+    .application-order-button {
+      width: 26px;
+      height: 28px;
+      padding: 0;
+      border: 1px solid rgba(36, 91, 87, 0.25);
+      border-radius: 6px;
+      color: #245b57;
+      background: #f7fbfa;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .application-order-button:hover, .application-order-button:focus { color: #fff; background: #245b57; outline: none; }
+    .application-order-button:disabled { color: #aab6b6; background: #f3f5f5; cursor: default; opacity: 0.55; }
+    .application-rank {
+      position: absolute;
+      top: 50%;
+      left: -48px;
       display: grid;
       place-items: center;
-      width: 28px;
-      height: 32px;
-      border-radius: 6px;
-      color: #6d7e83;
-      cursor: grab;
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: -4px;
-      user-select: none;
-    }
-    .application-drag-handle:hover, .application-drag-handle:focus { color: #173f3e; background: #e7f1ee; outline: none; }
-    .application-drag-handle:active { cursor: grabbing; }
-    .application-rank {
-      display: inline-grid;
-      place-items: center;
-      width: 30px;
-      height: 30px;
+      width: 36px;
+      height: 36px;
+      transform: translateY(-50%);
       border-radius: 50%;
-      color: #fff;
+      color: #fff !important;
       background: #245b57;
-      font-size: 12px !important;
+      box-shadow: 0 5px 14px rgba(36, 91, 87, 0.2);
+      font-size: 14px !important;
       font-weight: 900;
     }
     .application-rank.over-limit {
-      width: 38px;
+      left: -52px;
+      width: 46px;
       border-radius: 999px;
-      color: #8f2b2b;
+      color: #8f2b2b !important;
       background: #fff0f0;
+      box-shadow: 0 5px 14px rgba(143, 43, 43, 0.12);
       font-size: 10px !important;
     }
     .application-selection-item.special-purpose {
@@ -1138,10 +1149,10 @@
       .map-wrap, svg { min-height: 520px; }
       aside { max-height: 380px; }
       .application-selection-item { grid-template-columns: 1fr auto; }
-      .application-selection-item.general-purpose { grid-template-columns: 28px 38px minmax(0, 1fr) auto; }
-      .application-selection-item.general-purpose strong { grid-column: 3; }
-      .application-selection-item.general-purpose > span:not(.application-drag-handle):not(.application-rank) { grid-column: 3; }
-      .application-selection-item.general-purpose .application-remove-button { grid-column: 4; grid-row: 1 / span 3; }
+      .application-selection-item.general-purpose { grid-template-columns: 58px minmax(0, 1fr) auto; }
+      .application-selection-item.general-purpose strong { grid-column: 2; }
+      .application-selection-item.general-purpose > span:not(.application-rank) { grid-column: 2; }
+      .application-selection-item.general-purpose .application-remove-button { grid-column: 3; grid-row: 1 / span 3; }
       .application-selection-item span { grid-column: 1; }
       .application-remove-button { grid-column: 2; grid-row: 1 / span 3; }
       .application-direct-add-form { grid-template-columns: 1fr; }
@@ -2995,7 +3006,6 @@
     let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
     const applicationSelections = [];
     const applicationStorageKey = "applyCompass.applicationSelections.v1";
-    let draggedApplicationKey = null;
     const specialPurposeUniversities = new Set([
       "한국과학기술원",
       "울산과학기술원",
@@ -22098,8 +22108,11 @@
       const renderItems = (items, specialPurpose = false) => items.length
         ? items.map((item, index) => {
           const orderControls = specialPurpose ? "" : `
-            <span class="application-drag-handle" draggable="true" tabindex="0" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} 순서 이동`)}" title="드래그하여 순서 이동">⠿</span>
-            <span class="application-rank${index >= 6 ? " over-limit" : ""}">${index < 6 ? index + 1 : "초과"}</span>`;
+            <span class="application-rank${index >= 6 ? " over-limit" : ""}">${index < 6 ? index + 1 : "초과"}</span>
+            <div class="application-order-controls" aria-label="${escapeHtml(`${item.university} 순서 변경`)}">
+              <button class="application-order-button" type="button" data-selection-key="${escapeHtml(item.key)}" data-direction="up" aria-label="위로 이동" ${index === 0 ? "disabled" : ""}>▲</button>
+              <button class="application-order-button" type="button" data-selection-key="${escapeHtml(item.key)}" data-direction="down" aria-label="아래로 이동" ${index === items.length - 1 ? "disabled" : ""}>▼</button>
+            </div>`;
           return `
         <div class="application-selection-item${specialPurpose ? " special-purpose" : " general-purpose"}" data-selection-key="${escapeHtml(item.key)}">
           ${orderControls}
@@ -22180,16 +22193,16 @@
       renderApplicationSelections();
     }
 
-    function reorderGeneralSelections(sourceKey, targetKey, placeAfter) {
-      if (!sourceKey || !targetKey || sourceKey === targetKey) return;
-      const source = applicationSelections.find(item => item.key === sourceKey);
-      const target = applicationSelections.find(item => item.key === targetKey);
-      if (!source || !target || isSpecialPurposeSelection(source) || isSpecialPurposeSelection(target)) return;
-      const sourceIndex = applicationSelections.findIndex(item => item.key === sourceKey);
-      applicationSelections.splice(sourceIndex, 1);
-      let targetIndex = applicationSelections.findIndex(item => item.key === targetKey);
-      if (placeAfter) targetIndex += 1;
-      applicationSelections.splice(targetIndex, 0, source);
+    function moveGeneralSelection(key, direction) {
+      const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
+      const currentIndex = generalSelections.findIndex(item => item.key === key);
+      const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+      if (currentIndex < 0 || targetIndex < 0 || targetIndex >= generalSelections.length) return;
+      const current = generalSelections[currentIndex];
+      const target = generalSelections[targetIndex];
+      const currentStorageIndex = applicationSelections.findIndex(item => item.key === current.key);
+      const targetStorageIndex = applicationSelections.findIndex(item => item.key === target.key);
+      [applicationSelections[currentStorageIndex], applicationSelections[targetStorageIndex]] = [applicationSelections[targetStorageIndex], applicationSelections[currentStorageIndex]];
       saveApplicationSelections();
       renderApplicationSelections();
     }
@@ -24348,6 +24361,11 @@
           if (button) addApplicationSelection(button);
         });
         applicationSelectionList.addEventListener("click", event => {
+          const orderButton = event.target.closest(".application-order-button");
+          if (orderButton) {
+            moveGeneralSelection(orderButton.dataset.selectionKey, orderButton.dataset.direction);
+            return;
+          }
           const closeButton = event.target.closest(".application-direct-add-close");
           if (closeButton) {
             closeButton.closest(".application-direct-add-form").hidden = true;
@@ -24368,35 +24386,6 @@
           if (!form) return;
           event.preventDefault();
           addDirectApplicationSelection(form);
-        });
-        applicationSelectionList.addEventListener("dragstart", event => {
-          const handle = event.target.closest(".application-drag-handle");
-          if (!handle) return;
-          draggedApplicationKey = handle.dataset.selectionKey;
-          handle.closest(".application-selection-item").classList.add("dragging");
-          event.dataTransfer.effectAllowed = "move";
-          event.dataTransfer.setData("text/plain", draggedApplicationKey);
-        });
-        applicationSelectionList.addEventListener("dragover", event => {
-          const item = event.target.closest(".application-selection-item.general-purpose");
-          if (!item || !draggedApplicationKey) return;
-          event.preventDefault();
-          event.dataTransfer.dropEffect = "move";
-          applicationSelectionList.querySelectorAll(".drag-over").forEach(element => element.classList.remove("drag-over"));
-          item.classList.add("drag-over");
-        });
-        applicationSelectionList.addEventListener("drop", event => {
-          const item = event.target.closest(".application-selection-item.general-purpose");
-          if (!item || !draggedApplicationKey) return;
-          event.preventDefault();
-          const bounds = item.getBoundingClientRect();
-          const placeAfter = event.clientY > bounds.top + bounds.height / 2;
-          reorderGeneralSelections(draggedApplicationKey, item.dataset.selectionKey, placeAfter);
-          draggedApplicationKey = null;
-        });
-        applicationSelectionList.addEventListener("dragend", () => {
-          draggedApplicationKey = null;
-          applicationSelectionList.querySelectorAll(".dragging, .drag-over").forEach(element => element.classList.remove("dragging", "drag-over"));
         });
         loadApplicationSelections();
         renderApplicationSelections();
