@@ -1425,15 +1425,16 @@
       .print-report-header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
         gap: 6mm;
         margin-bottom: 3mm;
         padding: 0 0 2.5mm;
         border-bottom: 2px solid #245b57;
+        text-align: left;
       }
-      .print-report-header h1 { margin: 0; color: #173f3e; font-size: 18pt; }
-      .print-report-identity { display: flex; align-items: baseline; gap: 6mm; min-width: 0; }
-      .print-student-profile { display: flex; align-items: center; gap: 4mm; font-weight: 800; }
+      .print-report-header h1 { margin: 0; color: #173f3e; font-size: 18pt; text-align: left; }
+      .print-report-identity { display: flex; align-items: baseline; justify-content: flex-start; gap: 6mm; min-width: 0; text-align: left; }
+      .print-student-profile { display: flex; align-items: center; justify-content: flex-start; gap: 4mm; font-size: 11pt; font-weight: 800; text-align: left; }
       .print-student-profile span { white-space: nowrap; }
       .print-report-total { margin-left: auto; font-weight: 800; white-space: nowrap; }
       .print-report-section { margin-top: 3mm; }
