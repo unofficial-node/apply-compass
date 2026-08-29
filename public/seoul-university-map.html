@@ -141,7 +141,7 @@
 
     .application-status-view[hidden] { display: none; }
     .application-status-card {
-      width: min(1120px, 100%);
+      width: min(1540px, 100%);
       margin-bottom: 32px;
       padding: 34px;
       border: 1px solid rgba(36, 91, 87, 0.18);
@@ -251,22 +251,22 @@
       position: relative;
       width: calc(100% - 54px);
       margin-left: 54px;
-      grid-template-columns: 58px minmax(180px, 1fr) minmax(150px, 0.8fr) minmax(200px, 1.2fr) auto;
+      grid-template-columns: 44px minmax(220px, 1fr) minmax(180px, 0.8fr) minmax(240px, 1.2fr) auto;
     }
     .application-order-controls {
       display: flex;
-      gap: 4px;
+      gap: 2px;
     }
     .application-order-button {
-      width: 26px;
-      height: 28px;
+      width: 20px;
+      height: 22px;
       padding: 0;
       border: 1px solid rgba(36, 91, 87, 0.25);
-      border-radius: 6px;
+      border-radius: 5px;
       color: #245b57;
       background: #f7fbfa;
       cursor: pointer;
-      font-size: 11px;
+      font-size: 8px;
       font-weight: 900;
     }
     .application-order-button:hover, .application-order-button:focus { color: #fff; background: #245b57; outline: none; }
@@ -1149,7 +1149,7 @@
       .map-wrap, svg { min-height: 520px; }
       aside { max-height: 380px; }
       .application-selection-item { grid-template-columns: 1fr auto; }
-      .application-selection-item.general-purpose { grid-template-columns: 58px minmax(0, 1fr) auto; }
+      .application-selection-item.general-purpose { grid-template-columns: 44px minmax(0, 1fr) auto; }
       .application-selection-item.general-purpose strong { grid-column: 2; }
       .application-selection-item.general-purpose > span:not(.application-rank) { grid-column: 2; }
       .application-selection-item.general-purpose .application-remove-button { grid-column: 3; grid-row: 1 / span 3; }
