@@ -69,6 +69,7 @@
       position: absolute;
       top: -34px;
       left: 18px;
+      right: 18px;
       z-index: 4;
       display: flex;
       align-items: center;
@@ -110,6 +111,45 @@
       color: rgba(54, 82, 82, 0.7);
       background: rgba(216, 231, 225, 0.78);
     }
+
+    .region-tab.application-tab {
+      min-width: 104px;
+      margin-left: auto;
+      color: #fff;
+      background: #245b57;
+      border-color: #1d4b48;
+    }
+
+    .region-tab.application-tab.active {
+      color: #fff;
+      background: #173f3e;
+    }
+
+    .application-status-view {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      border-radius: inherit;
+      background: linear-gradient(145deg, rgba(242, 248, 246, 0.98), rgba(222, 237, 233, 0.98));
+    }
+
+    .application-status-view[hidden] { display: none; }
+    .application-status-card {
+      width: min(560px, 100%);
+      padding: 34px;
+      border: 1px solid rgba(36, 91, 87, 0.18);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 18px 44px rgba(31, 48, 65, 0.12);
+      text-align: center;
+    }
+    .application-status-card h2 { margin: 0 0 12px; color: #173f3e; font-size: 28px; }
+    .application-status-card p { margin: 0; color: var(--muted); line-height: 1.7; }
+    main.application-mode { grid-template-columns: minmax(0, 1fr); }
+    main.application-mode aside { display: none; }
 
     .line-picker {
       position: absolute;
@@ -898,8 +938,9 @@
     @media (max-width: 560px) {
       header { padding-top: 22px; }
       .map-wrap, svg { min-height: 430px; }
-      .region-tabs { left: 12px; top: -32px; height: 30px; gap: 5px; }
+      .region-tabs { right: 12px; left: 12px; top: -32px; height: 30px; gap: 5px; }
       .region-tab { min-width: 66px; height: 30px; padding: 7px 13px 8px; font-size: 12px; }
+      .region-tab.application-tab { min-width: 88px; }
       .district-name-badge { top: -31px; right: 12px; min-width: 72px; height: 26px; padding: 4px 10px; font-size: 12px; }
       .line-picker { width: 128px; gap: 5px; padding: 8px; }
       .line-button { height: 31px; padding: 4px 6px; gap: 6px; font-size: 11px; }
@@ -939,7 +980,14 @@
           <button class="region-tab pending" type="button" data-region="jeolla">호남권</button>
           <button class="region-tab pending" type="button" data-region="national">전국</button>
           <button class="region-tab pending" type="button" data-region="capital">수도권</button>
+          <button id="applicationStatusTab" class="region-tab application-tab" type="button">원서현황</button>
         </div>
+        <section id="applicationStatusView" class="application-status-view" aria-labelledby="applicationStatusTitle" hidden>
+          <div class="application-status-card">
+            <h2 id="applicationStatusTitle">원서현황</h2>
+            <p>희망 대학과 학과를 담아 지원 조합을 만들고 Excel 파일로 저장하는 기능이 이곳에 추가됩니다.</p>
+          </div>
+        </section>
         <div id="linePicker" class="line-picker" aria-label="지하철 노선 선택"></div>
         <div id="favoritePicker" class="favorite-picker" aria-label="전국 즐겨찾기 선택"></div>
         <div id="landmarkPanel" class="landmark-panel">
@@ -2718,7 +2766,9 @@
     const landmarkPanel = document.querySelector("#landmarkPanel");
     const mainEl = document.querySelector("main");
     const mapWrap = document.querySelector(".map-wrap");
-    const regionTabs = document.querySelectorAll(".region-tab");
+    const regionTabs = document.querySelectorAll(".region-tab[data-region]");
+    const applicationStatusTab = document.querySelector("#applicationStatusTab");
+    const applicationStatusView = document.querySelector("#applicationStatusView");
     const search = document.querySelector("#search");
     const departmentSearch = document.querySelector("#departmentSearch");
     const departmentResults = document.querySelector("#departmentResults");
@@ -23698,6 +23748,7 @@
     }
 
     function selectRegion(region) {
+      closeApplicationStatus();
       if (!state.geos[region] || state.currentRegion === region) return;
       state.currentRegion = region;
       state.geo = state.geos[region];
@@ -23716,6 +23767,27 @@
       updateLandmarkToggle();
       renderDefaultPanel();
       draw();
+    }
+
+    function openApplicationStatus() {
+      mainEl.classList.add("application-mode");
+      applicationStatusView.hidden = false;
+      applicationStatusTab.classList.add("active");
+      applicationStatusTab.setAttribute("aria-current", "page");
+      regionTabs.forEach(tab => {
+        tab.classList.remove("active");
+        tab.classList.add("pending");
+        tab.removeAttribute("aria-current");
+      });
+    }
+
+    function closeApplicationStatus() {
+      if (applicationStatusView.hidden) return;
+      mainEl.classList.remove("application-mode");
+      applicationStatusView.hidden = true;
+      applicationStatusTab.classList.remove("active");
+      applicationStatusTab.removeAttribute("aria-current");
+      updateRegionTabs();
     }
 
     function draw() {
@@ -23882,6 +23954,7 @@
         regionTabs.forEach(tab => {
           tab.addEventListener("click", () => selectRegion(tab.dataset.region));
         });
+        applicationStatusTab.addEventListener("click", openApplicationStatus);
         draw();
         window.addEventListener("resize", () => draw());
         search.addEventListener("input", handleSearchInput);
