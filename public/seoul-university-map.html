@@ -22465,7 +22465,7 @@
       }
 
       const headers = [
-        "대학 구분", "지원 구분", "순위", "대학명", "지원학과", "단과대", "전형유형", "세부전형명", "선발인원",
+        "대학 구분", "지원 구분", "순위", "대학명", "단과대학", "지원학과", "전형유형", "세부전형명", "선발인원",
         "전형방법", "수능최저", "등급컷", "경쟁률", "원서접수", "1단계", "면접일/논술일",
         "최종발표일", "기타 참고사항"
       ];
@@ -22476,8 +22476,8 @@
         category === "일반대학" ? (index < 6 ? "6순위 이내" : "순위 초과") : "해당 없음",
         category === "일반대학" && index < 6 ? index + 1 : "",
         item.university,
-        item.department,
         item.college,
+        item.department,
         item.admissionType || "",
         item.detailedAdmission || "",
         item.recruitmentCount || "",
@@ -22503,7 +22503,7 @@
       worksheet["!merges"] = [XLSX.utils.decode_range("A1:R1")];
       worksheet["!autofilter"] = { ref: `A4:R${Math.max(4, rows.length)}` };
       worksheet["!cols"] = [
-        14, 14, 7, 24, 24, 20, 18, 20, 12, 28, 16, 14, 14, 20, 18, 20, 18, 34
+        14, 14, 7, 24, 20, 24, 18, 20, 12, 28, 16, 14, 14, 20, 18, 20, 18, 34
       ].map(wch => ({ wch }));
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "원서현황");
@@ -22535,8 +22535,8 @@
         <tr>
           <td class="print-rank">${rank}</td>
           <td>${value(item.university)}</td>
-          <td>${value(item.department)}</td>
           <td>${value(item.college)}</td>
+          <td>${value(item.department)}</td>
           <td>${value(item.admissionType)}</td>
           <td>${value(item.detailedAdmission)}</td>
           <td>${value(item.recruitmentCount)}</td>
@@ -22570,8 +22570,8 @@
         <section class="print-report-section">
           <h2>지원 기본정보</h2>
           <table class="print-report-table">
-            <colgroup><col style="width:4%"><col style="width:11%"><col style="width:14%"><col style="width:7%"><col style="width:9%"><col style="width:10%"><col style="width:6%"><col style="width:17%"><col style="width:9%"><col style="width:6%"><col style="width:7%"></colgroup>
-            <thead><tr><th>순위</th><th>대학명</th><th>지원학과</th><th>단과대</th><th>전형유형</th><th>세부전형명</th><th>선발인원</th><th>전형방법</th><th>수능최저</th><th>등급컷</th><th>경쟁률</th></tr></thead>
+            <colgroup><col style="width:4%"><col style="width:11%"><col style="width:7%"><col style="width:14%"><col style="width:9%"><col style="width:10%"><col style="width:6%"><col style="width:17%"><col style="width:9%"><col style="width:6%"><col style="width:7%"></colgroup>
+            <thead><tr><th>순위</th><th>대학명</th><th>단과대학</th><th>지원학과</th><th>전형유형</th><th>세부전형명</th><th>선발인원</th><th>전형방법</th><th>수능최저</th><th>등급컷</th><th>경쟁률</th></tr></thead>
             <tbody>
               ${emptyRows(11)}
               ${groupedRows(rankedGeneralSelections, "일반대학 · 6순위 이내", "", 11, basicRow, index => index + 1)}
