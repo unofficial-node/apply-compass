@@ -351,21 +351,29 @@
       display: grid;
       place-items: center;
       width: 34px;
-      height: 28px;
+      height: 30px;
       transform: translateY(-50%);
-      border-left: 3px solid #2e6759;
       color: #245b57 !important;
       background: transparent;
-      font-size: 12px !important;
+      font-size: 15px !important;
       font-weight: 600;
     }
+    .application-rank::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 6px;
+      height: 1px;
+      background: #8aa9a2;
+    }
     .application-rank.over-limit {
-      left: -48px;
-      width: 34px;
-      border-left-color: #b64141;
+      left: -52px;
+      width: 40px;
       color: #8f2b2b !important;
       font-size: 10px !important;
     }
+    .application-rank.over-limit::before { background: #d39995; }
     .application-table-scroll {
       width: 100%;
       min-width: 0;
