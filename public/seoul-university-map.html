@@ -1426,14 +1426,16 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10mm;
+        gap: 6mm;
         margin-bottom: 3mm;
         padding: 0 0 2.5mm;
         border-bottom: 2px solid #245b57;
       }
       .print-report-header h1 { margin: 0; color: #173f3e; font-size: 18pt; }
-      .print-student-profile { display: flex; align-items: center; gap: 5mm; font-weight: 800; }
+      .print-report-identity { display: flex; align-items: baseline; gap: 6mm; min-width: 0; }
+      .print-student-profile { display: flex; align-items: center; gap: 4mm; font-weight: 800; }
       .print-student-profile span { white-space: nowrap; }
+      .print-report-total { margin-left: auto; font-weight: 800; white-space: nowrap; }
       .print-report-section { margin-top: 3mm; }
       .print-report-section h2 { margin: 0 0 1.5mm; color: #173f3e; font-size: 11pt; break-after: avoid; page-break-after: avoid; }
       .print-report-table {
@@ -22521,6 +22523,9 @@
       const overLimitGeneralSelections = generalSelections.slice(6);
       const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
       const value = input => escapeHtml(String(input || ""));
+      const studentId = profile.grade && profile.className && profile.number
+        ? `${profile.grade}${profile.className}${profile.number.padStart(2, "0")}`
+        : "";
       const groupedRows = (items, label, groupClass, columnCount, renderRow, rankFor) => {
         if (!items.length) return "";
         return `
@@ -22558,14 +22563,14 @@
 
       applicationPrintReport.innerHTML = `
         <header class="print-report-header">
-          <h1>수시 원서 희망 현황</h1>
-          <div class="print-student-profile">
-            <span>학년 ${value(profile.grade)}</span>
-            <span>반 ${value(profile.className)}</span>
-            <span>번호 ${value(profile.number)}</span>
-            <span>이름 ${value(profile.name)}</span>
-            <span>전체 ${applicationSelections.length}개</span>
+          <div class="print-report-identity">
+            <h1>수시 원서 희망 현황</h1>
+            <div class="print-student-profile">
+              <span>학번 ${value(studentId)}</span>
+              <span>이름 ${value(profile.name)}</span>
+            </div>
           </div>
+          <span class="print-report-total">전체 ${applicationSelections.length}개</span>
         </header>
         <section class="print-report-section">
           <h2>지원 기본정보</h2>
