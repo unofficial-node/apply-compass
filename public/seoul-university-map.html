@@ -308,12 +308,12 @@
       padding: 2px 2px 12px 54px;
       scrollbar-color: #7fa7a0 #e8f0ee;
     }
-    .application-table-content { min-width: 2110px; }
+    .application-table-content { min-width: 2090px; }
     .application-table-content .application-selection-items { gap: 4px; }
     .application-table-header,
     .application-selection-item.application-table-row {
       display: grid;
-      grid-template-columns: 32px 160px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px 48px;
+      grid-template-columns: 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px 48px;
       gap: 6px;
       align-items: stretch;
     }
@@ -345,7 +345,8 @@
       align-self: center;
       line-height: 1.35;
     }
-    .application-university-cell { display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+    .application-university-cell { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; text-align: left; }
+    .application-university-cell strong { align-self: flex-start !important; text-align: left; }
     .application-university-cell small { color: #6d7e83; font-size: 10px; line-height: 1.3; }
     .application-order-controls {
       flex-direction: column;
@@ -1238,7 +1239,7 @@
       .application-remove-button { grid-column: 2; grid-row: 1 / span 3; }
       .application-selection-item.general-purpose.application-table-row,
       .application-selection-item.special-purpose.application-table-row {
-        grid-template-columns: 32px 160px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px 48px;
+        grid-template-columns: 32px 140px 125px 145px 165px 175px 105px 95px 95px 135px 115px 125px 115px 205px 48px;
         width: 100%;
         margin-left: 0;
       }
@@ -22221,15 +22222,16 @@
 
       const renderItems = (items, specialPurpose = false) => items.length
         ? items.map((item, index) => {
-          const orderControls = specialPurpose ? "" : `
-            <span class="application-rank${index >= 6 ? " over-limit" : ""}">${index < 6 ? index + 1 : "초과"}</span>
+          const rank = specialPurpose ? "" : `<span class="application-rank${index >= 6 ? " over-limit" : ""}">${index < 6 ? index + 1 : "초과"}</span>`;
+          const orderControls = `
+            ${rank}
             <div class="application-order-controls" aria-label="${escapeHtml(`${item.university} 순서 변경`)}">
               <button class="application-order-button" type="button" data-selection-key="${escapeHtml(item.key)}" data-direction="up" aria-label="위로 이동" ${index === 0 ? "disabled" : ""}>▲</button>
               <button class="application-order-button" type="button" data-selection-key="${escapeHtml(item.key)}" data-direction="down" aria-label="아래로 이동" ${index === items.length - 1 ? "disabled" : ""}>▼</button>
             </div>`;
           return `
         <div class="application-selection-item application-table-row${specialPurpose ? " special-purpose" : " general-purpose"}" data-selection-key="${escapeHtml(item.key)}">
-          ${orderControls || "<span></span>"}
+          ${orderControls}
           <div class="application-university-cell"><strong>${escapeHtml(item.university)}</strong><small>${escapeHtml(item.college)}</small></div>
           ${detailInput(item, "admissionType", "예: 학생부종합")}
           ${detailInput(item, "detailedAdmission", "예: 학업우수형")}
@@ -22317,13 +22319,16 @@
       renderApplicationSelections();
     }
 
-    function moveGeneralSelection(key, direction) {
-      const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
-      const currentIndex = generalSelections.findIndex(item => item.key === key);
+    function moveApplicationSelection(key, direction) {
+      const selected = applicationSelections.find(item => item.key === key);
+      if (!selected) return;
+      const specialPurpose = isSpecialPurposeSelection(selected);
+      const groupedSelections = applicationSelections.filter(item => isSpecialPurposeSelection(item) === specialPurpose);
+      const currentIndex = groupedSelections.findIndex(item => item.key === key);
       const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
-      if (currentIndex < 0 || targetIndex < 0 || targetIndex >= generalSelections.length) return;
-      const current = generalSelections[currentIndex];
-      const target = generalSelections[targetIndex];
+      if (currentIndex < 0 || targetIndex < 0 || targetIndex >= groupedSelections.length) return;
+      const current = groupedSelections[currentIndex];
+      const target = groupedSelections[targetIndex];
       const currentStorageIndex = applicationSelections.findIndex(item => item.key === current.key);
       const targetStorageIndex = applicationSelections.findIndex(item => item.key === target.key);
       [applicationSelections[currentStorageIndex], applicationSelections[targetStorageIndex]] = [applicationSelections[targetStorageIndex], applicationSelections[currentStorageIndex]];
@@ -24495,7 +24500,7 @@
         applicationSelectionList.addEventListener("click", event => {
           const orderButton = event.target.closest(".application-order-button");
           if (orderButton) {
-            moveGeneralSelection(orderButton.dataset.selectionKey, orderButton.dataset.direction);
+            moveApplicationSelection(orderButton.dataset.selectionKey, orderButton.dataset.direction);
             return;
           }
           const closeButton = event.target.closest(".application-direct-add-close");
