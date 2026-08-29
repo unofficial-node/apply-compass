@@ -179,6 +179,42 @@
     }
     .application-selection-section-heading h3 { margin: 0; color: #243944; font-size: 16px; }
     .application-selection-section-heading span { color: var(--muted); font-size: 11px; }
+    .application-selection-section-actions { display: flex; align-items: center; gap: 8px; }
+    .application-direct-add-toggle {
+      padding: 6px 10px;
+      border: 1px solid #245b57;
+      border-radius: 7px;
+      color: #245b57;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .application-direct-add-toggle:hover, .application-direct-add-toggle:focus { color: #fff; background: #245b57; outline: none; }
+    .application-direct-add-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding: 12px;
+      border: 1px solid rgba(36, 91, 87, 0.18);
+      border-radius: 10px;
+      background: rgba(242, 248, 246, 0.8);
+    }
+    .application-direct-add-form[hidden] { display: none; }
+    .application-direct-add-form input { min-height: 36px; font-size: 12px; }
+    .application-direct-add-submit {
+      padding: 7px 13px;
+      border: 0;
+      border-radius: 7px;
+      color: #fff;
+      background: #245b57;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+    }
     .application-selection-items { display: grid; gap: 10px; }
     .application-selection-empty {
       padding: 42px 20px;
@@ -1052,6 +1088,7 @@
       .application-selection-item { grid-template-columns: 1fr auto; }
       .application-selection-item span { grid-column: 1; }
       .application-remove-button { grid-column: 2; grid-row: 1 / span 3; }
+      .application-direct-add-form { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 560px) {
@@ -21983,7 +22020,8 @@
         saved.forEach(item => {
           if (!item || typeof item.university !== "string" || typeof item.college !== "string" || typeof item.department !== "string") return;
           const key = applicationSelectionKey(item.university, item.college, item.department);
-          uniqueSelections.set(key, { key, university: item.university, college: item.college, department: item.department });
+          const category = item.category === "special" || item.category === "general" ? item.category : undefined;
+          uniqueSelections.set(key, { key, university: item.university, college: item.college, department: item.department, category });
         });
         applicationSelections.splice(0, applicationSelections.length, ...uniqueSelections.values());
       } catch (error) {
@@ -21992,13 +22030,10 @@
     }
 
     function renderApplicationSelections() {
-      const generalSelections = applicationSelections.filter(item => !specialPurposeUniversities.has(item.university));
-      const specialSelections = applicationSelections.filter(item => specialPurposeUniversities.has(item.university));
+      const isSpecialSelection = item => item.category === "special" || (item.category !== "general" && specialPurposeUniversities.has(item.university));
+      const generalSelections = applicationSelections.filter(item => !isSpecialSelection(item));
+      const specialSelections = applicationSelections.filter(isSpecialSelection);
       applicationCount.textContent = `전체 ${applicationSelections.length}개`;
-      if (!applicationSelections.length) {
-        applicationSelectionList.innerHTML = `<div class="application-selection-empty"><p>아직 선택한 대학과 학과가 없습니다.<br>지역별 지도에서 대학을 고른 뒤 학과 옆의 <strong>선택</strong> 버튼을 눌러주세요.</p></div>`;
-        return;
-      }
 
       const renderItems = (items, specialPurpose = false) => items.length
         ? items.map(item => `
@@ -22011,19 +22046,35 @@
       `).join("")
         : `<div class="application-selection-empty"><p>선택한 대학이 없습니다.</p></div>`;
 
+      const renderDirectAddForm = category => `
+        <form class="application-direct-add-form" data-category="${category}" hidden>
+          <input name="university" type="text" placeholder="대학교명" aria-label="대학교명" required>
+          <input name="college" type="text" placeholder="단과대명 (선택)" aria-label="단과대명">
+          <input name="department" type="text" placeholder="학과·전공명" aria-label="학과 또는 전공명" required>
+          <button class="application-direct-add-submit" type="submit">추가</button>
+        </form>`;
+
       applicationSelectionList.innerHTML = `
         <section class="application-selection-section" aria-labelledby="generalUniversityTitle">
           <div class="application-selection-section-heading">
             <h3 id="generalUniversityTitle">일반대학</h3>
-            <span>${generalSelections.length}개</span>
+            <div class="application-selection-section-actions">
+              <span>${generalSelections.length}개</span>
+              <button class="application-direct-add-toggle" type="button" data-category="general">직접추가</button>
+            </div>
           </div>
+          ${renderDirectAddForm("general")}
           <div class="application-selection-items">${renderItems(generalSelections)}</div>
         </section>
         <section class="application-selection-section" aria-labelledby="specialUniversityTitle">
           <div class="application-selection-section-heading">
             <h3 id="specialUniversityTitle">특수목적대학</h3>
-            <span>수시 6회 외 별도 지원 · ${specialSelections.length}개</span>
+            <div class="application-selection-section-actions">
+              <span>수시 6회 외 별도 지원 · ${specialSelections.length}개</span>
+              <button class="application-direct-add-toggle" type="button" data-category="special">직접추가</button>
+            </div>
           </div>
+          ${renderDirectAddForm("special")}
           <div class="application-selection-items">${renderItems(specialSelections, true)}</div>
         </section>
       `;
@@ -22041,6 +22092,24 @@
       button.textContent = "선택됨";
       button.classList.add("selected");
       button.setAttribute("aria-pressed", "true");
+      renderApplicationSelections();
+    }
+
+    function addDirectApplicationSelection(form) {
+      const formData = new FormData(form);
+      const university = String(formData.get("university") || "").trim();
+      const college = String(formData.get("college") || "").trim() || "단과대 구분 없음";
+      const department = String(formData.get("department") || "").trim();
+      const category = form.dataset.category === "special" ? "special" : "general";
+      if (!university || !department) return;
+      const key = applicationSelectionKey(university, college, department);
+      const existing = applicationSelections.find(item => item.key === key);
+      if (existing) {
+        existing.category = category;
+      } else {
+        applicationSelections.push({ key, university, college, department, category });
+      }
+      saveApplicationSelections();
       renderApplicationSelections();
     }
 
@@ -24198,8 +24267,21 @@
           if (button) addApplicationSelection(button);
         });
         applicationSelectionList.addEventListener("click", event => {
+          const toggle = event.target.closest(".application-direct-add-toggle");
+          if (toggle) {
+            const form = toggle.closest(".application-selection-section").querySelector(".application-direct-add-form");
+            form.hidden = !form.hidden;
+            if (!form.hidden) form.elements.university.focus();
+            return;
+          }
           const button = event.target.closest(".application-remove-button");
           if (button) removeApplicationSelection(button.dataset.selectionKey);
+        });
+        applicationSelectionList.addEventListener("submit", event => {
+          const form = event.target.closest(".application-direct-add-form");
+          if (!form) return;
+          event.preventDefault();
+          addDirectApplicationSelection(form);
         });
         loadApplicationSelections();
         renderApplicationSelections();
