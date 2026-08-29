@@ -222,6 +222,9 @@
     }
     main.application-mode aside { display: none; }
     main.application-mode .map-wrap { height: auto; }
+    main.application-mode .map-wrap > :not(.region-tabs):not(.application-status-view) {
+      display: none !important;
+    }
     main.application-mode .application-status-view {
       position: relative;
       inset: auto;
