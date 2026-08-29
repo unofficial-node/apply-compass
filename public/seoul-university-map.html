@@ -333,6 +333,17 @@
       color: #fff;
       line-height: 1.25;
     }
+    .application-table-header span:nth-child(-n+6) {
+      position: sticky;
+      z-index: 5;
+      background: #2e6759;
+    }
+    .application-table-header span:nth-child(1) { left: 0; }
+    .application-table-header span:nth-child(2) { left: 54px; }
+    .application-table-header span:nth-child(3) { left: 92px; }
+    .application-table-header span:nth-child(4) { left: 238px; }
+    .application-table-header span:nth-child(5) { left: 369px; }
+    .application-table-header span:nth-child(6) { left: 520px; box-shadow: 10px 0 12px -10px rgba(23, 63, 62, 0.8); }
     .application-selection-item.general-purpose.application-table-row,
     .application-selection-item.special-purpose.application-table-row {
       width: 100%;
@@ -373,6 +384,28 @@
       resize: vertical;
     }
     .application-detail-input:focus { border-color: #2e6759; outline: 2px solid rgba(46, 103, 89, 0.12); }
+    .application-table-row .application-remove-button,
+    .application-table-row .application-order-controls,
+    .application-table-row .application-university-cell,
+    .application-table-row .application-detail-input[data-field="admissionType"],
+    .application-table-row .application-detail-input[data-field="detailedAdmission"],
+    .application-table-row .application-detail-input[data-field="department"] {
+      position: sticky;
+      z-index: 3;
+      background: #fff;
+    }
+    .application-table-row .application-remove-button { left: 0; }
+    .application-table-row .application-order-controls { left: 54px; }
+    .application-table-row .application-university-cell { left: 92px; }
+    .application-table-row .application-detail-input[data-field="admissionType"] { left: 238px; }
+    .application-table-row .application-detail-input[data-field="detailedAdmission"] { left: 369px; }
+    .application-table-row .application-detail-input[data-field="department"] {
+      left: 520px;
+      box-shadow: 10px 0 12px -10px rgba(23, 63, 62, 0.35);
+    }
+    .application-table-row.special-purpose .application-remove-button,
+    .application-table-row.special-purpose .application-order-controls,
+    .application-table-row.special-purpose .application-university-cell { background: #fffaf1; }
     .application-selection-item.application-table-row .application-remove-button {
       align-self: center;
       padding: 5px 6px;
