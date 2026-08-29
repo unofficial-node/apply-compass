@@ -191,6 +191,20 @@
       font-weight: 900;
     }
     .excel-export-button:hover, .excel-export-button:focus { background: #10552b; outline: none; }
+    .pdf-export-button {
+      min-height: 34px;
+      padding: 7px 14px;
+      border: 0;
+      border-radius: 7px;
+      color: #fff;
+      background: #a43a32;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .pdf-export-button:hover, .pdf-export-button:focus { background: #7d2823; outline: none; }
+    .application-print-value { display: none; }
     .application-selection-list { display: grid; gap: 10px; margin-top: 22px; }
     .application-selection-section { min-width: 0; }
     .application-selection-section + .application-selection-section {
@@ -1366,6 +1380,89 @@
       .district-inset.incheon-inset svg { height: 340px; }
       .district-name-label { font-size: 20px; }
     }
+
+    @media print {
+      @page { size: A4 landscape; margin: 6mm; }
+      html, body { width: auto; min-width: 0; margin: 0; padding: 0; background: #fff; }
+      .app { display: block; min-height: 0; }
+      .app > header, aside, .region-tabs, .student-export-controls button,
+      .application-selection-section-actions, .application-direct-add-form,
+      .application-remove-button, .application-order-button { display: none !important; }
+      main, main.application-mode, .map-wrap, main.application-mode .map-wrap,
+      .application-status-view, main.application-mode .application-status-view {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        overflow: visible !important;
+        background: #fff !important;
+        box-shadow: none !important;
+      }
+      .application-status-card {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        box-shadow: none !important;
+      }
+      .application-status-heading { margin-bottom: 4mm; }
+      .application-status-card h2 { font-size: 18pt; }
+      .student-export-controls { display: flex !important; }
+      .student-export-controls input { display: none !important; }
+      .student-export-controls .application-print-value {
+        min-width: 28px;
+        min-height: 14px;
+        padding: 2px 4px;
+        border-bottom: 1px solid #8ca09d;
+        font-size: 8pt;
+      }
+      .application-selection-list { margin-top: 0; gap: 5mm; }
+      .application-selection-section + .application-selection-section { margin-top: 3mm; padding-top: 3mm; }
+      .application-selection-section-heading { margin-bottom: 2mm; }
+      .application-table-scroll { width: 100%; padding: 0; overflow: visible; }
+      .application-table-content { width: 100%; min-width: 0; }
+      .application-table-header,
+      .application-selection-item.application-table-row {
+        grid-template-columns: 30px 72px 62px 70px 90px 92px 58px 52px 52px 70px 62px 68px 62px minmax(90px, 1fr);
+        gap: 3px;
+        width: 100%;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .application-table-header { padding: 0 3px; border-radius: 3px; font-size: 6.5pt; }
+      .application-table-header span { min-height: 22px; }
+      .application-table-header span:first-child { display: none; }
+      .application-table-header span:nth-child(-n+6),
+      .application-table-row .application-order-controls,
+      .application-table-row .application-university-cell,
+      .application-table-row .application-detail-input[data-field] {
+        position: static !important;
+        box-shadow: none !important;
+      }
+      .application-selection-item.application-table-row { padding: 3px; }
+      .application-order-controls { display: flex; justify-content: center; }
+      .application-rank { width: 24px; height: 24px; font-size: 7pt !important; }
+      .application-university-cell strong { font-size: 7.5pt; }
+      .application-university-cell small { font-size: 6pt; }
+      .application-detail-input { display: none !important; }
+      .application-print-value {
+        display: block;
+        min-width: 0;
+        padding: 3px;
+        border: 1px solid #cbd7da;
+        border-radius: 2px;
+        color: #243944;
+        font-size: 6.5pt;
+        line-height: 1.25;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1397,12 +1494,13 @@
                 <h2 id="applicationStatusTitle">원서현황</h2>
                 <span id="applicationCount" class="application-count">선택 0개</span>
               </div>
-              <div class="student-export-controls" aria-label="학생 정보 및 엑셀 저장">
+              <div class="student-export-controls" aria-label="학생 정보 및 파일 저장">
                 <label>학년<input id="studentGrade" type="text" inputmode="numeric" maxlength="1" required></label>
                 <label>반<input id="studentClass" type="text" inputmode="numeric" maxlength="2" required></label>
                 <label>번호<input id="studentNumber" type="text" inputmode="numeric" maxlength="2" required></label>
                 <label>이름<input id="studentName" class="student-name-input" type="text" maxlength="20" required></label>
                 <button id="excelExportButton" class="excel-export-button" type="button">Excel 저장</button>
+                <button id="pdfExportButton" class="pdf-export-button" type="button">PDF 저장</button>
               </div>
             </div>
             <div id="applicationSelectionList" class="application-selection-list" aria-live="polite"></div>
@@ -3196,6 +3294,7 @@
     const studentNumber = document.querySelector("#studentNumber");
     const studentName = document.querySelector("#studentName");
     const excelExportButton = document.querySelector("#excelExportButton");
+    const pdfExportButton = document.querySelector("#pdfExportButton");
     const search = document.querySelector("#search");
     const departmentSearch = document.querySelector("#departmentSearch");
     const departmentResults = document.querySelector("#departmentResults");
@@ -22399,6 +22498,32 @@
       XLSX.writeFile(workbook, `${studentId}_${safeName}_수시원서희망.xlsx`, { compression: true });
     }
 
+    function prepareApplicationPrintValues() {
+      applicationStatusView.querySelectorAll(".application-print-value").forEach(element => element.remove());
+      applicationStatusView.querySelectorAll(".student-export-controls input, .application-selection-item .application-detail-input").forEach(input => {
+        const value = input.value.trim();
+        const printValue = document.createElement("span");
+        printValue.className = "application-print-value";
+        printValue.textContent = value || " ";
+        input.insertAdjacentElement("afterend", printValue);
+      });
+    }
+
+    function printApplicationsToPdf() {
+      saveStudentProfile();
+      prepareApplicationPrintValues();
+      const profile = studentProfile();
+      const originalTitle = document.title;
+      const studentId = `${profile.grade}${profile.className}${profile.number.padStart(2, "0")}`;
+      const safeName = profile.name.replace(/[\\/:*?"<>|]/g, "_");
+      document.title = `${studentId}_${safeName}_수시원서희망`;
+      window.addEventListener("afterprint", () => {
+        document.title = originalTitle;
+        applicationStatusView.querySelectorAll(".application-print-value").forEach(element => element.remove());
+      }, { once: true });
+      window.print();
+    }
+
     function renderApplicationSelections() {
       const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
       const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
@@ -24771,6 +24896,7 @@
           input.addEventListener("input", saveStudentProfile);
         });
         excelExportButton.addEventListener("click", exportApplicationsToExcel);
+        pdfExportButton.addEventListener("click", printApplicationsToPdf);
         loadStudentProfile();
         loadApplicationSelections();
         renderApplicationSelections();
