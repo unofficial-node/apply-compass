@@ -130,7 +130,7 @@
       inset: 0;
       z-index: 3;
       display: grid;
-      place-items: center;
+      place-items: start center;
       padding: 32px;
       border-radius: inherit;
       background: linear-gradient(145deg, rgba(242, 248, 246, 0.98), rgba(222, 237, 233, 0.98));
@@ -138,16 +138,60 @@
 
     .application-status-view[hidden] { display: none; }
     .application-status-card {
-      width: min(560px, 100%);
+      width: min(860px, 100%);
       padding: 34px;
       border: 1px solid rgba(36, 91, 87, 0.18);
       border-radius: 16px;
       background: rgba(255, 255, 255, 0.92);
       box-shadow: 0 18px 44px rgba(31, 48, 65, 0.12);
+      text-align: left;
+    }
+    .application-status-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .application-status-card h2 { margin: 0; color: #173f3e; font-size: 28px; }
+    .application-status-card p { margin: 0; color: var(--muted); line-height: 1.7; }
+    .application-count {
+      min-width: 78px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: #173f3e;
+      background: #d9ebe6;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .application-status-intro { margin-top: 10px !important; }
+    .application-selection-list { display: grid; gap: 10px; margin-top: 22px; }
+    .application-selection-empty {
+      padding: 42px 20px;
+      border: 1px dashed rgba(36, 91, 87, 0.28);
+      border-radius: 12px;
+      background: rgba(242, 248, 246, 0.74);
       text-align: center;
     }
-    .application-status-card h2 { margin: 0 0 12px; color: #173f3e; font-size: 28px; }
-    .application-status-card p { margin: 0; color: var(--muted); line-height: 1.7; }
+    .application-selection-item {
+      display: grid;
+      grid-template-columns: minmax(150px, 1fr) minmax(130px, 0.8fr) minmax(180px, 1.2fr) auto;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 14px;
+      border: 1px solid rgba(36, 91, 87, 0.14);
+      border-radius: 10px;
+      background: #fff;
+    }
+    .application-selection-item strong { color: #172636; font-size: 14px; }
+    .application-selection-item span { color: #52636d; font-size: 12px; }
+    .application-remove-button {
+      padding: 6px 10px;
+      border: 1px solid rgba(143, 43, 43, 0.28);
+      border-radius: 7px;
+      color: #8f2b2b;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .application-remove-button:hover, .application-remove-button:focus { background: #fff1f1; outline: none; }
     main.application-mode { grid-template-columns: minmax(0, 1fr); }
     main.application-mode aside { display: none; }
 
@@ -940,6 +984,7 @@
     .department-panel li:hover .department-select-button,
     .department-panel li:focus-within .department-select-button { opacity: 1; pointer-events: auto; }
     .department-select-button:hover, .department-select-button:focus { background: #173f3e; outline: none; }
+    .department-select-button.selected { border-color: #74867f; background: #74867f; }
     .department-panel li.highlighted-department {
       margin-left: -4px;
       padding-left: 6px;
@@ -967,6 +1012,9 @@
       main { grid-template-columns: 1fr; height: auto; min-height: 0; }
       .map-wrap, svg { min-height: 520px; }
       aside { max-height: 380px; }
+      .application-selection-item { grid-template-columns: 1fr auto; }
+      .application-selection-item span { grid-column: 1; }
+      .application-remove-button { grid-column: 2; grid-row: 1 / span 3; }
     }
 
     @media (max-width: 560px) {
@@ -1018,8 +1066,12 @@
         </div>
         <section id="applicationStatusView" class="application-status-view" aria-labelledby="applicationStatusTitle" hidden>
           <div class="application-status-card">
-            <h2 id="applicationStatusTitle">원서현황</h2>
-            <p>희망 대학과 학과를 담아 지원 조합을 만들고 Excel 파일로 저장하는 기능이 이곳에 추가됩니다.</p>
+            <div class="application-status-heading">
+              <h2 id="applicationStatusTitle">원서현황</h2>
+              <span id="applicationCount" class="application-count">선택 0개</span>
+            </div>
+            <p class="application-status-intro">지역별 지도에서 선택한 대학과 학과를 확인하고 지원 조합을 완성하세요.</p>
+            <div id="applicationSelectionList" class="application-selection-list" aria-live="polite"></div>
           </div>
         </section>
         <div id="linePicker" class="line-picker" aria-label="지하철 노선 선택"></div>
@@ -2803,12 +2855,15 @@
     const regionTabs = document.querySelectorAll(".region-tab[data-region]");
     const applicationStatusTab = document.querySelector("#applicationStatusTab");
     const applicationStatusView = document.querySelector("#applicationStatusView");
+    const applicationSelectionList = document.querySelector("#applicationSelectionList");
+    const applicationCount = document.querySelector("#applicationCount");
     const search = document.querySelector("#search");
     const departmentSearch = document.querySelector("#departmentSearch");
     const departmentResults = document.querySelector("#departmentResults");
     const departmentPanel = document.querySelector("#departmentPanel");
     const errorBox = document.querySelector("#error");
     let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
+    const applicationSelections = [];
 
     const gyeonggiNameMap = {
       Ansan: "안산시",
@@ -21853,6 +21908,53 @@
       return favoriteMatched ? `<mark>${escapeHtml(name)}</mark>` : escapeHtml(name);
     }
 
+    function applicationSelectionKey(university, college, department) {
+      return [university, college, department].map(value => encodeURIComponent(value)).join("|");
+    }
+
+    function isApplicationSelected(university, college, department) {
+      const key = applicationSelectionKey(university, college, department);
+      return applicationSelections.some(item => item.key === key);
+    }
+
+    function renderApplicationSelections() {
+      applicationCount.textContent = `선택 ${applicationSelections.length}개`;
+      if (!applicationSelections.length) {
+        applicationSelectionList.innerHTML = `<div class="application-selection-empty"><p>아직 선택한 대학과 학과가 없습니다.<br>지역별 지도에서 대학을 고른 뒤 학과 옆의 <strong>선택</strong> 버튼을 눌러주세요.</p></div>`;
+        return;
+      }
+      applicationSelectionList.innerHTML = applicationSelections.map(item => `
+        <div class="application-selection-item">
+          <strong>${escapeHtml(item.university)}</strong>
+          <span>${escapeHtml(item.college)}</span>
+          <span>${escapeHtml(item.department)}</span>
+          <button class="application-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">삭제</button>
+        </div>
+      `).join("");
+    }
+
+    function addApplicationSelection(button) {
+      const university = button.dataset.university;
+      const college = button.dataset.college;
+      const department = button.dataset.department;
+      const key = applicationSelectionKey(university, college, department);
+      if (!applicationSelections.some(item => item.key === key)) {
+        applicationSelections.push({ key, university, college, department });
+      }
+      button.textContent = "선택됨";
+      button.classList.add("selected");
+      button.setAttribute("aria-pressed", "true");
+      renderApplicationSelections();
+    }
+
+    function removeApplicationSelection(key) {
+      const index = applicationSelections.findIndex(item => item.key === key);
+      if (index < 0) return;
+      applicationSelections.splice(index, 1);
+      renderApplicationSelections();
+      if (state.selectedUniversity) renderDepartmentPanel(state.selectedUniversity);
+    }
+
     function renderDepartmentPanel(d) {
       const data = departmentData[departmentKey(d)] || [];
       const departmentQuery = departmentSearch.value.trim().toLowerCase();
@@ -21869,7 +21971,8 @@
               const favoriteMatched = !departmentQuery && favoriteDepartmentMatched(name);
               const departmentName = departmentNameMarkup(name, departmentQuery, favoriteMatched);
               const buttonLabel = `${d.name} ${name} 선택`;
-              return `<li class="${matched || favoriteMatched ? "highlighted-department" : ""}"><span>${departmentName}</span><button class="department-select-button" type="button" data-university="${escapeHtml(d.name)}" data-college="${escapeHtml(group.college)}" data-department="${escapeHtml(name)}" aria-label="${escapeHtml(buttonLabel)}">선택</button></li>`;
+              const selected = isApplicationSelected(d.name, group.college, name);
+              return `<li class="${matched || favoriteMatched ? "highlighted-department" : ""}"><span>${departmentName}</span><button class="department-select-button${selected ? " selected" : ""}" type="button" data-university="${escapeHtml(d.name)}" data-college="${escapeHtml(group.college)}" data-department="${escapeHtml(name)}" aria-label="${escapeHtml(buttonLabel)}" aria-pressed="${selected}">${selected ? "선택됨" : "선택"}</button></li>`;
             }).join("")}</ul>
           `).join("")
         : `<p class="department-empty">학과정보 데이터가 아직 준비되지 않았습니다. 나중에 <code>departmentData</code>에 이 대학의 학과를 추가하면 이곳에 표시됩니다.</p>`;
@@ -23806,6 +23909,7 @@
     }
 
     function openApplicationStatus() {
+      renderApplicationSelections();
       mainEl.classList.add("application-mode");
       applicationStatusView.hidden = false;
       applicationStatusTab.classList.add("active");
@@ -23991,6 +24095,15 @@
           tab.addEventListener("click", () => selectRegion(tab.dataset.region));
         });
         applicationStatusTab.addEventListener("click", openApplicationStatus);
+        departmentPanel.addEventListener("click", event => {
+          const button = event.target.closest(".department-select-button");
+          if (button) addApplicationSelection(button);
+        });
+        applicationSelectionList.addEventListener("click", event => {
+          const button = event.target.closest(".application-remove-button");
+          if (button) removeApplicationSelection(button.dataset.selectionKey);
+        });
+        renderApplicationSelections();
         draw();
         window.addEventListener("resize", () => draw());
         search.addEventListener("input", handleSearchInput);
