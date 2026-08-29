@@ -426,9 +426,53 @@
       align-self: center;
       line-height: 1.35;
     }
-    .application-university-cell { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; text-align: left; }
+    .application-university-cell { position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; padding-right: 28px; border-radius: 6px; text-align: left; transition: background 120ms ease, box-shadow 120ms ease; }
     .application-university-cell strong { align-self: flex-start !important; text-align: left; }
     .application-university-cell small { color: #6d7e83; font-size: 10px; line-height: 1.3; }
+    .application-university-cell:hover, .application-university-cell:focus-within { background: #eef7f4 !important; box-shadow: inset 0 0 0 1px rgba(36, 91, 87, 0.2); }
+    .application-university-remove-button {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      border: 1px solid rgba(143, 43, 43, 0.28);
+      border-radius: 50%;
+      color: #8f2b2b;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 120ms ease, background 120ms ease;
+    }
+    .application-university-cell:hover .application-university-remove-button,
+    .application-university-cell:focus-within .application-university-remove-button { opacity: 1; pointer-events: auto; }
+    .application-university-remove-button:hover, .application-university-remove-button:focus { background: #fff1f1; outline: none; }
+    .application-guide-cell { display: flex; align-items: center; justify-content: center; }
+    .application-guide-link, .application-guide-missing {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 30px;
+      padding: 4px 3px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.2;
+      text-align: center;
+    }
+    .application-guide-link { border: 1px solid #245b57; color: #245b57; background: #fff; text-decoration: none; }
+    .application-guide-link:hover, .application-guide-link:focus { color: #fff; background: #245b57; outline: none; }
+    .application-guide-missing { border: 1px solid #d5dede; color: #8a999d; background: #f4f7f7; }
+    @media (hover: none), (pointer: coarse) {
+      .application-university-remove-button { opacity: 1; pointer-events: auto; }
+    }
     .application-order-controls {
       flex-direction: column;
       align-items: center;
@@ -454,7 +498,7 @@
       resize: vertical;
     }
     .application-detail-input:focus { border-color: #2e6759; outline: 2px solid rgba(46, 103, 89, 0.12); }
-    .application-table-row .application-remove-button,
+    .application-table-row .application-guide-cell,
     .application-table-row .application-order-controls,
     .application-table-row .application-university-cell,
     .application-table-row .application-detail-input[data-field="department"],
@@ -464,7 +508,7 @@
       z-index: 3;
       background: #fff;
     }
-    .application-table-row .application-remove-button { left: 0; }
+    .application-table-row .application-guide-cell { left: 0; }
     .application-table-row .application-order-controls { left: 54px; }
     .application-table-row .application-university-cell { left: 92px; }
     .application-table-row .application-detail-input[data-field="department"] { left: 238px; }
@@ -473,13 +517,9 @@
       left: 540px;
       box-shadow: 10px 0 12px -10px rgba(23, 63, 62, 0.35);
     }
-    .application-table-row.special-purpose .application-remove-button,
+    .application-table-row.special-purpose .application-guide-cell,
     .application-table-row.special-purpose .application-order-controls,
     .application-table-row.special-purpose .application-university-cell { background: #fffaf1; }
-    .application-selection-item.application-table-row .application-remove-button {
-      align-self: center;
-      padding: 5px 6px;
-    }
     .application-table-row + .application-table-row { margin-top: 4px; }
     .application-selection-item.special-purpose {
       border-color: rgba(160, 104, 35, 0.24);
@@ -487,18 +527,6 @@
     }
     .application-selection-item strong { color: #172636; font-size: 14px; }
     .application-selection-item span { color: #52636d; font-size: 12px; }
-    .application-remove-button {
-      padding: 6px 10px;
-      border: 1px solid rgba(143, 43, 43, 0.28);
-      border-radius: 7px;
-      color: #8f2b2b;
-      background: #fff;
-      cursor: pointer;
-      font: inherit;
-      font-size: 11px;
-      font-weight: 800;
-    }
-    .application-remove-button:hover, .application-remove-button:focus { background: #fff1f1; outline: none; }
     main.application-mode {
       grid-template-columns: minmax(0, 1fr);
       height: auto;
@@ -1337,9 +1365,7 @@
       .application-selection-item.general-purpose { grid-template-columns: 44px minmax(0, 1fr) auto; }
       .application-selection-item.general-purpose strong { grid-column: 2; }
       .application-selection-item.general-purpose > span:not(.application-rank) { grid-column: 2; }
-      .application-selection-item.general-purpose .application-remove-button { grid-column: 3; grid-row: 1 / span 3; }
       .application-selection-item span { grid-column: 1; }
-      .application-remove-button { grid-column: 2; grid-row: 1 / span 3; }
       .application-selection-item.general-purpose.application-table-row,
       .application-selection-item.special-purpose.application-table-row {
         grid-template-columns: 48px 32px 140px 165px 125px 145px 90px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
@@ -1348,7 +1374,6 @@
       }
       .application-selection-item.application-table-row strong,
       .application-selection-item.application-table-row > span,
-      .application-selection-item.application-table-row .application-remove-button { grid-column: auto; grid-row: auto; }
       .application-direct-add-form { grid-template-columns: 1fr; }
       .application-direct-add-form.application-table-row {
         grid-template-columns: 48px 32px 140px 165px 125px 145px 90px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
@@ -22587,7 +22612,7 @@
 
       const tableHeader = `
         <div class="application-table-header" aria-hidden="true">
-          <span>삭제</span><span>순서</span><span>대학명</span><span>지원학과</span><span>전형유형</span>
+          <span>모집요강</span><span>순서</span><span>대학명</span><span>지원학과</span><span>전형유형</span>
           <span>세부전형명</span><span>선발인원</span><span>전형방법</span><span>수능최저</span><span>등급컷</span>
           <span>경쟁률</span><span>원서접수</span><span>1단계</span><span>면접일/논술일</span>
           <span>최종발표일</span><span>기타 참고사항</span>
@@ -22596,6 +22621,10 @@
       const renderItems = (items, specialPurpose = false) => items.length
         ? items.map((item, index) => {
           const rank = specialPurpose ? "" : `<span class="application-rank${index >= 6 ? " over-limit" : ""}">${index < 6 ? index + 1 : "초과"}</span>`;
+          const admissionUrl = admissionLinks[item.university] || admissionLinks[baseUniversityName(item.university)] || "";
+          const admissionGuide = admissionUrl
+            ? `<a class="application-guide-link" href="${escapeHtml(admissionUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(`${item.university} 모집요강 열기`)}">보기</a>`
+            : `<span class="application-guide-missing" aria-label="모집요강 링크 없음">없음</span>`;
           const orderControls = `
             ${rank}
             <div class="application-order-controls" aria-label="${escapeHtml(`${item.university} 순서 변경`)}">
@@ -22604,9 +22633,9 @@
             </div>`;
           return `
         <div class="application-selection-item application-table-row${specialPurpose ? " special-purpose" : " general-purpose"}" data-selection-key="${escapeHtml(item.key)}">
-          <button class="application-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">삭제</button>
+          <div class="application-guide-cell">${admissionGuide}</div>
           ${orderControls}
-          <div class="application-university-cell"><strong>${escapeHtml(item.university)}</strong><small>${escapeHtml(item.college)}</small></div>
+          <div class="application-university-cell"><strong>${escapeHtml(item.university)}</strong><small>${escapeHtml(item.college)}</small><button class="application-university-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">×</button></div>
           ${detailInput(item, "department", "지원학과")}
           ${detailInput(item, "admissionType", "예: 학생부종합")}
           ${detailInput(item, "detailedAdmission", "예: 학업우수형")}
@@ -24930,7 +24959,7 @@
             resetApplicationSelections(resetButton.dataset.category);
             return;
           }
-          const button = event.target.closest(".application-remove-button");
+          const button = event.target.closest(".application-university-remove-button");
           if (button) removeApplicationSelection(button.dataset.selectionKey);
         });
         applicationSelectionList.addEventListener("submit", event => {
