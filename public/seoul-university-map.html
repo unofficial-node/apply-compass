@@ -141,7 +141,7 @@
 
     .application-status-view[hidden] { display: none; }
     .application-status-card {
-      width: min(860px, 100%);
+      width: min(1120px, 100%);
       margin-bottom: 32px;
       padding: 34px;
       border: 1px solid rgba(36, 91, 87, 0.18);
@@ -246,6 +246,44 @@
       border: 1px solid rgba(36, 91, 87, 0.14);
       border-radius: 10px;
       background: #fff;
+    }
+    .application-selection-item.general-purpose {
+      grid-template-columns: 28px 38px minmax(180px, 1fr) minmax(150px, 0.8fr) minmax(200px, 1.2fr) auto;
+    }
+    .application-selection-item.dragging { opacity: 0.45; }
+    .application-selection-item.drag-over { border-color: #245b57; box-shadow: 0 0 0 2px rgba(36, 91, 87, 0.12); }
+    .application-drag-handle {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 32px;
+      border-radius: 6px;
+      color: #6d7e83;
+      cursor: grab;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -4px;
+      user-select: none;
+    }
+    .application-drag-handle:hover, .application-drag-handle:focus { color: #173f3e; background: #e7f1ee; outline: none; }
+    .application-drag-handle:active { cursor: grabbing; }
+    .application-rank {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      color: #fff;
+      background: #245b57;
+      font-size: 12px !important;
+      font-weight: 900;
+    }
+    .application-rank.over-limit {
+      width: 38px;
+      border-radius: 999px;
+      color: #8f2b2b;
+      background: #fff0f0;
+      font-size: 10px !important;
     }
     .application-selection-item.special-purpose {
       border-color: rgba(160, 104, 35, 0.24);
@@ -1100,6 +1138,10 @@
       .map-wrap, svg { min-height: 520px; }
       aside { max-height: 380px; }
       .application-selection-item { grid-template-columns: 1fr auto; }
+      .application-selection-item.general-purpose { grid-template-columns: 28px 38px minmax(0, 1fr) auto; }
+      .application-selection-item.general-purpose strong { grid-column: 3; }
+      .application-selection-item.general-purpose > span:not(.application-drag-handle):not(.application-rank) { grid-column: 3; }
+      .application-selection-item.general-purpose .application-remove-button { grid-column: 4; grid-row: 1 / span 3; }
       .application-selection-item span { grid-column: 1; }
       .application-remove-button { grid-column: 2; grid-row: 1 / span 3; }
       .application-direct-add-form { grid-template-columns: 1fr; }
@@ -2953,6 +2995,7 @@
     let state = { currentRegion: "seoul", geos: {}, geo: null, mapGeo: null, nationalBoundary: null, nationalJejuGeo: null, cheonanInternalBoundary: null, chungcheongOuterBoundaries: null, routes: {}, projection: null, path: null, points: null, labels: null, labelLinks: null, landmarkPoints: null, landmarkLabels: null, landmarkLinks: null, landmarkRiver: null, districts: null, activeDistrictFill: null, activeDistrictOutline: null, districtNameBadge: document.getElementById("districtNameBadge"), districtInset: document.getElementById("districtInset"), districtInsetTitle: document.getElementById("districtInsetTitle"), districtInsetMap: document.getElementById("districtInsetMap"), districtInsetClose: document.getElementById("districtInsetClose"), districtSign: null, pixelGuide: null, routeLayer: null, activeLine: null, activeDistrict: null, signOnlyDistrict: null, landmarkMode: false, activeFavorite: null, selectedUniversity: null };
     const applicationSelections = [];
     const applicationStorageKey = "applyCompass.applicationSelections.v1";
+    let draggedApplicationKey = null;
     const specialPurposeUniversities = new Set([
       "한국과학기술원",
       "울산과학기술원",
@@ -22018,6 +22061,10 @@
       return applicationSelections.some(item => item.key === key);
     }
 
+    function isSpecialPurposeSelection(item) {
+      return item.category === "special" || (item.category !== "general" && specialPurposeUniversities.has(item.university));
+    }
+
     function saveApplicationSelections() {
       try {
         localStorage.setItem(applicationStorageKey, JSON.stringify(applicationSelections));
@@ -22044,20 +22091,25 @@
     }
 
     function renderApplicationSelections() {
-      const isSpecialSelection = item => item.category === "special" || (item.category !== "general" && specialPurposeUniversities.has(item.university));
-      const generalSelections = applicationSelections.filter(item => !isSpecialSelection(item));
-      const specialSelections = applicationSelections.filter(isSpecialSelection);
+      const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
+      const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
       applicationCount.textContent = `전체 ${applicationSelections.length}개`;
 
       const renderItems = (items, specialPurpose = false) => items.length
-        ? items.map(item => `
-        <div class="application-selection-item${specialPurpose ? " special-purpose" : ""}">
+        ? items.map((item, index) => {
+          const orderControls = specialPurpose ? "" : `
+            <span class="application-drag-handle" draggable="true" tabindex="0" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} 순서 이동`)}" title="드래그하여 순서 이동">⠿</span>
+            <span class="application-rank${index >= 6 ? " over-limit" : ""}">${index < 6 ? index + 1 : "초과"}</span>`;
+          return `
+        <div class="application-selection-item${specialPurpose ? " special-purpose" : " general-purpose"}" data-selection-key="${escapeHtml(item.key)}">
+          ${orderControls}
           <strong>${escapeHtml(item.university)}</strong>
           <span>${escapeHtml(item.college)}</span>
           <span>${escapeHtml(item.department)}</span>
           <button class="application-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">삭제</button>
         </div>
-      `).join("")
+      `;
+        }).join("")
         : `<div class="application-selection-empty"><p>선택한 대학이 없습니다.</p></div>`;
 
       const renderDirectAddForm = category => `
@@ -22124,6 +22176,20 @@
       } else {
         applicationSelections.push({ key, university, college, department, category });
       }
+      saveApplicationSelections();
+      renderApplicationSelections();
+    }
+
+    function reorderGeneralSelections(sourceKey, targetKey, placeAfter) {
+      if (!sourceKey || !targetKey || sourceKey === targetKey) return;
+      const source = applicationSelections.find(item => item.key === sourceKey);
+      const target = applicationSelections.find(item => item.key === targetKey);
+      if (!source || !target || isSpecialPurposeSelection(source) || isSpecialPurposeSelection(target)) return;
+      const sourceIndex = applicationSelections.findIndex(item => item.key === sourceKey);
+      applicationSelections.splice(sourceIndex, 1);
+      let targetIndex = applicationSelections.findIndex(item => item.key === targetKey);
+      if (placeAfter) targetIndex += 1;
+      applicationSelections.splice(targetIndex, 0, source);
       saveApplicationSelections();
       renderApplicationSelections();
     }
@@ -24302,6 +24368,35 @@
           if (!form) return;
           event.preventDefault();
           addDirectApplicationSelection(form);
+        });
+        applicationSelectionList.addEventListener("dragstart", event => {
+          const handle = event.target.closest(".application-drag-handle");
+          if (!handle) return;
+          draggedApplicationKey = handle.dataset.selectionKey;
+          handle.closest(".application-selection-item").classList.add("dragging");
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", draggedApplicationKey);
+        });
+        applicationSelectionList.addEventListener("dragover", event => {
+          const item = event.target.closest(".application-selection-item.general-purpose");
+          if (!item || !draggedApplicationKey) return;
+          event.preventDefault();
+          event.dataTransfer.dropEffect = "move";
+          applicationSelectionList.querySelectorAll(".drag-over").forEach(element => element.classList.remove("drag-over"));
+          item.classList.add("drag-over");
+        });
+        applicationSelectionList.addEventListener("drop", event => {
+          const item = event.target.closest(".application-selection-item.general-purpose");
+          if (!item || !draggedApplicationKey) return;
+          event.preventDefault();
+          const bounds = item.getBoundingClientRect();
+          const placeAfter = event.clientY > bounds.top + bounds.height / 2;
+          reorderGeneralSelections(draggedApplicationKey, item.dataset.selectionKey, placeAfter);
+          draggedApplicationKey = null;
+        });
+        applicationSelectionList.addEventListener("dragend", () => {
+          draggedApplicationKey = null;
+          applicationSelectionList.querySelectorAll(".dragging, .drag-over").forEach(element => element.classList.remove("dragging", "drag-over"));
         });
         loadApplicationSelections();
         renderApplicationSelections();
