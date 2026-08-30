@@ -22413,11 +22413,11 @@
       const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
       const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
       const rows = [
-        ["지원 희망"],
-        ["학년", profile.grade, "반", profile.className, "번호", profile.number, "이름", profile.name],
-        []
+        ["", "지원 희망"],
+        ["", "학년", profile.grade, "반", profile.className, "번호", profile.number, "이름", profile.name],
+        [""]
       ];
-      const merges = [XLSX.utils.decode_range("A1:K1")];
+      const merges = [XLSX.utils.decode_range("B1:L1")];
       const rowHeights = [{ hpt: 28 }, { hpt: 22 }, { hpt: 14 }];
       const groupHeadingRows = [];
       const applicationBlocks = [];
@@ -22425,9 +22425,9 @@
 
       const addGroupHeading = title => {
         const rowNumber = rows.length + 1;
-        rows.push([title]);
+        rows.push(["", title]);
         groupHeadingRows.push(rowNumber);
-        merges.push(XLSX.utils.decode_range(`A${rowNumber}:K${rowNumber}`));
+        merges.push(XLSX.utils.decode_range(`B${rowNumber}:L${rowNumber}`));
         rowHeights.push({ hpt: 22 });
       };
 
@@ -22435,10 +22435,11 @@
         const startRow = rows.length + 1;
         applicationBlocks.push({ startRow, rankColor });
         rows.push(
-          [rankLabel, "대학명", "단과대학", "학과명", "정시참고자료\n(6월모평기준)", "군(모집인원)", "표준점수", "백분위", "반영지표", "반영영역", "영어반영"],
-          ["", item.university || "", item.college || "", item.department || "", "", "", "", "", "", "", ""],
-          ["전형유형", "세부전형명", "모집인원", "전형방법", "", "", "경쟁률", "수능최저", "", "등급컷", ""],
+          ["", rankLabel, "대학명", "단과대학", "학과명", "정시참고자료\n(6월모평기준)", "군(모집인원)", "표준점수", "백분위", "반영지표", "반영영역", "영어반영"],
+          ["", "", item.university || "", item.college || "", item.department || "", "", "", "", "", "", "", ""],
+          ["", "전형유형", "세부전형명", "모집인원", "전형방법", "", "", "경쟁률", "수능최저", "", "등급컷", ""],
           [
+            "",
             item.admissionType || "",
             item.detailedAdmission || "",
             item.recruitmentCount || "",
@@ -22447,17 +22448,17 @@
             item.csatMinimum || "", "",
             item.gradeCut || "", ""
           ],
-          []
+          [""]
         );
         merges.push(
-          XLSX.utils.decode_range(`A${startRow}:A${startRow + 1}`),
-          XLSX.utils.decode_range(`E${startRow}:E${startRow + 1}`),
-          XLSX.utils.decode_range(`D${startRow + 2}:F${startRow + 2}`),
-          XLSX.utils.decode_range(`D${startRow + 3}:F${startRow + 3}`),
-          XLSX.utils.decode_range(`H${startRow + 2}:I${startRow + 2}`),
-          XLSX.utils.decode_range(`H${startRow + 3}:I${startRow + 3}`),
-          XLSX.utils.decode_range(`J${startRow + 2}:K${startRow + 2}`),
-          XLSX.utils.decode_range(`J${startRow + 3}:K${startRow + 3}`)
+          XLSX.utils.decode_range(`B${startRow}:B${startRow + 1}`),
+          XLSX.utils.decode_range(`F${startRow}:F${startRow + 1}`),
+          XLSX.utils.decode_range(`E${startRow + 2}:G${startRow + 2}`),
+          XLSX.utils.decode_range(`E${startRow + 3}:G${startRow + 3}`),
+          XLSX.utils.decode_range(`I${startRow + 2}:J${startRow + 2}`),
+          XLSX.utils.decode_range(`I${startRow + 3}:J${startRow + 3}`),
+          XLSX.utils.decode_range(`K${startRow + 2}:L${startRow + 2}`),
+          XLSX.utils.decode_range(`K${startRow + 3}:L${startRow + 3}`)
         );
         rowHeights.push({ hpt: 23 }, { hpt: 23 }, { hpt: 21 }, { hpt: 42 }, { hpt: 28 });
       };
@@ -22497,7 +22498,7 @@
       worksheet["!merges"] = merges;
       worksheet["!rows"] = rowHeights;
       worksheet["!cols"] = [
-        14, 23, 20, 23, 18, 15, 12, 12, 12, 12, 12
+        3, 14, 23, 20, 23, 18, 15, 12, 12, 12, 12, 12
       ].map(wch => ({ wch }));
 
       const thinBorder = {
@@ -22536,48 +22537,48 @@
         ...whiteCellStyle,
         font: { name: "맑은 고딕", sz: 10, bold: true, color: { rgb: "000000" } }
       };
-      styleRange(1, 1, 1, 11, {
+      styleRange(1, 1, 2, 12, {
         font: { name: "맑은 고딕", sz: 22, color: { rgb: "5B3F8C" } },
         fill: { patternType: "solid", fgColor: { rgb: "FFFFFF" } },
         alignment: { horizontal: "left", vertical: "center" }
       });
-      styleRange(2, 2, 1, 8, whiteCellStyle);
-      [1, 3, 5, 7].forEach(column => {
+      styleRange(2, 2, 2, 9, whiteCellStyle);
+      [2, 4, 6, 8].forEach(column => {
         ensureCell(2, column).s = {
           ...headerCellStyle,
           fill: { patternType: "solid", fgColor: { rgb: "D9EAF7" } }
         };
       });
       groupHeadingRows.forEach(row => {
-        styleRange(row, row, 1, 11, {
+        styleRange(row, row, 2, 12, {
           ...headerCellStyle,
           fill: { patternType: "solid", fgColor: { rgb: "DDEBE7" } },
           alignment: { horizontal: "left", vertical: "center" }
         });
       });
       applicationBlocks.forEach(({ startRow, rankColor }) => {
-        styleRange(startRow, startRow + 3, 1, 11, whiteCellStyle);
-        styleRange(startRow, startRow, 2, 11, headerCellStyle);
-        styleRange(startRow + 2, startRow + 2, 1, 11, headerCellStyle);
-        styleRange(startRow, startRow + 1, 1, 1, {
+        styleRange(startRow, startRow + 3, 2, 12, whiteCellStyle);
+        styleRange(startRow, startRow, 3, 12, headerCellStyle);
+        styleRange(startRow + 2, startRow + 2, 2, 12, headerCellStyle);
+        styleRange(startRow, startRow + 1, 2, 2, {
           ...whiteCellStyle,
           font: { name: "맑은 고딕", sz: 14, color: { rgb: "000000" } },
           fill: { patternType: "solid", fgColor: { rgb: rankColor } },
           alignment: { horizontal: "center", vertical: "center", wrapText: false }
         });
-        for (let column = 1; column <= 11; column += 1) {
+        for (let column = 2; column <= 12; column += 1) {
           setBorderSide(startRow, column, "top");
           setBorderSide(startRow + 1, column, "bottom");
           setBorderSide(startRow + 3, column, "bottom");
         }
         for (let row = startRow; row <= startRow + 3; row += 1) {
-          setBorderSide(row, 1, "left");
-          setBorderSide(row, 11, "right");
+          setBorderSide(row, 2, "left");
+          setBorderSide(row, 12, "right");
         }
-        setBorderSide(startRow, 1, "right");
-        setBorderSide(startRow + 1, 1, "right");
-        setBorderSide(startRow, 4, "right");
-        setBorderSide(startRow + 1, 4, "right");
+        setBorderSide(startRow, 2, "right");
+        setBorderSide(startRow + 1, 2, "right");
+        setBorderSide(startRow, 5, "right");
+        setBorderSide(startRow + 1, 5, "right");
       });
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "원서현황");
