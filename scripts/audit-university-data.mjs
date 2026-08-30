@@ -2,7 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 
-const sourcePath = path.resolve(process.argv[2] || "public/university-map.html");
+const sourceArgument = process.argv.slice(2).find(arg => !arg.startsWith("--"));
+const sourcePath = path.resolve(sourceArgument || "public/university-map.html");
 const region = (process.argv.find(arg => arg.startsWith("--region="))?.split("=")[1] || "seoul").toLowerCase();
 const source = fs.readFileSync(sourcePath, "utf8");
 
@@ -57,12 +58,14 @@ const baseName = name => String(name || "").replace(/\([^)]*\)$/, "");
 const keyFor = university => departmentData[university.name] ? university.name : baseName(university.name);
 const issues = [];
 let departmentCount = 0;
+const universitySummaries = [];
 
 for (const university of universities) {
   const key = keyFor(university);
   const groups = departmentData[key];
   if (!Array.isArray(groups) || groups.length === 0) {
     issues.push({ type: "missing-or-empty", university: university.name, dataKey: key });
+    universitySummaries.push({ university: university.name, dataKey: key, colleges: 0, departments: 0 });
     continue;
   }
 
@@ -87,6 +90,7 @@ for (const university of universities) {
       if (department !== rawDepartment) issues.push({ type: "department-whitespace", university: university.name, college, department: rawDepartment });
     }
   }
+  universitySummaries.push({ university: university.name, dataKey: key, colleges: groups.length, departments: departmentNames.size });
 }
 
 const report = {
@@ -95,6 +99,7 @@ const report = {
   universities: universities.length,
   departmentEntries: departmentCount,
   universitiesWithData: universities.length - issues.filter(issue => issue.type === "missing-or-empty").length,
+  universitySummaries,
   issues
 };
 
