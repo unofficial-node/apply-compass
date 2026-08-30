@@ -13,12 +13,13 @@
 ## 서울 지역 진행 현황
 
 - 지도 등록 대학: 45개
-- 검증 완료: 한국예술종합학교, 감리교신학대학교, 강서대학교
+- 검증 완료: 가톨릭대학교(서울/부천), 한국예술종합학교, 감리교신학대학교, 강서대학교
 - 구조 수정: 한양대학교(서울)의 국제학부 중복 제거
 - 공식 확인 필요: 태재대학교 및 나머지 대학
 
 | 대학 | 상태 | 조치 |
 | --- | --- | --- |
+| 가톨릭대학교(서울/부천) | 확인 완료 | 2027학년도 시행계획의 모집단위 표를 기준으로 서울 성의·성신교정과 부천 성심교정을 분리하고 비모집 전공 제거 |
 | 한국예술종합학교 | 확인 완료 | 2027학년도 예술사 정원내 모집요강의 모집단위 반영 |
 | 감리교신학대학교 | 확인 완료 | 2027학년도 시행계획의 신입학 모집단위 `신학부`와 일치 확인 |
 | 강서대학교 | 확인 완료 | 2027학년도 수시 모집 학과 7개로 정리 |
@@ -27,6 +28,7 @@
 
 ## 확인 근거
 
+- 가톨릭대학교 2027학년도 대학입학전형 시행계획: https://ipsi.catholic.ac.kr/detail.do?board_seq=34931&categoryid=&menuurl=k%2BqZC0HTrql005wmLhNoXA%3D%3D&pageNo=1&userpwd=
 - 한국예술종합학교 2027학년도 예술사 모집요강 안내: https://www.karts.ac.kr/cop/bbs/selectBoardArticle.do?bbsId=BBSMSTR_000000000007&ctgryId=BBSCTG_0001020200000&noticeAt=N&nttNo=69907&pageIndex=3&siteId=&sysTyCode=
 - 한국예술종합학교 2027학년도 예술사 정원내 모집요강: https://www.karts.ac.kr/cmm/fms/FileDown.do?accAt=&atchFileId=FILE_000000000161996&bbsId=BBSMSTR_000000000007&fileSn=23&nttId=69907&trgetId=SYSTEM_DEFAULT_BOARD
 - 감리교신학대학교 2027학년도 대학입학전형 시행계획: https://www.mtu.ac.kr/mtu/contents/view.do?mId=408
