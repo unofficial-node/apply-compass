@@ -22412,13 +22412,14 @@
 
       const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
       const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
-      const studentSummary = `${profile.grade}학년 ${profile.className}반 ${profile.number}번 ${profile.name}`;
+      const studentSummary = `${profile.grade}학년　　${profile.className}반　　${profile.number}번　　${profile.name}`;
       const rows = [
+        [""],
         ["", "지원 희망", "", "", "", studentSummary],
         [""]
       ];
-      const merges = [XLSX.utils.decode_range("B1:E1"), XLSX.utils.decode_range("F1:L1")];
-      const rowHeights = [{ hpt: 30 }, { hpt: 14 }];
+      const merges = [XLSX.utils.decode_range("B2:E2"), XLSX.utils.decode_range("F2:L2")];
+      const rowHeights = [{ hpt: 9 }, { hpt: 30 }, { hpt: 14 }];
       const groupHeadingRows = [];
       const applicationBlocks = [];
       const rankColors = ["E9F0DC", "FFFACD", "E7E1EF", "FCE4D6", "DDEBF7", "E2F0D9"];
@@ -22537,12 +22538,12 @@
         ...whiteCellStyle,
         font: { name: "맑은 고딕", sz: 10, bold: true, color: { rgb: "000000" } }
       };
-      styleRange(1, 1, 2, 5, {
+      styleRange(2, 2, 2, 5, {
         font: { name: "맑은 고딕", sz: 22, color: { rgb: "5B3F8C" } },
         fill: { patternType: "solid", fgColor: { rgb: "FFFFFF" } },
         alignment: { horizontal: "left", vertical: "center" }
       });
-      styleRange(1, 1, 6, 12, {
+      styleRange(2, 2, 6, 12, {
         font: { name: "맑은 고딕", sz: 12, bold: true, color: { rgb: "000000" } },
         fill: { patternType: "solid", fgColor: { rgb: "FFFFFF" } },
         alignment: { horizontal: "right", vertical: "center" }
