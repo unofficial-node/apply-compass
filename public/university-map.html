@@ -22410,46 +22410,77 @@
         return;
       }
 
-      const headers = [
-        "대학 구분", "지원 구분", "순위", "대학명", "단과대학", "지원학과", "전형유형", "세부전형명", "선발인원",
-        "전형방법", "수능최저", "등급컷", "경쟁률", "원서접수", "1단계", "면접일/논술일",
-        "최종발표일", "기타 참고사항"
-      ];
       const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
       const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
-      const rowFor = (item, category, index) => [
-        category,
-        category === "일반대학" ? (index < 6 ? "6순위 이내" : "순위 초과") : "해당 없음",
-        category === "일반대학" && index < 6 ? index + 1 : "",
-        item.university,
-        item.college,
-        item.department,
-        item.admissionType || "",
-        item.detailedAdmission || "",
-        item.recruitmentCount || "",
-        item.method || "",
-        item.csatMinimum || "",
-        item.gradeCut || "",
-        item.competitionRate || "",
-        item.applicationPeriod || "",
-        item.firstStageDate || "",
-        item.interviewDate || "",
-        item.finalAnnouncement || "",
-        item.notes || ""
-      ];
       const rows = [
-        ["수시 원서 희망 현황"],
+        ["지원 희망"],
         ["학년", profile.grade, "반", profile.className, "번호", profile.number, "이름", profile.name],
-        [],
-        headers,
-        ...generalSelections.map((item, index) => rowFor(item, "일반대학", index)),
-        ...specialSelections.map((item, index) => rowFor(item, "특수목적대학", index))
+        []
       ];
+      const merges = [XLSX.utils.decode_range("A1:K1")];
+      const rowHeights = [{ hpt: 28 }, { hpt: 22 }, { hpt: 8 }];
+
+      const addGroupHeading = title => {
+        const rowNumber = rows.length + 1;
+        rows.push([title]);
+        merges.push(XLSX.utils.decode_range(`A${rowNumber}:K${rowNumber}`));
+        rowHeights.push({ hpt: 22 });
+      };
+
+      const addApplicationBlock = (item, rankLabel) => {
+        const startRow = rows.length + 1;
+        rows.push(
+          [rankLabel, "대학명", "단과대학", "학과명", "정시참고자료(교사 작성)"],
+          ["", item.university || "", item.college || "", item.department || "", ""],
+          ["전형유형", "세부전형명", "모집인원", "전형방법", "", "", "경쟁률", "수능최저", "", "등급컷", ""],
+          [
+            item.admissionType || "",
+            item.detailedAdmission || "",
+            item.recruitmentCount || "",
+            item.method || "", "", "",
+            item.competitionRate || "",
+            item.csatMinimum || "", "",
+            item.gradeCut || "", ""
+          ],
+          []
+        );
+        merges.push(
+          XLSX.utils.decode_range(`A${startRow}:A${startRow + 1}`),
+          XLSX.utils.decode_range(`E${startRow}:K${startRow}`),
+          XLSX.utils.decode_range(`E${startRow + 1}:K${startRow + 1}`),
+          XLSX.utils.decode_range(`D${startRow + 2}:F${startRow + 2}`),
+          XLSX.utils.decode_range(`D${startRow + 3}:F${startRow + 3}`),
+          XLSX.utils.decode_range(`H${startRow + 2}:I${startRow + 2}`),
+          XLSX.utils.decode_range(`H${startRow + 3}:I${startRow + 3}`),
+          XLSX.utils.decode_range(`J${startRow + 2}:K${startRow + 2}`),
+          XLSX.utils.decode_range(`J${startRow + 3}:K${startRow + 3}`)
+        );
+        rowHeights.push({ hpt: 21 }, { hpt: 28 }, { hpt: 21 }, { hpt: 42 }, { hpt: 8 });
+      };
+
+      const rankedGeneralSelections = generalSelections.slice(0, 6);
+      const overLimitGeneralSelections = generalSelections.slice(6);
+      if (rankedGeneralSelections.length) {
+        addGroupHeading("일반대학 · 1~6지망");
+        rankedGeneralSelections.forEach((item, index) => addApplicationBlock(item, `${index + 1} 지망`));
+      }
+      if (overLimitGeneralSelections.length) {
+        addGroupHeading("일반대학 · 순위 초과");
+        overLimitGeneralSelections.forEach((item, index) => addApplicationBlock(item, `순위 초과 ${index + 1}`));
+      }
+      if (specialSelections.length) {
+        addGroupHeading("특수목적대학 · 별도 지원");
+        specialSelections.forEach((item, index) => addApplicationBlock(item, `별도 지원 ${index + 1}`));
+      }
+      if (!applicationSelections.length) {
+        addGroupHeading("선택한 대학이 없습니다.");
+      }
+
       const worksheet = XLSX.utils.aoa_to_sheet(rows);
-      worksheet["!merges"] = [XLSX.utils.decode_range("A1:R1")];
-      worksheet["!autofilter"] = { ref: `A4:R${Math.max(4, rows.length)}` };
+      worksheet["!merges"] = merges;
+      worksheet["!rows"] = rowHeights;
       worksheet["!cols"] = [
-        14, 14, 7, 24, 20, 24, 18, 20, 12, 28, 16, 14, 14, 20, 18, 20, 18, 34
+        14, 23, 20, 23, 12, 12, 14, 14, 12, 14, 12
       ].map(wch => ({ wch }));
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "원서현황");
