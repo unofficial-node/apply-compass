@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>대학교 모아보기</title>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
   <style>
     :root {
       --ink: #17212b;
@@ -22419,16 +22419,21 @@
       ];
       const merges = [XLSX.utils.decode_range("A1:K1")];
       const rowHeights = [{ hpt: 28 }, { hpt: 22 }, { hpt: 8 }];
+      const groupHeadingRows = [];
+      const applicationBlocks = [];
+      const rankColors = ["E9F0DC", "FFFACD", "E7E1EF", "FCE4D6", "DDEBF7", "E2F0D9"];
 
       const addGroupHeading = title => {
         const rowNumber = rows.length + 1;
         rows.push([title]);
+        groupHeadingRows.push(rowNumber);
         merges.push(XLSX.utils.decode_range(`A${rowNumber}:K${rowNumber}`));
         rowHeights.push({ hpt: 22 });
       };
 
-      const addApplicationBlock = (item, rankLabel) => {
+      const addApplicationBlock = (item, rankLabel, rankColor) => {
         const startRow = rows.length + 1;
+        applicationBlocks.push({ startRow, rankColor });
         rows.push(
           [rankLabel, "대학명", "단과대학", "학과명", "정시참고자료(교사 작성)"],
           ["", item.university || "", item.college || "", item.department || "", ""],
@@ -22462,15 +22467,15 @@
       const overLimitGeneralSelections = generalSelections.slice(6);
       if (rankedGeneralSelections.length) {
         addGroupHeading("일반대학 · 1~6지망");
-        rankedGeneralSelections.forEach((item, index) => addApplicationBlock(item, `${index + 1} 지망`));
+        rankedGeneralSelections.forEach((item, index) => addApplicationBlock(item, `${index + 1}　지망`, rankColors[index]));
       }
       if (overLimitGeneralSelections.length) {
         addGroupHeading("일반대학 · 순위 초과");
-        overLimitGeneralSelections.forEach((item, index) => addApplicationBlock(item, `순위 초과 ${index + 1}`));
+        overLimitGeneralSelections.forEach((item, index) => addApplicationBlock(item, `순위 초과 ${index + 1}`, "F4CCCC"));
       }
       if (specialSelections.length) {
         addGroupHeading("특수목적대학 · 별도 지원");
-        specialSelections.forEach((item, index) => addApplicationBlock(item, `별도 지원 ${index + 1}`));
+        specialSelections.forEach((item, index) => addApplicationBlock(item, `별도 지원 ${index + 1}`, "D9EAF7"));
       }
       if (!applicationSelections.length) {
         addGroupHeading("선택한 대학이 없습니다.");
@@ -22482,13 +22487,72 @@
       worksheet["!cols"] = [
         14, 23, 20, 23, 12, 12, 14, 14, 12, 14, 12
       ].map(wch => ({ wch }));
+
+      const thinBorder = {
+        top: { style: "thin", color: { rgb: "000000" } },
+        bottom: { style: "thin", color: { rgb: "000000" } },
+        left: { style: "thin", color: { rgb: "000000" } },
+        right: { style: "thin", color: { rgb: "000000" } }
+      };
+      const ensureCell = (row, column) => {
+        const address = XLSX.utils.encode_cell({ r: row - 1, c: column - 1 });
+        if (!worksheet[address]) worksheet[address] = { t: "s", v: "" };
+        return worksheet[address];
+      };
+      const styleRange = (startRow, endRow, startColumn, endColumn, style) => {
+        for (let row = startRow; row <= endRow; row += 1) {
+          for (let column = startColumn; column <= endColumn; column += 1) {
+            ensureCell(row, column).s = style;
+          }
+        }
+      };
+      const whiteCellStyle = {
+        font: { name: "맑은 고딕", sz: 10, color: { rgb: "000000" } },
+        fill: { patternType: "solid", fgColor: { rgb: "FFFFFF" } },
+        alignment: { horizontal: "center", vertical: "center", wrapText: true },
+        border: thinBorder
+      };
+      const headerCellStyle = {
+        ...whiteCellStyle,
+        font: { name: "맑은 고딕", sz: 10, bold: true, color: { rgb: "000000" } }
+      };
+      styleRange(1, 1, 1, 11, {
+        font: { name: "맑은 고딕", sz: 22, color: { rgb: "5B3F8C" } },
+        fill: { patternType: "solid", fgColor: { rgb: "FFFFFF" } },
+        alignment: { horizontal: "left", vertical: "center" }
+      });
+      styleRange(2, 2, 1, 8, whiteCellStyle);
+      [1, 3, 5, 7].forEach(column => {
+        ensureCell(2, column).s = {
+          ...headerCellStyle,
+          fill: { patternType: "solid", fgColor: { rgb: "D9EAF7" } }
+        };
+      });
+      groupHeadingRows.forEach(row => {
+        styleRange(row, row, 1, 11, {
+          ...headerCellStyle,
+          fill: { patternType: "solid", fgColor: { rgb: "DDEBE7" } },
+          alignment: { horizontal: "left", vertical: "center" }
+        });
+      });
+      applicationBlocks.forEach(({ startRow, rankColor }) => {
+        styleRange(startRow, startRow + 3, 1, 11, whiteCellStyle);
+        styleRange(startRow, startRow, 2, 11, headerCellStyle);
+        styleRange(startRow + 2, startRow + 2, 1, 11, headerCellStyle);
+        styleRange(startRow, startRow + 1, 1, 1, {
+          ...whiteCellStyle,
+          font: { name: "맑은 고딕", sz: 14, color: { rgb: "000000" } },
+          fill: { patternType: "solid", fgColor: { rgb: rankColor } },
+          alignment: { horizontal: "center", vertical: "center", wrapText: false }
+        });
+      });
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "원서현황");
       workbook.Props = { Title: "수시 원서 희망 현황", Subject: `${profile.name} 학생 대입 지원 희망 목록` };
 
       const studentId = `${profile.grade}${profile.className}${profile.number.padStart(2, "0")}`;
       const safeName = profile.name.replace(/[\\/:*?"<>|]/g, "_");
-      XLSX.writeFile(workbook, `${studentId}_${safeName}_수시원서희망.xlsx`, { compression: true });
+      XLSX.writeFile(workbook, `${studentId}_${safeName}_수시원서희망.xlsx`, { compression: true, cellStyles: true });
     }
 
     function buildApplicationPrintReport() {
