@@ -22451,6 +22451,7 @@
         );
         merges.push(
           XLSX.utils.decode_range(`A${startRow}:A${startRow + 1}`),
+          XLSX.utils.decode_range(`E${startRow}:E${startRow + 1}`),
           XLSX.utils.decode_range(`D${startRow + 2}:F${startRow + 2}`),
           XLSX.utils.decode_range(`D${startRow + 3}:F${startRow + 3}`),
           XLSX.utils.decode_range(`H${startRow + 2}:I${startRow + 2}`),
@@ -22458,7 +22459,7 @@
           XLSX.utils.decode_range(`J${startRow + 2}:K${startRow + 2}`),
           XLSX.utils.decode_range(`J${startRow + 3}:K${startRow + 3}`)
         );
-        rowHeights.push({ hpt: 32 }, { hpt: 28 }, { hpt: 21 }, { hpt: 42 }, { hpt: 20 });
+        rowHeights.push({ hpt: 23 }, { hpt: 23 }, { hpt: 21 }, { hpt: 42 }, { hpt: 28 });
       };
 
       const specialPurposeCategory = university => {
@@ -22505,6 +22506,7 @@
         left: { style: "thin", color: { rgb: "000000" } },
         right: { style: "thin", color: { rgb: "000000" } }
       };
+      const mediumBorderSide = { style: "medium", color: { rgb: "000000" } };
       const ensureCell = (row, column) => {
         const address = XLSX.utils.encode_cell({ r: row - 1, c: column - 1 });
         if (!worksheet[address]) worksheet[address] = { t: "s", v: "" };
@@ -22516,6 +22518,13 @@
             ensureCell(row, column).s = style;
           }
         }
+      };
+      const setBorderSide = (row, column, side, borderSide = mediumBorderSide) => {
+        const cell = ensureCell(row, column);
+        cell.s = {
+          ...(cell.s || {}),
+          border: { ...((cell.s && cell.s.border) || {}), [side]: borderSide }
+        };
       };
       const whiteCellStyle = {
         font: { name: "맑은 고딕", sz: 10, color: { rgb: "000000" } },
@@ -22556,6 +22565,19 @@
           fill: { patternType: "solid", fgColor: { rgb: rankColor } },
           alignment: { horizontal: "center", vertical: "center", wrapText: false }
         });
+        for (let column = 1; column <= 11; column += 1) {
+          setBorderSide(startRow, column, "top");
+          setBorderSide(startRow + 1, column, "bottom");
+          setBorderSide(startRow + 3, column, "bottom");
+        }
+        for (let row = startRow; row <= startRow + 3; row += 1) {
+          setBorderSide(row, 1, "left");
+          setBorderSide(row, 11, "right");
+        }
+        setBorderSide(startRow, 1, "right");
+        setBorderSide(startRow + 1, 1, "right");
+        setBorderSide(startRow, 4, "right");
+        setBorderSide(startRow + 1, 4, "right");
       });
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "원서현황");
