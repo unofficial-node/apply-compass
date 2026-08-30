@@ -22418,7 +22418,7 @@
         []
       ];
       const merges = [XLSX.utils.decode_range("A1:K1")];
-      const rowHeights = [{ hpt: 28 }, { hpt: 22 }, { hpt: 8 }];
+      const rowHeights = [{ hpt: 28 }, { hpt: 22 }, { hpt: 14 }];
       const groupHeadingRows = [];
       const applicationBlocks = [];
       const rankColors = ["E9F0DC", "FFFACD", "E7E1EF", "FCE4D6", "DDEBF7", "E2F0D9"];
@@ -22435,8 +22435,8 @@
         const startRow = rows.length + 1;
         applicationBlocks.push({ startRow, rankColor });
         rows.push(
-          [rankLabel, "대학명", "단과대학", "학과명", "정시참고자료(교사 작성)"],
-          ["", item.university || "", item.college || "", item.department || "", ""],
+          [rankLabel, "대학명", "단과대학", "학과명", "정시참고자료\n(6월모평기준)", "군(모집인원)", "표준점수", "백분위", "반영지표", "반영영역", "영어반영"],
+          ["", item.university || "", item.college || "", item.department || "", "", "", "", "", "", "", ""],
           ["전형유형", "세부전형명", "모집인원", "전형방법", "", "", "경쟁률", "수능최저", "", "등급컷", ""],
           [
             item.admissionType || "",
@@ -22451,8 +22451,6 @@
         );
         merges.push(
           XLSX.utils.decode_range(`A${startRow}:A${startRow + 1}`),
-          XLSX.utils.decode_range(`E${startRow}:K${startRow}`),
-          XLSX.utils.decode_range(`E${startRow + 1}:K${startRow + 1}`),
           XLSX.utils.decode_range(`D${startRow + 2}:F${startRow + 2}`),
           XLSX.utils.decode_range(`D${startRow + 3}:F${startRow + 3}`),
           XLSX.utils.decode_range(`H${startRow + 2}:I${startRow + 2}`),
@@ -22460,7 +22458,20 @@
           XLSX.utils.decode_range(`J${startRow + 2}:K${startRow + 2}`),
           XLSX.utils.decode_range(`J${startRow + 3}:K${startRow + 3}`)
         );
-        rowHeights.push({ hpt: 21 }, { hpt: 28 }, { hpt: 21 }, { hpt: 42 }, { hpt: 8 });
+        rowHeights.push({ hpt: 32 }, { hpt: 28 }, { hpt: 21 }, { hpt: 42 }, { hpt: 20 });
+      };
+
+      const specialPurposeCategory = university => {
+        const scienceInstitutes = new Set([
+          "한국과학기술원", "울산과학기술원", "광주과학기술원", "대구경북과학기술원", "한국에너지공과대학교"
+        ]);
+        const militaryAcademies = new Set([
+          "육군사관학교", "공군사관학교", "해군사관학교", "국군간호사관학교"
+        ]);
+        const baseName = baseUniversityName(university);
+        if (scienceInstitutes.has(baseName)) return "과기원";
+        if (militaryAcademies.has(baseName)) return "사관학교";
+        return "전통대학";
       };
 
       const rankedGeneralSelections = generalSelections.slice(0, 6);
@@ -22474,8 +22485,8 @@
         overLimitGeneralSelections.forEach((item, index) => addApplicationBlock(item, `순위 초과 ${index + 1}`, "F4CCCC"));
       }
       if (specialSelections.length) {
-        addGroupHeading("특수목적대학 · 별도 지원");
-        specialSelections.forEach((item, index) => addApplicationBlock(item, `별도 지원 ${index + 1}`, "D9EAF7"));
+        addGroupHeading("특수목적대학");
+        specialSelections.forEach(item => addApplicationBlock(item, specialPurposeCategory(item.university), "D9EAF7"));
       }
       if (!applicationSelections.length) {
         addGroupHeading("선택한 대학이 없습니다.");
@@ -22485,7 +22496,7 @@
       worksheet["!merges"] = merges;
       worksheet["!rows"] = rowHeights;
       worksheet["!cols"] = [
-        14, 23, 20, 23, 12, 12, 14, 14, 12, 14, 12
+        14, 23, 20, 23, 18, 15, 12, 12, 12, 12, 12
       ].map(wch => ({ wch }));
 
       const thinBorder = {
