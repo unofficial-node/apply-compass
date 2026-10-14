@@ -571,11 +571,32 @@
     .susi-detail-heading strong { font-size: 18px; }
     .susi-detail-heading span { font-size: 13px; }
     .susi-tables .application-selection-empty { padding: 20px; }
-    .application-table-header span:nth-child(n+3),
-    .application-table-row .application-detail-input[data-field] { position: static; box-shadow: none; }
+    /* 예전 16칸 표의 고정 열(sticky) 위치가 남아 좁은 화면에서 입력칸이 겹치지 않도록, 3번째 열부터는 고정을 끈다. */
+    .application-table-content .application-table-header span:nth-child(n+3),
+    .application-table-content .application-selection-item.application-table-row .application-detail-input[data-field] {
+      position: static;
+      left: auto;
+      box-shadow: none;
+    }
     .application-selection-item.application-table-row { cursor: pointer; }
     .application-table-row .application-university-cell { flex-direction: row; align-items: center; gap: 8px; padding-right: 4px; }
     .application-university-name { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+    .application-university-name strong { word-break: keep-all; overflow-wrap: anywhere; }
+    @media (max-width: 1599px) {
+      /* 대학명은 첫 줄, 계열과 모집요강 버튼은 둘째 줄에 나란히 */
+      .application-table-row .application-university-cell {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: start;
+        align-items: center;
+        gap: 3px 8px;
+        padding: 4px 6px 4px 0;
+      }
+      .application-table-row .application-university-name { display: contents; }
+      .application-table-row .application-university-name strong { grid-column: 1 / -1; }
+      .application-table-row .application-university-name small { grid-column: 1; }
+      .application-table-row .susi-guide-link { grid-column: 2; justify-self: start; padding: 2px 7px; font-size: 11px; }
+    }
     .application-table-row .application-university-remove-button { top: -7px; right: -7px; z-index: 4; }
     .susi-guide-link {
       flex: none;
@@ -3414,7 +3435,7 @@
           return `
         <div class="application-selection-item application-table-row${specialPurpose ? " special-purpose" : " general-purpose"}${item.key === selectedSusiKey ? " selected" : ""}" data-selection-key="${escapeHtml(item.key)}">
           ${orderControls}
-          <div class="application-university-cell"><div class="application-university-name"><strong>${escapeHtml(item.university)}</strong><small>${escapeHtml(item.college)}</small></div>${admissionGuide}<button class="application-university-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">×</button></div>
+          <div class="application-university-cell"><div class="application-university-name"><strong>${escapeHtml(item.university).replace("(", "<wbr>(")}</strong><small>${escapeHtml(item.college)}</small></div>${admissionGuide}<button class="application-university-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">×</button></div>
           ${detailInput(item, "department", "지원학과")}
           ${detailInput(item, "admissionType", "예: 학생부종합")}
           ${detailInput(item, "detailedAdmission", "예: 학업우수형")}
