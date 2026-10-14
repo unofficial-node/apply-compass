@@ -1536,6 +1536,24 @@
     }
     .department-result-button:hover, .department-result-button:focus { background: #eef6f4; outline: none; }
     .department-results-empty { color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .department-results-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: default;
+      font-family: inherit;
+      text-align: left;
+    }
+    .department-results-toggle-label { display: none; color: #2e6759; font-size: 11px; font-weight: 800; }
+    .map-search.in-aside .department-results-toggle { cursor: pointer; }
+    .map-search.in-aside .department-results-toggle-label { display: inline; }
+    .map-search.in-aside .department-results-list { max-height: 150px; }
+    .map-search.in-aside .department-results.collapsed .department-results-list { display: none; }
+    .map-search.in-aside .department-results.collapsed .department-results-title { margin-bottom: 0; }
 
     .department-panel {
       flex: 1;
@@ -1924,6 +1942,7 @@
     let expandedJeongsiKey = null;
     let jeongsiSort = "added";
     let selectedSusiKey = null;
+    let departmentResultsCollapsed = false;
     const applicationDetailFields = [
       "admissionType", "detailedAdmission", "recruitmentCount", "method", "csatMinimum", "gradeCut",
       "competitionRate", "applicationPeriod", "firstStageDate", "interviewDate",
@@ -5269,6 +5288,17 @@
       focusUniversity(d);
       showTip(event, d);
       renderDepartmentPanel(d);
+      if (departmentResults.classList.contains("visible")) setDepartmentResultsCollapsed(true);
+      scrollToMatchedDepartment();
+    }
+
+    // 학과 검색으로 대학을 고르면 찾던 학과가 보이도록 학과정보를 그 위치로 내린다.
+    function scrollToMatchedDepartment() {
+      if (!departmentSearch.value.trim()) return;
+      const matched = departmentPanel.querySelector("li.highlighted-department");
+      if (!matched) return;
+      const offset = matched.getBoundingClientRect().top - departmentPanel.getBoundingClientRect().top;
+      departmentPanel.scrollTop += offset - departmentPanel.clientHeight / 3;
     }
 
     function hideTip() { refreshVisuals(currentFiltered()); }
@@ -5285,18 +5315,32 @@
         departmentResults.innerHTML = `<p class="department-results-title">검색된 대학</p><p class="department-results-empty">해당 학과가 포함된 대학이 없습니다.</p>`;
         return;
       }
+      departmentResults.classList.toggle("collapsed", departmentResultsCollapsed);
       departmentResults.innerHTML = `
-        <p class="department-results-title">검색된 대학 ${items.length}개</p>
+        <button type="button" class="department-results-title department-results-toggle" aria-expanded="${!departmentResultsCollapsed}">검색된 대학 ${items.length}개<span class="department-results-toggle-label">${departmentResultsCollapsed ? "▸ 펼치기" : "▾ 접기"}</span></button>
         <div class="department-results-list">
           ${items.map(d => `<button type="button" class="department-result-button" data-name="${escapeHtml(d.name)}">${escapeHtml(d.name)}</button>`).join("")}
         </div>
       `;
+      departmentResults.querySelector(".department-results-toggle").addEventListener("click", () => {
+        setDepartmentResultsCollapsed(!departmentResultsCollapsed);
+      });
       departmentResults.querySelectorAll(".department-result-button").forEach(button => {
         button.addEventListener("click", event => {
           const university = activeUniversities().find(d => d.name === button.dataset.name);
           if (university) selectUniversity(university, event);
         });
       });
+    }
+
+    // 검색창이 오른쪽 칸(작은 화면)에 있을 때, 대학을 고르면 검색 결과를 한 줄로 접어 학과정보 자리를 비워 준다.
+    function setDepartmentResultsCollapsed(collapsed) {
+      departmentResultsCollapsed = collapsed;
+      departmentResults.classList.toggle("collapsed", collapsed);
+      const toggle = departmentResults.querySelector(".department-results-toggle");
+      if (!toggle) return;
+      toggle.setAttribute("aria-expanded", String(!collapsed));
+      toggle.querySelector(".department-results-toggle-label").textContent = collapsed ? "▸ 펼치기" : "▾ 접기";
     }
 
     function currentFiltered() {
@@ -5310,6 +5354,7 @@
     }
 
     function handleSearchInput() {
+      departmentResultsCollapsed = false;
       if (state.activeFavorite) {
         state.activeFavorite = null;
         renderFavoritePicker();
@@ -5630,6 +5675,7 @@
       } else if (mapSearchBox.parentElement !== aside) {
         aside.prepend(mapSearchBox);
       }
+      mapSearchBox.classList.toggle("in-aside", mapSearchBox.parentElement === aside);
       const picker = linePicker.node();
       if (landmarkPanel && picker && picker.getClientRects().length) {
         landmarkPanel.style.top = `${picker.offsetTop + picker.offsetHeight + 8}px`;
