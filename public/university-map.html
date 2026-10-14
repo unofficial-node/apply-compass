@@ -571,6 +571,14 @@
     .susi-detail-heading strong { font-size: 18px; }
     .susi-detail-heading span { font-size: 13px; }
     .susi-tables .application-selection-empty { padding: 20px; }
+    @media (max-height: 760px) {
+      .susi-detail { padding: 14px 16px; }
+      .susi-detail-heading { margin-bottom: 10px; padding-bottom: 8px; }
+      .susi-detail-grid { gap: 8px 12px; }
+      .susi-detail-field { gap: 3px; }
+      .susi-detail-field .application-detail-input { min-height: 30px; padding: 4px 8px; }
+      .susi-detail-field textarea.application-detail-input { min-height: 46px; height: 46px; }
+    }
     /* 예전 16칸 표의 고정 열(sticky) 위치가 남아 좁은 화면에서 입력칸이 겹치지 않도록, 3번째 열부터는 고정을 끈다. */
     .application-table-content .application-table-header span:nth-child(n+3),
     .application-table-content .application-selection-item.application-table-row .application-detail-input[data-field] {
@@ -1376,6 +1384,8 @@
       background: rgba(255, 255, 255, 0.94);
       box-shadow: 0 20px 44px rgba(25, 39, 51, 0.22);
       transform: translate(-50%, -50%);
+      max-height: calc(100% - 12px);
+      overflow: auto;
       pointer-events: auto;
       backdrop-filter: blur(8px);
     }
@@ -1429,7 +1439,7 @@
     }
 
     .district-inset.incheon-inset svg {
-      height: 560px;
+      height: min(560px, calc(100vh - 200px));
     }
 
     .district-inset.national-inset {
@@ -1438,7 +1448,7 @@
     }
 
     .district-inset.national-inset svg {
-      height: 520px;
+      height: min(520px, calc(100vh - 200px));
     }
 
     .inset-district {
@@ -4629,7 +4639,7 @@
       if (state.currentRegion === "jeolla" && ["제주시", "서귀포시"].includes(name)) {
         const insetWidth = 210;
         const insetHeight = 154;
-        const insetX = Math.max(18, mapWidth - 410);
+        const insetX = jejuInsetX(mapWidth, insetWidth);
         const insetY = Math.max(48, mapHeight - insetHeight - 42);
         return {
           x: clamp(insetX + 62, boxWidth / 2 + 12, mapWidth - boxWidth / 2 - 12),
@@ -5406,6 +5416,20 @@
       state.routeLayer.append("path").datum(feature).attr("class", "subway-line").attr("stroke", lineMeta[state.activeLine].color).attr("d", state.path).append("title").text(state.activeLine);
     }
 
+    // 제주 상자의 가로 위치. 넓은 화면에서는 원래 위치를 쓰고, 좁은 화면에서는 본토(제주 제외) 오른쪽 끝 바깥으로 옮겨 해안을 덮지 않게 한다.
+    function jejuInsetX(width, boxWidth) {
+      let x = Math.max(18, width - (state.currentRegion === "national" ? 520 : 410));
+      if (state.path && state.mapGeo) {
+        const features = state.mapGeo.features ? state.mapGeo.features.filter(feature => !isJejuFeature(feature)) : null;
+        const mainland = features && features.length ? { type: "FeatureCollection", features } : state.mapGeo;
+        const mainlandRight = state.path.bounds(mainland)[1][0];
+        // 호남권은 여수 쪽 대학 이름표가 해안 밖으로 나와 있어 간격을 더 둔다.
+        const gap = state.currentRegion === "jeolla" ? 44 : 8;
+        x = Math.min(Math.max(x, mainlandRight + gap), width - boxWidth - 14);
+      }
+      return x;
+    }
+
     function drawJejuInset(width, height) {
       if (!["jeolla", "national"].includes(state.currentRegion) || !state.geo) return;
       const jejuFeatures = state.currentRegion === "national"
@@ -5415,12 +5439,7 @@
       const jejuCollection = { type: "FeatureCollection", features: jejuFeatures };
       const boxWidth = state.currentRegion === "national" ? 164 : 210;
       const boxHeight = state.currentRegion === "national" ? 112 : 154;
-      let x = state.currentRegion === "national" ? Math.max(18, width - 520) : Math.max(18, width - 410);
-      if (state.currentRegion === "national" && state.path && state.mapGeo) {
-        // 좁은 화면에서 제주 상자가 본토 남해안을 덮지 않도록 본토 오른쪽 끝 근처로 옮긴다(넓은 화면 위치는 그대로).
-        const mainlandRight = state.path.bounds(state.mapGeo)[1][0];
-        x = Math.min(Math.max(x, mainlandRight + 8), width - boxWidth - 14);
-      }
+      const x = jejuInsetX(width, boxWidth);
       const y = Math.max(48, height - boxHeight - 42);
       const inset = svg.append("g").attr("class", "jeju-inset");
       inset.append("rect")
@@ -5743,6 +5762,9 @@
         ? [[40, fitPadding - 10], [width - 198, height - fitPadding + 10]]
         : state.currentRegion === "jeolla"
         ? [[-110, fitPadding - 18], [width - 206, height - fitPadding + 16]]
+        : state.currentRegion === "chungcheong" && width < 1100
+        // 좁은 화면에서는 오른쪽 여백을 줄이고 서해안이 잘리지 않게 왼쪽 여백을 둔다.
+        ? [[fitPadding, fitPadding], [width - 90, height - fitPadding]]
         : ["chungcheong", "gyeongsang"].includes(state.currentRegion)
         ? [[-30, fitPadding], [width - 178, height - fitPadding]]
         : [[fitPadding, fitPadding], [width - fitPadding, height - fitPadding]];
