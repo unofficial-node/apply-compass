@@ -6478,6 +6478,2332 @@ window.ADMISSION_SCORES = {
           "percentile": 89
         }
       }
+    },
+    "가톨릭대학교(부천)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (unvCd=0000046, searchSyr=2027, tsrdCmphSlcnArtclUpCd=40 → 2026학년도 수능위주 전형 결과) 수능(일반전형Ⅰ)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2026/가톨릭대학교/가톨릭대학교_2027학년도_정시모집요강.pdf (모집단위 및 모집인원)"
+      ],
+      "departments": {
+        "자유전공학부": {
+          "standard": null,
+          "percentile": 83,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "인문사회계열": {
+          "standard": null,
+          "percentile": 81,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "국어국문학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "철학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "국사학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "영어영문학부": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "중국언어문화학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "일어일본문화학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "프랑스어문화학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "사회복지학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "심리학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "사회학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "경영학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "회계학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "국제학부": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "법학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "경제학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "행정학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "아동학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "인문사회계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "자연공학계열": {
+          "standard": null,
+          "percentile": 83,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "화학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "수학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "물리학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "공간디자인·소비자학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "의류학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "식품영양학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "컴퓨터정보공학부": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "미디어기술콘텐츠학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "정보통신전자공학부": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "생명공학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "에너지환경공학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "바이오메디컬화학공학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연공학계열 모집단위; 수능(일반전형Ⅰ)"
+        },
+        "의생명과학과": {
+          "standard": null,
+          "percentile": 87,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "인공지능학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "데이터사이언스학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "바이오메디컬소프트웨어학과": {
+          "standard": null,
+          "percentile": 84,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "특수교육과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "바이오로직스공학부": {
+          "standard": null,
+          "percentile": 82,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "AI의공학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "수능(일반전형Ⅰ)"
+        },
+        "약학과": {
+          "standard": null,
+          "percentile": 96,
+          "note": "수능(일반전형Ⅰ)"
+        }
+      }
+    },
+    "명지대학교(용인)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (unvCd=0000109, 명지대학교 자연캠퍼스)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/명지대학교/명지대학교_2026학년도_정시모집요강.pdf"
+      ],
+      "departments": {
+        "반도체·ICT대학": {
+          "standard": null,
+          "percentile": 82
+        },
+        "반도체공학부": {
+          "standard": null,
+          "percentile": 82,
+          "note": "반도체·ICT대학[광역] 모집단위"
+        },
+        "산업경영공학과": {
+          "standard": null,
+          "percentile": 82,
+          "note": "반도체·ICT대학[광역] 모집단위"
+        },
+        "전기공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "반도체·ICT대학[광역] 모집단위"
+        },
+        "전기전자공학부": {
+          "standard": null,
+          "percentile": 82,
+          "note": "반도체·ICT대학[광역] 모집단위"
+        },
+        "전자공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "반도체·ICT대학[광역] 모집단위"
+        },
+        "정보통신공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "반도체·ICT대학[광역] 모집단위"
+        },
+        "컴퓨터공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "반도체·ICT대학[광역] 모집단위"
+        },
+        "컴퓨터정보통신공학부": {
+          "standard": null,
+          "percentile": 82,
+          "note": "반도체·ICT대학[광역] 모집단위"
+        },
+        "건설환경공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "기계공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "기계시스템공학부": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "로봇공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "스마트모빌리티공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "스마트시스템공과대학": {
+          "standard": null,
+          "percentile": 82
+        },
+        "스마트인프라공학부": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "신소재공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "화공신소재공학부": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "화학공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "환경시스템공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "스마트시스템공과대학[광역] 모집단위"
+        },
+        "시스템생명과학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "화학·생명과학대학[광역] 모집단위"
+        },
+        "식품영양학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "화학·생명과학대학[광역] 모집단위"
+        },
+        "융합바이오학부": {
+          "standard": null,
+          "percentile": 79,
+          "note": "화학·생명과학대학[광역] 모집단위"
+        },
+        "융합에너지학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "화학·생명과학대학[광역] 모집단위"
+        },
+        "화학·생명과학대학": {
+          "standard": null,
+          "percentile": 79
+        },
+        "화학·에너지융합학부": {
+          "standard": null,
+          "percentile": 79,
+          "note": "화학·생명과학대학[광역] 모집단위"
+        },
+        "화학나노학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "화학·생명과학대학[광역] 모집단위"
+        },
+        "건축대학": {
+          "standard": null,
+          "percentile": 87
+        },
+        "건축학부 건축학전공(5년제)": {
+          "standard": null,
+          "percentile": 87,
+          "note": "건축대학[광역] 모집단위"
+        },
+        "건축학부 전통건축전공(5년제)": {
+          "standard": null,
+          "percentile": 87,
+          "note": "건축대학[광역] 모집단위"
+        },
+        "건축학부(건축학전공/전통건축전공) (5년제)": {
+          "standard": null,
+          "percentile": 87,
+          "note": "건축대학[광역] 모집단위"
+        },
+        "공간디자인학과": {
+          "standard": null,
+          "percentile": 87,
+          "note": "건축대학[광역] 모집단위"
+        },
+        "자율전공학부(자연)": {
+          "standard": null,
+          "percentile": 83
+        }
+      }
+    },
+    "성균관대학교(수원)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (unvCd=0000133, 자연과학캠퍼스 모집단위만)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/성균관대학교/성균관대학교_2026학년도_정시모집요강.pdf"
+      ],
+      "departments": {
+        "건설환경공학부": {
+          "standard": null,
+          "percentile": 94,
+          "note": "전공예약 모집단위"
+        },
+        "기계공학부": {
+          "standard": null,
+          "percentile": 94,
+          "note": "공학계열 모집단위"
+        },
+        "나노공학과": {
+          "standard": null,
+          "percentile": 94,
+          "note": "공학계열 모집단위"
+        },
+        "시스템경영공학과": {
+          "standard": null,
+          "percentile": 94,
+          "note": "공학계열 모집단위"
+        },
+        "신소재공학부": {
+          "standard": null,
+          "percentile": 94,
+          "note": "공학계열 모집단위"
+        },
+        "양자정보공학과": {
+          "standard": null,
+          "percentile": 93
+        },
+        "화학공학부": {
+          "standard": null,
+          "percentile": 94,
+          "note": "공학계열 모집단위"
+        },
+        "공학계열": {
+          "standard": null,
+          "percentile": 94
+        },
+        "에너지학과": {
+          "standard": null,
+          "percentile": 97
+        },
+        "자연과학계열": {
+          "standard": null,
+          "percentile": 93
+        },
+        "바이오메카트로닉스학과": {
+          "standard": null,
+          "percentile": 93,
+          "note": "자연과학계열 모집단위"
+        },
+        "식품생명공학과": {
+          "standard": null,
+          "percentile": 93,
+          "note": "자연과학계열 모집단위"
+        },
+        "융합생명공학과": {
+          "standard": null,
+          "percentile": 93,
+          "note": "자연과학계열 모집단위"
+        },
+        "소프트웨어학과": {
+          "standard": null,
+          "percentile": 95
+        },
+        "스포츠과학과": {
+          "standard": null,
+          "percentile": 89,
+          "note": "실기 반영 전형"
+        },
+        "약학과": {
+          "standard": null,
+          "percentile": 97
+        },
+        "의예과": {
+          "standard": null,
+          "percentile": 99
+        },
+        "물리학과": {
+          "standard": null,
+          "percentile": 93,
+          "note": "자연과학계열 모집단위"
+        },
+        "생명과학과": {
+          "standard": null,
+          "percentile": 93,
+          "note": "자연과학계열 모집단위"
+        },
+        "수학과": {
+          "standard": null,
+          "percentile": 93,
+          "note": "자연과학계열 모집단위"
+        },
+        "화학과": {
+          "standard": null,
+          "percentile": 93,
+          "note": "자연과학계열 모집단위"
+        },
+        "반도체시스템공학과": {
+          "standard": null,
+          "percentile": 96,
+          "note": "계약학과"
+        },
+        "전자전기공학부": {
+          "standard": null,
+          "percentile": 95
+        },
+        "글로벌바이오메디컬공학과": {
+          "standard": null,
+          "percentile": 98
+        },
+        "반도체융합공학과": {
+          "standard": null,
+          "percentile": 97
+        }
+      }
+    },
+    "수원대학교": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do?searchSyr=2027&unvCd=0000140&tsrdCmphSlcnArtclUpCd=40",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/%EC%88%98%EC%9B%90%EB%8C%80%ED%95%99%EA%B5%90/%EC%88%98%EC%9B%90%EB%8C%80%ED%95%99%EA%B5%90_2026%ED%95%99%EB%85%84%EB%8F%84_%EC%A0%95%EC%8B%9C%EB%AA%A8%EC%A7%91%EC%9A%94%EA%B0%95.pdf"
+      ],
+      "departments": {
+        "경영": {
+          "standard": null,
+          "percentile": 76,
+          "note": "경영공학대학 모집단위 (수능일반전형1)"
+        },
+        "경제금융": {
+          "standard": null,
+          "percentile": 76,
+          "note": "경영공학대학 모집단위 (수능일반전형1)"
+        },
+        "글로벌비즈니스": {
+          "standard": null,
+          "percentile": 76,
+          "note": "경영공학대학 모집단위 (수능일반전형1)"
+        },
+        "회계": {
+          "standard": null,
+          "percentile": 76,
+          "note": "경영공학대학 모집단위 (수능일반전형1)"
+        },
+        "자유전공학부": {
+          "standard": null,
+          "percentile": 71,
+          "note": "수능일반전형1"
+        },
+        "간호학과": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능일반전형1"
+        },
+        "의류학과": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능일반전형1"
+        },
+        "디지털콘텐츠": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능일반전형1"
+        },
+        "디지털헤리티지": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "러시아언어문화": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "미디어커뮤니케이션": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "법학": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "소방행정": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "영미언어문화": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "인문사회융합대학": {
+          "standard": null,
+          "percentile": 74,
+          "note": "수능일반전형1"
+        },
+        "일본언어문화": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "중국언어문화": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "한국언어문화": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "행정학": {
+          "standard": null,
+          "percentile": 74,
+          "note": "인문사회융합대학 모집단위 (수능일반전형1)"
+        },
+        "건설환경공학": {
+          "standard": null,
+          "percentile": 75,
+          "note": "건설환경에너지공학부 모집단위 (수능일반전형1)"
+        },
+        "건설환경에너지공학부": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능일반전형1"
+        },
+        "반도체공학과": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능일반전형1"
+        },
+        "전기공학": {
+          "standard": null,
+          "percentile": 75,
+          "note": "전기전자공학부 모집단위 (수능일반전형1)"
+        },
+        "전기전자공학부": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능일반전형1"
+        },
+        "전자공학": {
+          "standard": null,
+          "percentile": 75,
+          "note": "전기전자공학부 모집단위 (수능일반전형1)"
+        },
+        "환경에너지공학": {
+          "standard": null,
+          "percentile": 75,
+          "note": "건설환경에너지공학부 모집단위 (수능일반전형1)"
+        },
+        "화학공학·신소재공학부": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능일반전형1"
+        },
+        "화학공학": {
+          "standard": null,
+          "percentile": 77,
+          "note": "화학공학·신소재공학부 모집단위 (수능일반전형1)"
+        },
+        "신소재공학": {
+          "standard": null,
+          "percentile": 77,
+          "note": "화학공학·신소재공학부 모집단위 (수능일반전형1)"
+        },
+        "건축도시부동산학부": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능일반전형1"
+        },
+        "건축학": {
+          "standard": null,
+          "percentile": 75,
+          "note": "건축도시부동산학부 모집단위 (수능일반전형1)"
+        },
+        "도시부동산학": {
+          "standard": null,
+          "percentile": 75,
+          "note": "건축도시부동산학부 모집단위 (수능일반전형1)"
+        },
+        "아동가족복지학과": {
+          "standard": null,
+          "percentile": 76,
+          "note": "수능일반전형1"
+        },
+        "식품영양학과": {
+          "standard": null,
+          "percentile": 79,
+          "note": "수능일반전형1"
+        }
+      }
+    },
+    "강남대학교": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (unvCd=0000051, searchSyr=2027, tsrdCmphSlcnArtclUpCd=40 → 2026학년도 수능위주 전형 결과) 수능위주(일반학생전형)",
+        "https://admission.kangnam.ac.kr/bbs/filedown.php?bbsid=paper&file_seq=4237 (2027학년도 정시 모집요강: 모집단위 및 입학정원)"
+      ],
+      "departments": {
+        "경영학전공": {
+          "standard": null,
+          "percentile": 70,
+          "note": "상경학부 모집단위"
+        },
+        "경제금융학전공": {
+          "standard": null,
+          "percentile": 70,
+          "note": "상경학부 모집단위"
+        },
+        "국제무역학전공": {
+          "standard": null,
+          "percentile": 70,
+          "note": "상경학부 모집단위"
+        },
+        "법행정세무학부": {
+          "standard": null,
+          "percentile": 72
+        },
+        "법행정학전공": {
+          "standard": null,
+          "percentile": 72,
+          "note": "법행정세무학부 모집단위"
+        },
+        "상경학부": {
+          "standard": null,
+          "percentile": 70
+        },
+        "세무학전공": {
+          "standard": null,
+          "percentile": 72,
+          "note": "법행정세무학부 모집단위"
+        },
+        "메타버스게임전공": {
+          "standard": null,
+          "percentile": 72,
+          "note": "컴퓨터공학부 모집단위"
+        },
+        "반도체공학전공": {
+          "standard": null,
+          "percentile": 70,
+          "note": "전자반도체공학부 모집단위"
+        },
+        "소프트웨어전공": {
+          "standard": null,
+          "percentile": 72,
+          "note": "컴퓨터공학부 모집단위"
+        },
+        "스마트모빌리티전공": {
+          "standard": null,
+          "percentile": 70,
+          "note": "전자반도체공학부 모집단위"
+        },
+        "전자공학전공": {
+          "standard": null,
+          "percentile": 70,
+          "note": "전자반도체공학부 모집단위"
+        },
+        "전자반도체공학부": {
+          "standard": null,
+          "percentile": 70
+        },
+        "컴퓨터공학부": {
+          "standard": null,
+          "percentile": 72
+        },
+        "국제지역학과": {
+          "standard": null,
+          "percentile": 70,
+          "note": "글로벌문화콘텐츠대학 모집단위"
+        },
+        "글로벌문화콘텐츠대학": {
+          "standard": null,
+          "percentile": 70
+        },
+        "기독교커뮤니케이션학과": {
+          "standard": null,
+          "percentile": 70,
+          "note": "글로벌문화콘텐츠대학 모집단위"
+        },
+        "문화콘텐츠학과": {
+          "standard": null,
+          "percentile": 70,
+          "note": "글로벌문화콘텐츠대학 모집단위"
+        },
+        "중국콘텐츠비즈니스학과": {
+          "standard": null,
+          "percentile": 70,
+          "note": "글로벌문화콘텐츠대학 모집단위"
+        },
+        "복지융합대학": {
+          "standard": null,
+          "percentile": 69
+        },
+        "사회복지학부": {
+          "standard": null,
+          "percentile": 69,
+          "note": "복지융합대학 모집단위"
+        },
+        "사회복지학전공": {
+          "standard": null,
+          "percentile": 69,
+          "note": "복지융합대학 모집단위"
+        },
+        "사회복지학전공(사회복지학부)": {
+          "standard": null,
+          "percentile": 69,
+          "note": "복지융합대학 모집단위"
+        },
+        "사회서비스학전공(사회복지학부)": {
+          "standard": null,
+          "percentile": 69,
+          "note": "복지융합대학 모집단위"
+        },
+        "시니어비즈니스학과": {
+          "standard": null,
+          "percentile": 69,
+          "note": "복지융합대학 모집단위"
+        },
+        "교육학과": {
+          "standard": null,
+          "percentile": 73
+        },
+        "초등특수교육과": {
+          "standard": null,
+          "percentile": 72
+        },
+        "유아교육과": {
+          "standard": null,
+          "percentile": 73
+        },
+        "인공지능융합공학부": {
+          "standard": null,
+          "percentile": 73
+        },
+        "인공지능전공": {
+          "standard": null,
+          "percentile": 73,
+          "note": "인공지능융합공학부 모집단위"
+        },
+        "데이터사이언스전공": {
+          "standard": null,
+          "percentile": 73,
+          "note": "인공지능융합공학부 모집단위"
+        },
+        "부동산건설학부": {
+          "standard": null,
+          "percentile": 71
+        },
+        "부동산학전공": {
+          "standard": null,
+          "percentile": 71,
+          "note": "부동산건설학부 모집단위"
+        },
+        "스마트도시공학전공": {
+          "standard": null,
+          "percentile": 71,
+          "note": "부동산건설학부 모집단위"
+        },
+        "건축공학전공": {
+          "standard": null,
+          "percentile": 71,
+          "note": "부동산건설학부 모집단위"
+        }
+      }
+    },
+    "아주대학교": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do?searchSyr=2027&unvCd=0000146&tsrdCmphSlcnArtclUpCd=40",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/%EC%95%84%EC%A3%BC%EB%8C%80%ED%95%99%EA%B5%90/%EC%95%84%EC%A3%BC%EB%8C%80%ED%95%99%EA%B5%90_2026%ED%95%99%EB%85%84%EB%8F%84_%EC%A0%95%EC%8B%9C%EB%AA%A8%EC%A7%91%EC%9A%94%EA%B0%95.pdf"
+      ],
+      "departments": {
+        "간호학과": {
+          "standard": null,
+          "percentile": 87,
+          "note": "수능(일반전형3)"
+        },
+        "경영인텔리전스학과": {
+          "standard": null,
+          "percentile": 85
+        },
+        "경영학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "금융공학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "교통시스템공학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "기계공학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "산업공학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "화학공학과": {
+          "standard": null,
+          "percentile": 85
+        },
+        "환경안전공학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "자유전공학부(인문)": {
+          "standard": null,
+          "percentile": 89
+        },
+        "자유전공학부(자연)": {
+          "standard": null,
+          "percentile": 86
+        },
+        "경제 분야": {
+          "standard": null,
+          "percentile": 82,
+          "note": "경제정치사회융합학부 모집단위"
+        },
+        "경제정치사회융합학부": {
+          "standard": null,
+          "percentile": 82
+        },
+        "경제학과": {
+          "standard": null,
+          "percentile": 82,
+          "note": "2026 모집단위명: 경제정치사회융합학부"
+        },
+        "사회 분야": {
+          "standard": null,
+          "percentile": 82,
+          "note": "경제정치사회융합학부 모집단위"
+        },
+        "사회학과": {
+          "standard": null,
+          "percentile": 82,
+          "note": "2026 모집단위명: 경제정치사회융합학부"
+        },
+        "정치 분야": {
+          "standard": null,
+          "percentile": 82,
+          "note": "경제정치사회융합학부 모집단위"
+        },
+        "정치외교학과": {
+          "standard": null,
+          "percentile": 82,
+          "note": "2026 모집단위명: 경제정치사회융합학부"
+        },
+        "디지털미디어학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "의학과(예과)": {
+          "standard": null,
+          "percentile": 99
+        },
+        "국어국문학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "물리·양자과학전공": {
+          "standard": null,
+          "percentile": 86,
+          "note": "프런티어과학학부 모집단위"
+        },
+        "물리학과": {
+          "standard": null,
+          "percentile": 86,
+          "note": "2026 모집단위명: 프런티어과학학부"
+        },
+        "생명과학·응용생물학전공": {
+          "standard": null,
+          "percentile": 86,
+          "note": "프런티어과학학부 모집단위"
+        },
+        "생명과학과": {
+          "standard": null,
+          "percentile": 86,
+          "note": "2026 모집단위명: 프런티어과학학부"
+        },
+        "수학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "프런티어과학학부": {
+          "standard": null,
+          "percentile": 86
+        },
+        "화학·물질과학전공": {
+          "standard": null,
+          "percentile": 86,
+          "note": "프런티어과학학부 모집단위"
+        },
+        "화학과": {
+          "standard": null,
+          "percentile": 86,
+          "note": "2026 모집단위명: 프런티어과학학부"
+        },
+        "첨단바이오융합대학": {
+          "standard": null,
+          "percentile": 84
+        },
+        "혁신신약공학전공": {
+          "standard": null,
+          "percentile": 84,
+          "note": "첨단바이오융합대학 모집단위"
+        },
+        "미래모빌리티공학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "전자공학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "지능형반도체공학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "건설시스템공학과": {
+          "standard": null,
+          "percentile": 85
+        },
+        "건축학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "응용화학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "행정학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "심리학과": {
+          "standard": null,
+          "percentile": 85
+        },
+        "사이버보안학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "소프트웨어학과": {
+          "standard": null,
+          "percentile": 87
+        },
+        "문화콘텐츠학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "불어불문학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "사학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "영어영문학과": {
+          "standard": null,
+          "percentile": 85
+        },
+        "약학과": {
+          "standard": null,
+          "percentile": 95,
+          "note": "수능(일반전형2)"
+        }
+      }
+    },
+    "용인대학교": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&unvCd=0000156&searchSyr=2027"
+      ],
+      "departments": {
+        "경찰행정학과": {
+          "standard": null,
+          "percentile": 72
+        }
+      }
+    },
+    "동국대학교(고양)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&unvCd=0000100&searchSyr=2027",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2026/동국대학교/동국대학교_2026학년도_정시입시결과.pdf"
+      ],
+      "departments": {
+        "바이오시스템대학(광역화 모집단위)": {
+          "standard": null,
+          "percentile": 88
+        },
+        "생명과학과": {
+          "standard": null,
+          "percentile": 87
+        },
+        "식품생명공학과": {
+          "standard": null,
+          "percentile": 88,
+          "note": "2026 모집단위명: 식품바이오융합공학과"
+        },
+        "약학과": {
+          "standard": null,
+          "percentile": 97
+        },
+        "의생명공학과": {
+          "standard": null,
+          "percentile": 90
+        }
+      }
+    },
+    "중앙대학교(안성)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&unvCd=0000174&searchSyr=2027",
+        "https://admission.cau.ac.kr/files/2026/2026_js_bn.pdf"
+      ],
+      "departments": {
+        "첨단소재공학과": {
+          "standard": null,
+          "percentile": 74
+        },
+        "생명자원공학부(식물생명공학전공)": {
+          "standard": null,
+          "percentile": 74
+        },
+        "식품공학부(식품공학전공)": {
+          "standard": null,
+          "percentile": 77
+        },
+        "식품공학부(식품영양전공)": {
+          "standard": null,
+          "percentile": 76
+        },
+        "시스템생명공학과": {
+          "standard": null,
+          "percentile": 78
+        },
+        "예술공학부": {
+          "standard": null,
+          "percentile": 77
+        },
+        "공연영상창작학부(사진전공)": {
+          "standard": null,
+          "percentile": 76
+        },
+        "디자인학부(공예전공)": {
+          "standard": null,
+          "percentile": 74
+        },
+        "디자인학부(산업디자인전공)": {
+          "standard": null,
+          "percentile": 78
+        },
+        "디자인학부(실내환경디자인전공)": {
+          "standard": null,
+          "percentile": 76
+        },
+        "디자인학부(패션전공)": {
+          "standard": null,
+          "percentile": 78
+        },
+        "생명자원공학부(동물생명공학전공)": {
+          "standard": null,
+          "percentile": 78
+        },
+        "디자인학부(시각디자인전공)": {
+          "standard": null,
+          "percentile": 83
+        }
+      }
+    },
+    "차의과학대학교": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (POST searchSyr=2027, unvCd=0000187, tsrdCmphSlcnArtclUpCd=40)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2026/차의과학대학교/차의과학대학교_2027학년도_정시모집요강.pdf"
+      ],
+      "departments": {
+        "약학과": {
+          "standard": null,
+          "percentile": 90,
+          "note": "약학대학 모집단위"
+        }
+      }
+    },
+    "경기대학교(수원)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (unvCd=0000056, searchSyr=2027, tsrdCmphSlcnArtclUpCd=40 → 2026학년도 수능위주 전형 결과) 수능(일반학생전형)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2026/경기대학교/경기대학교_2027학년도_정시모집요강.pdf (Ⅲ. 모집단위 및 모집인원)"
+      ],
+      "departments": {
+        "경찰행정학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "공공안전학부 모집단위"
+        },
+        "공공안전학부": {
+          "standard": null,
+          "percentile": 81
+        },
+        "공공인재학부": {
+          "standard": null,
+          "percentile": 79
+        },
+        "무역학과": {
+          "standard": null,
+          "percentile": 77
+        },
+        "범죄교정심리학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "공공안전학부 모집단위"
+        },
+        "정치외교학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "공공인재학부 모집단위"
+        },
+        "행정학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "공공인재학부 모집단위"
+        },
+        "모빌리티SW전공": {
+          "standard": null,
+          "percentile": 75,
+          "note": "AI컴퓨터공학부 모집단위"
+        },
+        "산업경영공학과": {
+          "standard": null,
+          "percentile": 77
+        },
+        "소프트웨어경영학부": {
+          "standard": null,
+          "percentile": 75
+        },
+        "인공지능전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "2026 모집단위명: AI컴퓨터공학부 인공지능전공"
+        },
+        "컴퓨터공학전공": {
+          "standard": null,
+          "percentile": 75,
+          "note": "AI컴퓨터공학부 모집단위"
+        },
+        "AI컴퓨터공학부": {
+          "standard": null,
+          "percentile": 75
+        },
+        "SW안전보안전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "2026 모집단위명: AI컴퓨터공학부 SW안전보안전공"
+        },
+        "바이오융합학부": {
+          "standard": null,
+          "percentile": 81
+        },
+        "생명과학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "바이오융합학부 모집단위"
+        },
+        "식품생물공학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "바이오융합학부 모집단위"
+        },
+        "융합과학부": {
+          "standard": null,
+          "percentile": 73
+        },
+        "화학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "사학과": {
+          "standard": null,
+          "percentile": 79
+        },
+        "영어영문학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "유아교육과": {
+          "standard": null,
+          "percentile": 77
+        },
+        "인문학부": {
+          "standard": null,
+          "percentile": 78
+        },
+        "자유전공학부(수원)": {
+          "standard": null,
+          "percentile": 79
+        },
+        "기계시스템공학과": {
+          "standard": null,
+          "percentile": 74
+        },
+        "나노·반도체전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "전자공학부 모집단위"
+        },
+        "신소재공학전공": {
+          "standard": null,
+          "percentile": 77,
+          "note": "신소재화학공학부 모집단위"
+        },
+        "신소재화학공학부": {
+          "standard": null,
+          "percentile": 77
+        },
+        "전자공학부": {
+          "standard": null,
+          "percentile": 81
+        },
+        "정보통신시스템전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "전자공학부 모집단위"
+        },
+        "창의공학부": {
+          "standard": null,
+          "percentile": 76
+        },
+        "화학공학전공": {
+          "standard": null,
+          "percentile": 77,
+          "note": "신소재화학공학부 모집단위"
+        },
+        "경제학부": {
+          "standard": null,
+          "percentile": 81
+        },
+        "경제학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "경제학부 모집단위"
+        },
+        "응용통계학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "경제학부 모집단위"
+        },
+        "지식재산학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "경제학부 모집단위"
+        },
+        "경영학부": {
+          "standard": null,
+          "percentile": 81
+        },
+        "경영학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "경영학부 모집단위"
+        },
+        "회계세무학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "경영학부 모집단위"
+        },
+        "휴먼서비스학부": {
+          "standard": null,
+          "percentile": 79
+        },
+        "사회복지학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "휴먼서비스학부 모집단위"
+        },
+        "청소년학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "휴먼서비스학부 모집단위"
+        },
+        "스마트시티공학부": {
+          "standard": null,
+          "percentile": 79
+        },
+        "건축공학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "스마트시티공학부 모집단위"
+        },
+        "도시·교통공학전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "스마트시티공학부 모집단위"
+        },
+        "법학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "수학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "국어국문학과": {
+          "standard": null,
+          "percentile": 85
+        },
+        "문헌정보학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "건축학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "사회에너지시스템공학과": {
+          "standard": null,
+          "percentile": 82
+        }
+      }
+    },
+    "한국공학대학교": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (POST searchSyr=2027, unvCd=0000247, tsrdCmphSlcnArtclUpCd=40)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2026/한국공학대학교/한국공학대학교_2027학년도_정시모집요강.pdf"
+      ],
+      "departments": {
+        "경영학부 (IT경영전공)": {
+          "standard": null,
+          "percentile": 76,
+          "note": "수능(일반학생1) 전형"
+        },
+        "경영학부(경영 자율전공)": {
+          "standard": null,
+          "percentile": 77,
+          "note": "2026 모집단위명: 경영 자율전공; 수능(일반학생1) 전형"
+        },
+        "경영학부(경영학전공)": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능(일반학생1) 전형"
+        },
+        "디자인공학부": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능(일반학생1) 전형"
+        },
+        "디자인공학부(미디어디자인공학전공)": {
+          "standard": null,
+          "percentile": 75,
+          "note": "디자인공학부 모집단위; 수능(일반학생1) 전형"
+        },
+        "디자인공학부(산업디자인공학전공)": {
+          "standard": null,
+          "percentile": 75,
+          "note": "디자인공학부 모집단위; 수능(일반학생1) 전형"
+        },
+        "자유전공학부": {
+          "standard": null,
+          "percentile": 74,
+          "note": "수능(일반학생1) 전형"
+        },
+        "기계공학과": {
+          "standard": null,
+          "percentile": 74,
+          "note": "수능(일반학생1) 전형"
+        },
+        "기계설계공학부(기계설계전공)": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능(일반학생1) 전형"
+        },
+        "기계설계공학부(지능형모빌리티전공)": {
+          "standard": null,
+          "percentile": 78,
+          "note": "수능(일반학생1) 전형"
+        },
+        "메카트로닉스공학부(AI로봇전공)": {
+          "standard": null,
+          "percentile": 80,
+          "note": "수능(일반학생1) 전형"
+        },
+        "생명화학공학과": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능(일반학생1) 전형"
+        },
+        "신소재공학과": {
+          "standard": null,
+          "percentile": 78,
+          "note": "수능(일반학생1) 전형"
+        },
+        "첨단융합 자율전공": {
+          "standard": null,
+          "percentile": 73,
+          "note": "수능(일반학생1) 전형"
+        },
+        "반도체공학부(나노반도체공학전공)": {
+          "standard": null,
+          "percentile": 76,
+          "note": "수능(일반학생1) 전형"
+        },
+        "전자공학부(임베디드시스템전공)": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능(일반학생1) 전형"
+        },
+        "전자공학부(전자공학전공)": {
+          "standard": null,
+          "percentile": 78,
+          "note": "수능(일반학생1) 전형"
+        },
+        "게임공학과": {
+          "standard": null,
+          "percentile": 76,
+          "note": "수능(일반학생1) 전형"
+        },
+        "인공지능학과": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능(일반학생1) 전형"
+        },
+        "컴퓨터공학부(소프트웨어전공)": {
+          "standard": null,
+          "percentile": 76,
+          "note": "수능(일반학생1) 전형"
+        },
+        "컴퓨터공학부(컴퓨터공학전공)": {
+          "standard": null,
+          "percentile": 73,
+          "note": "수능(일반학생1) 전형"
+        },
+        "SW 자율전공": {
+          "standard": null,
+          "percentile": 74,
+          "note": "2027 모집단위명: AI융합 자율전공; 수능(일반학생1) 전형"
+        },
+        "IT반도체융합 자율전공": {
+          "standard": null,
+          "percentile": 80,
+          "note": "수능(일반학생1) 전형"
+        },
+        "스마트기계융합 자율전공": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능(일반학생1) 전형"
+        },
+        "반도체공학부(반도체시스템전공)": {
+          "standard": null,
+          "percentile": 80,
+          "note": "수능(일반학생1) 전형"
+        },
+        "에너지·전기공학부(미래에너지시스템전공)": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능(일반학생1) 전형"
+        },
+        "에너지·전기공학부(전력응용시스템전공)": {
+          "standard": null,
+          "percentile": 77,
+          "note": "수능(일반학생1) 전형"
+        },
+        "경영학부(데이터사이언스경영전공)": {
+          "standard": null,
+          "percentile": 80,
+          "note": "수능(일반학생1) 전형"
+        },
+        "메카트로닉스공학부(메카트로닉스전공)": {
+          "standard": null,
+          "percentile": 78,
+          "note": "수능(일반학생1) 전형"
+        }
+      }
+    },
+    "한국외국어대학교(용인)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (unvCd=0000192)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/%ED%95%9C%EA%B5%AD%EC%99%B8%EA%B5%AD%EC%96%B4%EB%8C%80%ED%95%99%EA%B5%90/%ED%95%9C%EA%B5%AD%EC%99%B8%EA%B5%AD%EC%96%B4%EB%8C%80%ED%95%99%EA%B5%90_2026%ED%95%99%EB%85%84%EB%8F%84_%EC%A0%95%EC%8B%9C%EB%AA%A8%EC%A7%91%EC%9A%94%EA%B0%95.pdf"
+      ],
+      "departments": {
+        "경상대학[통합모집]": {
+          "standard": null,
+          "percentile": 80
+        },
+        "국제금융학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "반도체전자공학부(반도체공학전공)": {
+          "standard": null,
+          "percentile": 80
+        },
+        "반도체전자공학부(전자공학전공)": {
+          "standard": null,
+          "percentile": 77
+        },
+        "산업경영공학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "정보통신공학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "컴퓨터공학부": {
+          "standard": null,
+          "percentile": 75
+        },
+        "국가전략언어계열": {
+          "standard": null,
+          "percentile": 75
+        },
+        "루마니아학과": {
+          "standard": null,
+          "percentile": 74
+        },
+        "세르비아·크로아티아학과": {
+          "standard": null,
+          "percentile": 77
+        },
+        "우크라이나학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "체코·슬로바키아학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "폴란드학과": {
+          "standard": null,
+          "percentile": 79
+        },
+        "한국학과": {
+          "standard": null,
+          "percentile": 75
+        },
+        "기후변화융합학부": {
+          "standard": null,
+          "percentile": 77
+        },
+        "바이오메디컬공학부": {
+          "standard": null,
+          "percentile": 82
+        },
+        "자유전공학부(글로벌)": {
+          "standard": null,
+          "percentile": 79
+        },
+        "사학과": {
+          "standard": null,
+          "percentile": 75
+        },
+        "인문대학[통합모집]": {
+          "standard": null,
+          "percentile": 76
+        },
+        "철학과": {
+          "standard": null,
+          "percentile": 78
+        },
+        "생명공학과": {
+          "standard": null,
+          "percentile": 79
+        },
+        "자연과학대학[통합모집]": {
+          "standard": null,
+          "percentile": 78
+        },
+        "환경학과": {
+          "standard": null,
+          "percentile": 74
+        },
+        "AI데이터융합학부": {
+          "standard": null,
+          "percentile": 79
+        },
+        "AI융합대학[통합모집]": {
+          "standard": null,
+          "percentile": 77
+        },
+        "Finance & AI융합학부": {
+          "standard": null,
+          "percentile": 77
+        },
+        "글로벌스포츠산업학부": {
+          "standard": null,
+          "percentile": 82
+        },
+        "디지털콘텐츠학부": {
+          "standard": null,
+          "percentile": 76
+        },
+        "투어리즘 & 웰니스학부": {
+          "standard": null,
+          "percentile": 76
+        },
+        "Culture & Technology융합대학[통합모집]": {
+          "standard": null,
+          "percentile": 77
+        },
+        "중앙아시아학과": {
+          "standard": null,
+          "percentile": 79
+        },
+        "그리스·불가리아학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "아프리카학부": {
+          "standard": null,
+          "percentile": 76
+        },
+        "헝가리학과": {
+          "standard": null,
+          "percentile": 78
+        },
+        "공과계열": {
+          "standard": null,
+          "percentile": 80
+        },
+        "언어인지과학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "Global Business & Technology학부": {
+          "standard": null,
+          "percentile": 83
+        },
+        "전자물리학과": {
+          "standard": null,
+          "percentile": 77
+        },
+        "통계학과": {
+          "standard": null,
+          "percentile": 79
+        },
+        "융합인재학부": {
+          "standard": null,
+          "percentile": 78
+        },
+        "화학과": {
+          "standard": null,
+          "percentile": 76
+        },
+        "수학과": {
+          "standard": null,
+          "percentile": 79
+        }
+      }
+    },
+    "한국항공대학교": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (unvCd=0000194)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/%ED%95%9C%EA%B5%AD%ED%95%AD%EA%B3%B5%EB%8C%80%ED%95%99%EA%B5%90/%ED%95%9C%EA%B5%AD%ED%95%AD%EA%B3%B5%EB%8C%80%ED%95%99%EA%B5%90_2026%ED%95%99%EB%85%84%EB%8F%84_%EC%A0%95%EC%8B%9C%EB%AA%A8%EC%A7%91%EC%9A%94%EA%B0%95.pdf"
+      ],
+      "departments": {
+        "스마트드론공학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "AI융합대학": {
+          "standard": null,
+          "percentile": 88
+        },
+        "인공지능전공": {
+          "standard": null,
+          "percentile": 88,
+          "note": "AI융합대학 모집단위"
+        },
+        "컴퓨터공학전공": {
+          "standard": null,
+          "percentile": 88,
+          "note": "AI융합대학 모집단위"
+        },
+        "반도체시스템전공": {
+          "standard": null,
+          "percentile": 88,
+          "note": "AI융합대학 모집단위"
+        },
+        "전자및항공전자전공": {
+          "standard": null,
+          "percentile": 88,
+          "note": "AI융합대학 모집단위"
+        },
+        "AI융합ICT전공": {
+          "standard": null,
+          "percentile": 88,
+          "note": "AI융합대학 모집단위"
+        },
+        "항공운항학과": {
+          "standard": null,
+          "percentile": 96
+        },
+        "AI자율주행시스템공학과": {
+          "standard": null,
+          "percentile": 88
+        }
+      }
+    },
+    "한양대학교(ERICA)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (한양대학교(ERICA)[분교] unvCd=0000204, searchSyr=2027 > 수능위주전형 > 2026학년도 전형 결과, 수능(일반)/수능(일반-스포츠과학부))",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/%ED%95%9C%EC%96%91%EB%8C%80%ED%95%99%EA%B5%90%28ERICA%29/%ED%95%9C%EC%96%91%EB%8C%80%ED%95%99%EA%B5%90%28ERICA%29_2026%ED%95%99%EB%85%84%EB%8F%84_%EC%A0%95%EC%8B%9C%EB%AA%A8%EC%A7%91%EC%9A%94%EA%B0%95.pdf"
+      ],
+      "departments": {
+        "경영학부": {
+          "standard": null,
+          "percentile": 81
+        },
+        "경제학부": {
+          "standard": null,
+          "percentile": 82
+        },
+        "보험계리학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "건설환경공학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "건축공학전공": {
+          "standard": null,
+          "percentile": 81
+        },
+        "건축학전공": {
+          "standard": null,
+          "percentile": 82
+        },
+        "교통물류공학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "2026 모집단위명: 교통·물류공학과"
+        },
+        "기계공학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "로봇공학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "배터리소재화학공학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "산업경영공학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "에너지바이오학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "전자공학부": {
+          "standard": null,
+          "percentile": 83
+        },
+        "해양융합공학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "글로벌문화통상학부": {
+          "standard": null,
+          "percentile": 79
+        },
+        "데이터인텔리전스전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "ICT융합학부 모집단위"
+        },
+        "디자인컨버전스전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "ICT융합학부 모집단위"
+        },
+        "수리데이터사이언스학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "인공지능학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "컴퓨터학부": {
+          "standard": null,
+          "percentile": 82,
+          "note": "나군 컴퓨터학부 모집단위(가군 컴퓨터전공·지능형클라우드전공은 별도 모집)"
+        },
+        "ICT융합학부": {
+          "standard": null,
+          "percentile": 82
+        },
+        "약학과(6년제)": {
+          "standard": null,
+          "percentile": 97,
+          "note": "약학과 모집단위"
+        },
+        "스포츠과학부": {
+          "standard": null,
+          "percentile": 56,
+          "note": "실기 반영 전형(수능 70% + 실기 30%)"
+        },
+        "스포츠문화전공": {
+          "standard": null,
+          "percentile": 56,
+          "note": "스포츠과학부 모집단위; 실기 반영 전형"
+        },
+        "스포츠코칭전공": {
+          "standard": null,
+          "percentile": 56,
+          "note": "스포츠과학부 모집단위; 실기 반영 전형"
+        },
+        "바이오나노공학전공": {
+          "standard": null,
+          "percentile": 82
+        },
+        "바이오신약융합학부": {
+          "standard": null,
+          "percentile": 82
+        },
+        "반도체·디스플레이공학전공": {
+          "standard": null,
+          "percentile": 83
+        },
+        "분자의약전공": {
+          "standard": null,
+          "percentile": 83
+        },
+        "신소재·반도체공학전공": {
+          "standard": null,
+          "percentile": 83
+        },
+        "지능정보양자공학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "국방지능정보융합공학부(지능정보양자공학전공) 모집단위"
+        },
+        "차세대반도체융합공학부": {
+          "standard": null,
+          "percentile": 80
+        },
+        "광고홍보학과": {
+          "standard": null,
+          "percentile": 80
+        },
+        "문화인류학과": {
+          "standard": null,
+          "percentile": 79
+        },
+        "문화콘텐츠학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "미디어학과": {
+          "standard": null,
+          "percentile": 80
+        },
+        "LIONS자율전공학부(전계열)": {
+          "standard": null,
+          "percentile": 83
+        }
+      }
+    },
+    "경희대학교(용인)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (searchSyr=2027, unvCd=0000066, tsrdCmphSlcnArtclUpCd=40)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/%EA%B2%BD%ED%9D%AC%EB%8C%80%ED%95%99%EA%B5%90/%EA%B2%BD%ED%9D%AC%EB%8C%80%ED%95%99%EA%B5%90_2026%ED%95%99%EB%85%84%EB%8F%84_%EC%A0%95%EC%8B%9C%EB%AA%A8%EC%A7%91%EC%9A%94%EA%B0%95.pdf"
+      ],
+      "departments": {
+        "건축공학과": {
+          "standard": null,
+          "percentile": 87
+        },
+        "기계공학과": {
+          "standard": null,
+          "percentile": 91,
+          "note": "2026 모집단위명: 기계공학부"
+        },
+        "사회기반시스템공학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "산업경영공학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "원자력공학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "환경학및환경공학과": {
+          "standard": null,
+          "percentile": 89
+        },
+        "유전생명공학과": {
+          "standard": null,
+          "percentile": 91
+        },
+        "융합바이오·신소재공학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "소프트웨어융합학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "컴퓨터공학부 인공지능학과": {
+          "standard": null,
+          "percentile": 91,
+          "note": "adiga 표기: 인공지능학과"
+        },
+        "컴퓨터공학부 컴퓨터공학과": {
+          "standard": null,
+          "percentile": 89,
+          "note": "adiga 표기: 컴퓨터공학과"
+        },
+        "산업디자인학과": {
+          "standard": null,
+          "percentile": 75,
+          "note": "수능위주 일반(예술, 수능 100%)"
+        },
+        "글로벌커뮤니케이션학부": {
+          "standard": null,
+          "percentile": 86
+        },
+        "러시아어학과": {
+          "standard": null,
+          "percentile": 88
+        },
+        "스페인어학과": {
+          "standard": null,
+          "percentile": 84
+        },
+        "프랑스어학과": {
+          "standard": null,
+          "percentile": 89
+        },
+        "우주과학과": {
+          "standard": null,
+          "percentile": 89
+        },
+        "응용화학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "생체의공학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "전자정보공학부 전자공학과": {
+          "standard": null,
+          "percentile": 88,
+          "note": "2026 모집단위명: 전자공학부 전자공학과"
+        },
+        "골프산업학과": {
+          "standard": null,
+          "percentile": 79,
+          "note": "수능위주 일반(체육, 수능 100%)"
+        },
+        "태권도학과": {
+          "standard": null,
+          "percentile": 63,
+          "note": "수능위주 체육(수능 90% + 학생부 10%)"
+        },
+        "건축학과": {
+          "standard": null,
+          "percentile": 89
+        },
+        "신소재공학과": {
+          "standard": null,
+          "percentile": 92
+        },
+        "화학공학과": {
+          "standard": null,
+          "percentile": 91
+        },
+        "국제학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "스마트팜과학과": {
+          "standard": null,
+          "percentile": 89
+        },
+        "식품생명공학과": {
+          "standard": null,
+          "percentile": 93
+        },
+        "의류디자인학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "수능위주 일반(예술, 수능 100%)"
+        },
+        "일본어학과": {
+          "standard": null,
+          "percentile": 84
+        },
+        "중국어학과": {
+          "standard": null,
+          "percentile": 88
+        },
+        "응용물리학과": {
+          "standard": null,
+          "percentile": 90
+        },
+        "응용수학과": {
+          "standard": null,
+          "percentile": 91
+        },
+        "전자정보공학부 반도체공학과": {
+          "standard": null,
+          "percentile": 92,
+          "note": "2026 모집단위명: 전자공학부 반도체공학과"
+        },
+        "스포츠의학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "수능위주 일반(체육, 수능 100%)"
+        },
+        "체육학과": {
+          "standard": null,
+          "percentile": 80,
+          "note": "수능위주 일반(체육, 수능 100%)"
+        }
+      }
+    },
+    "단국대학교(죽전)": {
+      "year": "2026학년도",
+      "sources": [
+        "https://www.adiga.kr/uct/acd/ade/criteriaAndResultItemNewAjax.do (searchSyr=2027, unvCd=0000082, tsrdCmphSlcnArtclUpCd=40)",
+        "https://cdn013.negagea.net/dgsmidc/omr/seoul/web/univ_info2025/%EB%8B%A8%EA%B5%AD%EB%8C%80%ED%95%99%EA%B5%90(%EC%A3%BD%EC%A0%84)/%EB%8B%A8%EA%B5%AD%EB%8C%80%ED%95%99%EA%B5%90(%EC%A3%BD%EC%A0%84)_2026%ED%95%99%EB%85%84%EB%8F%84_%EC%A0%95%EC%8B%9C%EB%AA%A8%EC%A7%91%EC%9A%94%EA%B0%95.pdf"
+      ],
+      "departments": {
+        "경영학부": {
+          "standard": null,
+          "percentile": 82
+        },
+        "경영학부 경영학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "경영학부 모집단위"
+        },
+        "경영학부 회계학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "경영학부 모집단위"
+        },
+        "경제학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "건축학부 건축공학전공": {
+          "standard": null,
+          "percentile": 84
+        },
+        "건축학부 건축학전공": {
+          "standard": null,
+          "percentile": 83,
+          "note": "2026 모집단위명: 건축학부 건축학전공(5년제)"
+        },
+        "고분자공학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "고분자시스템공학부 고분자공학전공 모집단위"
+        },
+        "고분자시스템공학부 고분자공학전공": {
+          "standard": null,
+          "percentile": 82
+        },
+        "고분자시스템공학부 파이버융합소재공학전공": {
+          "standard": null,
+          "percentile": 83,
+          "note": "2026 모집단위명: 고분자시스템공학부 융합소재공학전공"
+        },
+        "기계공학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "토목환경공학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "2026 모집단위명: 인프라건설공학과"
+        },
+        "화학공학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "국어국문학과": {
+          "standard": null,
+          "percentile": 80
+        },
+        "영미인문학과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "과학교육과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "체육교육과": {
+          "standard": null,
+          "percentile": 74,
+          "note": "실기 반영 전형"
+        },
+        "특수교육과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "한문교육과": {
+          "standard": null,
+          "percentile": 81
+        },
+        "광고홍보전공": {
+          "standard": null,
+          "percentile": 85,
+          "note": "미디어커뮤니케이션학부 모집단위"
+        },
+        "미디어커뮤니케이션학부": {
+          "standard": null,
+          "percentile": 85
+        },
+        "상담학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "영상콘텐츠전공": {
+          "standard": null,
+          "percentile": 85,
+          "note": "미디어커뮤니케이션학부 모집단위"
+        },
+        "저널리즘전공": {
+          "standard": null,
+          "percentile": 85,
+          "note": "미디어커뮤니케이션학부 모집단위"
+        },
+        "행정학과": {
+          "standard": null,
+          "percentile": 84
+        },
+        "공연영화학부 연극전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "수능위주 일반학생(연출)"
+        },
+        "공연영화학부 영화전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "수능위주 일반학생(이론·연출·스탭)"
+        },
+        "퇴계혁신칼리지": {
+          "standard": null,
+          "percentile": 81
+        },
+        "국제경영학과": {
+          "standard": null,
+          "percentile": 84
+        },
+        "모바일시스템공학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "컴퓨터공학과": {
+          "standard": null,
+          "percentile": 85
+        },
+        "통계데이터사이언스학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "무역학과": {
+          "standard": null,
+          "percentile": 83
+        },
+        "융합반도체공학과": {
+          "standard": null,
+          "percentile": 86
+        },
+        "전자전기공학과": {
+          "standard": null,
+          "percentile": 89
+        },
+        "사학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "철학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "법학과": {
+          "standard": null,
+          "percentile": 84
+        },
+        "수학교육과": {
+          "standard": null,
+          "percentile": 87
+        },
+        "도시계획부동산학부": {
+          "standard": null,
+          "percentile": 83,
+          "note": "adiga 표기: 도시계획・부동산학부"
+        },
+        "도시지역계획학전공": {
+          "standard": null,
+          "percentile": 83,
+          "note": "도시계획·부동산학부 모집단위"
+        },
+        "부동산학전공": {
+          "standard": null,
+          "percentile": 83,
+          "note": "도시계획·부동산학부 모집단위"
+        },
+        "정치외교학과": {
+          "standard": null,
+          "percentile": 84
+        },
+        "사이버보안학과": {
+          "standard": null,
+          "percentile": 82
+        },
+        "소프트웨어학과": {
+          "standard": null,
+          "percentile": 84
+        }
+      }
     }
   }
 };
