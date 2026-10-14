@@ -4637,13 +4637,10 @@
     function regionalDistrictSignPosition(name, bounds, centroid, boxWidth, boxHeight, mapWidth, mapHeight) {
       if (!["gyeongsang", "jeolla"].includes(state.currentRegion)) return null;
       if (state.currentRegion === "jeolla" && ["제주시", "서귀포시"].includes(name)) {
-        const insetWidth = 210;
-        const insetHeight = 154;
-        const insetX = jejuInsetX(mapWidth, insetWidth);
-        const insetY = Math.max(48, mapHeight - insetHeight - 42);
+        const { x: insetX, y: insetY, boxHeight: insetHeight, scale: insetScale } = jejuInsetBox(mapWidth, mapHeight);
         return {
-          x: clamp(insetX + 62, boxWidth / 2 + 12, mapWidth - boxWidth / 2 - 12),
-          y: clamp(insetY + insetHeight - 22, boxHeight / 2 + 12, mapHeight - boxHeight / 2 - 12)
+          x: clamp(insetX + 62 * insetScale, boxWidth / 2 + 12, mapWidth - boxWidth / 2 - 12),
+          y: clamp(insetY + insetHeight - 22 * insetScale, boxHeight / 2 + 12, mapHeight - boxHeight / 2 - 12)
         };
       }
       const targetRegions = new Set([
@@ -5416,18 +5413,33 @@
       state.routeLayer.append("path").datum(feature).attr("class", "subway-line").attr("stroke", lineMeta[state.activeLine].color).attr("d", state.path).append("title").text(state.activeLine);
     }
 
-    // 제주 상자의 가로 위치. 넓은 화면에서는 원래 위치를 쓰고, 좁은 화면에서는 본토(제주 제외) 오른쪽 끝 바깥으로 옮겨 해안을 덮지 않게 한다.
-    function jejuInsetX(width, boxWidth) {
-      let x = Math.max(18, width - (state.currentRegion === "national" ? 520 : 410));
-      if (state.path && state.mapGeo) {
-        const features = state.mapGeo.features ? state.mapGeo.features.filter(feature => !isJejuFeature(feature)) : null;
-        const mainland = features && features.length ? { type: "FeatureCollection", features } : state.mapGeo;
-        const mainlandRight = state.path.bounds(mainland)[1][0];
+    function jejuMainlandBounds() {
+      if (!state.path || !state.mapGeo) return null;
+      const features = state.mapGeo.features ? state.mapGeo.features.filter(feature => !isJejuFeature(feature)) : null;
+      const mainland = features && features.length ? { type: "FeatureCollection", features } : state.mapGeo;
+      return state.path.bounds(mainland);
+    }
+
+    // 제주 상자 크기·위치. 100% 화면(본토 폭 기준값)에서는 원래 크기 그대로, 지도가 작게 그려지면 같은 비율로 줄인다.
+    // 위치는 넓은 화면에서는 원래 자리, 좁은 화면에서는 본토(제주 제외) 오른쪽 끝 바깥으로 옮겨 해안을 덮지 않게 한다.
+    function jejuInsetBox(width, height) {
+      const national = state.currentRegion === "national";
+      const baseWidth = national ? 164 : 210;
+      const baseHeight = national ? 112 : 154;
+      const referenceMainlandWidth = national ? 512 : 714;
+      const bounds = jejuMainlandBounds();
+      const ratio = bounds ? (bounds[1][0] - bounds[0][0]) / referenceMainlandWidth : 1;
+      const scale = ratio >= 0.97 ? 1 : clamp(ratio, 0.6, 1);
+      const boxWidth = Math.round(baseWidth * scale);
+      const boxHeight = Math.round(baseHeight * scale);
+      let x = Math.max(18, width - (national ? 520 : 410));
+      if (bounds) {
         // 호남권은 여수 쪽 대학 이름표가 해안 밖으로 나와 있어 간격을 더 둔다.
         const gap = state.currentRegion === "jeolla" ? 44 : 8;
-        x = Math.min(Math.max(x, mainlandRight + gap), width - boxWidth - 14);
+        x = Math.min(Math.max(x, bounds[1][0] + gap), width - boxWidth - 14);
       }
-      return x;
+      const y = Math.max(48, height - boxHeight - 42);
+      return { x, y, boxWidth, boxHeight, scale };
     }
 
     function drawJejuInset(width, height) {
@@ -5437,10 +5449,7 @@
         : state.geo.features.filter(isJejuFeature);
       if (!jejuFeatures.length) return;
       const jejuCollection = { type: "FeatureCollection", features: jejuFeatures };
-      const boxWidth = state.currentRegion === "national" ? 164 : 210;
-      const boxHeight = state.currentRegion === "national" ? 112 : 154;
-      const x = jejuInsetX(width, boxWidth);
-      const y = Math.max(48, height - boxHeight - 42);
+      const { x, y, boxWidth, boxHeight, scale } = jejuInsetBox(width, height);
       const inset = svg.append("g").attr("class", "jeju-inset");
       inset.append("rect")
         .attr("class", "island-inset-frame")
@@ -5453,11 +5462,12 @@
       inset.append("text")
         .attr("class", "island-inset-title")
         .attr("x", x + boxWidth / 2)
-        .attr("y", y + 20)
+        .attr("y", y + 20 * scale)
+        .style("font-size", scale < 1 ? `${Math.max(10, Math.round(13 * scale))}px` : null)
         .text("제주");
-      const topPadding = state.currentRegion === "national" ? 30 : 34;
-      const sidePadding = state.currentRegion === "national" ? 22 : 18;
-      state.jejuInsetProjection = d3.geoMercator().fitExtent([[x + sidePadding, y + topPadding], [x + boxWidth - sidePadding, y + boxHeight - 16]], jejuCollection);
+      const topPadding = (state.currentRegion === "national" ? 30 : 34) * scale;
+      const sidePadding = (state.currentRegion === "national" ? 22 : 18) * scale;
+      state.jejuInsetProjection = d3.geoMercator().fitExtent([[x + sidePadding, y + topPadding], [x + boxWidth - sidePadding, y + boxHeight - 16 * scale]], jejuCollection);
       const insetPath = d3.geoPath(state.jejuInsetProjection);
       inset.selectAll("path")
         .data(jejuFeatures)
