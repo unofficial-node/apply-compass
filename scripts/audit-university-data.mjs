@@ -3,9 +3,10 @@ import path from "node:path";
 import vm from "node:vm";
 
 const sourceArgument = process.argv.slice(2).find(arg => !arg.startsWith("--"));
-const sourcePath = path.resolve(sourceArgument || "public/university-map.html");
+const defaultSources = ["public/data/universities.js", "public/data/departments.js"];
+const sourcePaths = (sourceArgument ? [sourceArgument] : defaultSources).map(file => path.resolve(file));
 const region = (process.argv.find(arg => arg.startsWith("--region="))?.split("=")[1] || "seoul").toLowerCase();
-const source = fs.readFileSync(sourcePath, "utf8");
+const source = sourcePaths.map(file => fs.readFileSync(file, "utf8")).join("\n");
 
 function extractInitializer(name, open, close) {
   const marker = `const ${name} =`;
@@ -94,7 +95,7 @@ for (const university of universities) {
 }
 
 const report = {
-  source: path.relative(process.cwd(), sourcePath),
+  source: sourcePaths.map(file => path.relative(process.cwd(), file)),
   region,
   universities: universities.length,
   departmentEntries: departmentCount,
