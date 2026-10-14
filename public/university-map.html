@@ -6,6 +6,8 @@
   <title>대학교 모아보기</title>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+  <script src="./admission-scores.js"></script>
+  <script src="./admission-offices.js"></script>
   <style>
     :root {
       --ink: #17212b;
@@ -204,6 +206,146 @@
       font-weight: 900;
     }
     .pdf-export-button:hover, .pdf-export-button:focus { background: #7d2823; outline: none; }
+    .application-mode-switch {
+      display: inline-flex;
+      padding: 3px;
+      border: 1px solid rgba(36, 91, 87, 0.22);
+      border-radius: 9px;
+      background: #f2f6f5;
+    }
+    .application-mode-option {
+      min-width: 58px;
+      padding: 6px 14px;
+      border: 0;
+      border-radius: 6px;
+      color: #52636d;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .application-mode-option:hover, .application-mode-option:focus-visible { color: #173f3e; background: rgba(36, 91, 87, 0.1); outline: none; }
+    .application-mode-option.susi.active { color: #fff; background: #245b57; }
+    .application-mode-option.jeongsi.active { color: #fff; background: #2f5f9e; }
+    .jeongsi-layout { max-width: 720px; margin-left: 54px; }
+    .jeongsi-slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .jeongsi-slot {
+      position: relative;
+      display: grid;
+      align-content: start;
+      gap: 4px;
+      min-height: 96px;
+      padding: 14px 16px;
+      border: 1px dashed rgba(47, 95, 158, 0.38);
+      border-radius: 12px;
+      background: rgba(240, 246, 253, 0.7);
+    }
+    .jeongsi-slot.filled { border-style: solid; background: #fff; box-shadow: 0 6px 16px rgba(31, 48, 65, 0.08); }
+    .jeongsi-slot h3 { margin: 0 0 6px; color: #2f5f9e; font-size: 15px; }
+    .jeongsi-slot strong { color: #173f3e; font-size: 15px; }
+    .jeongsi-slot-department { color: #263843; font-size: 13px; }
+    .jeongsi-slot-empty { color: var(--muted); font-size: 12px; }
+    .jeongsi-slot-clear, .jeongsi-candidate-remove {
+      width: 26px;
+      height: 26px;
+      border: 1px solid rgba(164, 58, 50, 0.3);
+      border-radius: 50%;
+      color: #a43a32;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 15px;
+      line-height: 1;
+    }
+    .jeongsi-slot-clear { position: absolute; top: 10px; right: 10px; }
+    .jeongsi-slot-clear:hover, .jeongsi-slot-clear:focus,
+    .jeongsi-candidate-remove:hover, .jeongsi-candidate-remove:focus { background: #fff1f1; outline: none; }
+    .jeongsi-candidates-section { margin-top: 22px; padding-top: 20px; border-top: 2px solid rgba(36, 91, 87, 0.14); }
+    .jeongsi-candidates-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+    .jeongsi-candidates-heading h3 { margin: 0; color: #243944; font-size: 16px; }
+    .jeongsi-candidates-help { flex-basis: 100%; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .jeongsi-sort { display: inline-flex; gap: 2px; padding: 2px; border-radius: 7px; background: #eef3f2; }
+    .jeongsi-sort-button {
+      padding: 4px 10px;
+      border: 0;
+      border-radius: 5px;
+      color: #52636d;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .jeongsi-sort-button:hover, .jeongsi-sort-button:focus-visible { color: #173f3e; outline: none; }
+    .jeongsi-sort-button.active { color: #fff; background: #2f5f9e; }
+    .jeongsi-candidates {
+      position: relative;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      max-height: min(420px, calc(100vh - 360px));
+      min-height: 160px;
+      padding: 2px 6px 2px 2px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+    .susi-guide-link.jeongsi-guide-link { min-width: 64px; padding: 6px 10px; font-size: 12.5px; text-align: center; }
+    .jeongsi-candidate {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px 6px 6px;
+      border: 1px solid rgba(36, 91, 87, 0.16);
+      border-radius: 10px;
+      background: #fff;
+    }
+    .jeongsi-candidate.expanded { border-color: #2f5f9e; box-shadow: 0 0 0 2px rgba(47, 95, 158, 0.14); }
+    .jeongsi-candidate.placed { background: rgba(240, 246, 253, 0.7); }
+    .jeongsi-candidate-main {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      min-height: 36px;
+      padding: 6px 8px;
+      border: 0;
+      border-radius: 7px;
+      color: #263843;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      text-align: left;
+    }
+    .jeongsi-candidate-main:hover, .jeongsi-candidate-main:focus { background: rgba(36, 91, 87, 0.08); outline: none; }
+    .jeongsi-candidate-main strong { color: #173f3e; }
+    .jeongsi-candidate-badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      color: #fff;
+      background: #2f5f9e;
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 800;
+    }
+    .jeongsi-group-picker { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 8px 6px; }
+    .jeongsi-group-button {
+      min-width: 72px;
+      padding: 7px 14px;
+      border: 1px solid #2f5f9e;
+      border-radius: 7px;
+      color: #2f5f9e;
+      background: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .jeongsi-group-button:hover, .jeongsi-group-button:focus, .jeongsi-group-button.active { color: #fff; background: #2f5f9e; outline: none; }
     .application-print-report { display: none; }
     .application-selection-list { display: grid; gap: 10px; margin-top: 22px; }
     .application-selection-section { min-width: 0; }
@@ -260,7 +402,7 @@
       border-radius: 10px;
       background: rgba(242, 248, 246, 0.8);
     }
-    .application-direct-add-form[hidden] { display: none; }
+    .application-direct-add-form[hidden] { display: none !important; }
     .application-direct-add-form input { min-height: 36px; font-size: 12px; }
     .application-direct-add-submit {
       padding: 7px 13px;
@@ -288,9 +430,6 @@
     }
     .application-direct-add-close:hover, .application-direct-add-close:focus { color: #173f3e; background: #e7f1ee; outline: none; }
     .application-direct-add-form.application-table-row {
-      grid-template-columns: 48px 32px 140px 165px 125px 145px 90px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
-      gap: 6px;
-      align-items: stretch;
       margin: 4px 0 0;
       padding: 6px 8px;
       border-style: dashed;
@@ -385,14 +524,83 @@
       padding: 2px 2px 12px 54px;
       scrollbar-color: #7fa7a0 #e8f0ee;
     }
-    .application-table-content { min-width: 2016px; }
+    .application-table-content { min-width: 480px; }
     .application-table-content .application-selection-items { gap: 4px; }
     .application-table-header,
-    .application-selection-item.application-table-row {
+    .application-selection-item.application-table-row,
+    .application-direct-add-form.application-table-row {
       display: grid;
-      grid-template-columns: 48px 32px 140px 165px 125px 145px 90px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
+      grid-template-columns: 32px minmax(160px, 1.45fr) minmax(100px, 1fr) minmax(76px, 1.05fr) minmax(86px, 1.2fr);
       gap: 6px;
       align-items: stretch;
+    }
+    .susi-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 820px) minmax(340px, 1fr);
+      align-items: start;
+      gap: 20px;
+    }
+    .susi-tables { min-width: 0; }
+    .susi-detail {
+      position: sticky;
+      top: 12px;
+      margin-top: 42px;
+      padding: 16px;
+      border: 1px solid rgba(36, 91, 87, 0.2);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(31, 48, 65, 0.08);
+    }
+    .susi-detail-empty { color: var(--muted); font-size: 12px; }
+    .susi-detail-heading { display: grid; gap: 2px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(36, 91, 87, 0.14); }
+    .susi-detail-heading small { color: #2e6759; font-size: 11px; font-weight: 900; }
+    .susi-detail-heading strong { color: #173f3e; font-size: 16px; }
+    .susi-detail-heading span { color: #52636d; font-size: 12px; }
+    .susi-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 14px; }
+    @media (min-width: 1500px) {
+      .susi-detail-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    .susi-detail-field { display: grid; gap: 5px; margin: 0; }
+    .susi-detail-field.wide { grid-column: 1 / -1; }
+    .susi-detail-field > span { color: #52636d; font-size: 12px; font-weight: 800; }
+    .susi-detail-field .application-detail-input { min-height: 36px; padding: 6px 9px; font-size: 13px; }
+    .susi-detail-field textarea.application-detail-input { min-height: 72px; }
+    .susi-detail { padding: 18px 20px; }
+    .susi-detail-heading strong { font-size: 18px; }
+    .susi-detail-heading span { font-size: 13px; }
+    .susi-tables .application-selection-empty { padding: 20px; }
+    .application-table-header span:nth-child(n+3),
+    .application-table-row .application-detail-input[data-field] { position: static; box-shadow: none; }
+    .application-selection-item.application-table-row { cursor: pointer; }
+    .application-table-row .application-university-cell { flex-direction: row; align-items: center; gap: 8px; padding-right: 4px; }
+    .application-university-name { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+    .application-table-row .application-university-remove-button { top: -7px; right: -7px; z-index: 4; }
+    .susi-guide-link {
+      flex: none;
+      padding: 5px 8px;
+      border-radius: 6px;
+      color: #fff;
+      background: #4a78b8;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.2;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .susi-guide-link:hover, .susi-guide-link:focus { background: #395f94; outline: none; }
+    .susi-guide-link.missing { color: #8a999d; background: #eef2f2; }
+    .application-direct-add-actions { display: grid; gap: 3px; }
+    .application-direct-add-form.application-table-row .application-direct-add-actions .application-direct-add-close,
+    .application-direct-add-form.application-table-row .application-direct-add-actions .application-direct-add-submit {
+      width: 100%;
+      min-height: 18px;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .application-selection-item.application-table-row.selected { border-color: #2e6759; box-shadow: 0 0 0 2px rgba(46, 103, 89, 0.22); }
+    @media (max-width: 1100px) {
+      .susi-layout { grid-template-columns: minmax(0, 1fr); }
+      .susi-detail { position: static; margin: 0 0 0 54px; }
     }
     .application-table-header {
       margin-bottom: 4px;
@@ -416,7 +624,7 @@
       background: #2e6759;
     }
     .application-table-header span:nth-child(1) { left: 0; }
-    .application-table-header span:nth-child(2) { left: 54px; }
+    .application-table-header span:nth-child(2) { left: 38px; }
     .application-table-header span:nth-child(3) { left: 92px; }
     .application-table-header span:nth-child(4) { left: 238px; }
     .application-table-header span:nth-child(5) { left: 409px; }
@@ -516,8 +724,8 @@
       background: #fff;
     }
     .application-table-row .application-guide-cell { left: 0; }
-    .application-table-row .application-order-controls { left: 54px; }
-    .application-table-row .application-university-cell { left: 92px; }
+    .application-table-row .application-order-controls { left: 0; }
+    .application-table-row .application-university-cell { left: 38px; }
     .application-table-row .application-detail-input[data-field="department"] { left: 238px; }
     .application-table-row .application-detail-input[data-field="admissionType"] { left: 409px; }
     .application-table-row .application-detail-input[data-field="detailedAdmission"] {
@@ -534,6 +742,7 @@
     }
     .application-selection-item strong { color: #172636; font-size: 14px; }
     .application-selection-item span { color: #52636d; font-size: 12px; }
+    html:has(main.application-mode) { overflow-y: scroll; }
     main.application-mode {
       grid-template-columns: minmax(0, 1fr);
       height: auto;
@@ -1312,18 +1521,43 @@
     .department-panel li {
       position: relative;
       min-height: 28px;
-      padding: 5px 58px 5px 2px;
+      padding: 5px 2px;
       border-radius: 6px;
     }
+    .department-line { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .department-panel li + li { margin-top: 1px; }
-    .department-panel li:hover, .department-panel li:focus-within { background: rgba(36, 91, 87, 0.08); }
-    .department-select-button {
+    .department-panel li:hover, .department-panel li.actions-open { background: rgba(36, 91, 87, 0.08); }
+    .department-select-actions {
       position: absolute;
-      top: 50%;
-      right: 2px;
-      min-width: 48px;
-      padding: 4px 8px;
-      transform: translateY(-50%);
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 2px 0 18px;
+      background: linear-gradient(to right, rgba(238, 243, 242, 0), #eef3f2 16px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .department-panel li.highlighted-department .department-select-actions {
+      background: linear-gradient(to right, rgba(255, 247, 216, 0), #fff7d8 16px);
+    }
+    .department-panel li:hover .department-select-actions,
+    .department-panel li.actions-open .department-select-actions,
+    .department-panel li:has(.department-select-button:focus-visible) .department-select-actions,
+    .department-panel li.actions-confirming .department-select-actions { opacity: 1; visibility: visible; pointer-events: auto; }
+    .department-panel li.actions-dismissed .department-select-actions {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 350ms ease, visibility 0s linear 350ms;
+    }
+    .department-select-button {
+      min-width: 46px;
+      padding: 4px 6px;
       border: 1px solid #245b57;
       border-radius: 6px;
       color: #fff;
@@ -1333,14 +1567,20 @@
       font-size: 11px;
       font-weight: 800;
       line-height: 1.2;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 120ms ease, background 120ms ease;
+      transition: background 120ms ease;
     }
-    .department-panel li:hover .department-select-button,
-    .department-panel li:focus-within .department-select-button { opacity: 1; pointer-events: auto; }
     .department-select-button:hover, .department-select-button:focus { background: #173f3e; outline: none; }
-    .department-select-button.selected { border-color: #74867f; background: #74867f; }
+    .department-select-button.jeongsi { border-color: #2f5f9e; background: #2f5f9e; }
+    .department-select-button.jeongsi:hover, .department-select-button.jeongsi:focus { background: #224a7d; }
+    .department-select-button.selected,
+    .department-select-button.jeongsi.selected { border-color: #74867f; background: #74867f; }
+    .admission-score {
+      margin-left: 6px;
+      color: #1f56b8;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
     .department-panel li.highlighted-department {
       margin-left: -4px;
       padding-left: 6px;
@@ -1359,9 +1599,6 @@
     .note { color: var(--muted); font-size: 12px; line-height: 1.5; }
     .error { position: absolute; inset: 0; display: none; place-items: center; padding: 24px; color: #8f2b2b; background: rgba(255, 255, 255, 0.82); text-align: center; font-weight: 700; }
 
-    @media (hover: none) {
-      .department-select-button { opacity: 1; pointer-events: auto; }
-    }
 
     @media (max-width: 940px) {
       header { align-items: stretch; flex-direction: column; }
@@ -1374,17 +1611,15 @@
       .application-selection-item.general-purpose > span:not(.application-rank) { grid-column: 2; }
       .application-selection-item span { grid-column: 1; }
       .application-selection-item.general-purpose.application-table-row,
-      .application-selection-item.special-purpose.application-table-row {
-        grid-template-columns: 48px 32px 140px 165px 125px 145px 90px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
+      .application-selection-item.special-purpose.application-table-row,
+      .application-direct-add-form.application-table-row {
+        grid-template-columns: 32px minmax(160px, 1.6fr) minmax(100px, 1.1fr) minmax(76px, 0.9fr) minmax(86px, 1fr);
         width: 100%;
         margin-left: 0;
       }
       .application-selection-item.application-table-row strong,
       .application-selection-item.application-table-row > span,
       .application-direct-add-form { grid-template-columns: 1fr; }
-      .application-direct-add-form.application-table-row {
-        grid-template-columns: 48px 32px 140px 165px 125px 145px 90px 175px 105px 95px 95px 135px 115px 125px 115px 205px;
-      }
       .application-status-heading { align-items: flex-start; flex-direction: column; }
       .student-export-controls { justify-content: flex-start; }
     }
@@ -1490,7 +1725,7 @@
     <header>
       <div>
         <h1>대학교 모아보기</h1>
-        <p class="subtitle">본 자료는 풍산고등학교 학생의 진로·진학 지도 참고용으로 제작되었으며, 모집요강 링크는 경기도교육청 제공 자료를 참고했습니다.</p>
+        <p class="subtitle">본 자료는 풍산고등학교 학생의 진로·진학 지도 참고용으로 제작되었으며, 경기도교육청 제공 자료(모집요강 링크)와 대학 공개 자료(최근 정시 최종등록자 70% 컷의 국어·수학·탐구 백분위 평균, 학과명 옆 파란 숫자)를 참고하였습니다.</p>
       </div>
     </header>
 
@@ -1511,7 +1746,11 @@
           <div class="application-status-card">
             <div class="application-status-heading">
               <div class="application-title-group">
-                <h2 id="applicationStatusTitle">원서현황</h2>
+                <h2 id="applicationStatusTitle">수시 원서현황</h2>
+                <div id="applicationModeSwitch" class="application-mode-switch" role="group" aria-label="수시·정시 원서현황 전환">
+                  <button class="application-mode-option susi active" type="button" data-mode="susi" aria-pressed="true">수시</button>
+                  <button class="application-mode-option jeongsi" type="button" data-mode="jeongsi" aria-pressed="false">정시</button>
+                </div>
                 <span id="applicationCount" class="application-count">선택 0개</span>
               </div>
               <div class="student-export-controls" aria-label="학생 정보 및 파일 저장">
@@ -3317,6 +3556,7 @@
     const studentName = document.querySelector("#studentName");
     const excelExportButton = document.querySelector("#excelExportButton");
     const pdfExportButton = document.querySelector("#pdfExportButton");
+    const applicationModeSwitch = document.querySelector("#applicationModeSwitch");
     const applicationPrintReport = document.querySelector("#applicationPrintReport");
     const search = document.querySelector("#search");
     const departmentSearch = document.querySelector("#departmentSearch");
@@ -3327,6 +3567,14 @@
     const applicationSelections = [];
     const applicationStorageKey = "applyCompass.applicationSelections.v1";
     const studentProfileStorageKey = "applyCompass.studentProfile.v1";
+    const jeongsiStorageKey = "applyCompass.jeongsiSelections.v1";
+    const jeongsiGroups = [["ga", "가군"], ["na", "나군"], ["da", "다군"]];
+    const jeongsiCandidates = [];
+    const jeongsiSlots = { ga: null, na: null, da: null };
+    let applicationMode = "susi";
+    let expandedJeongsiKey = null;
+    let jeongsiSort = "added";
+    let selectedSusiKey = null;
     const applicationDetailFields = [
       "admissionType", "detailedAdmission", "recruitmentCount", "method", "csatMinimum", "gradeCut",
       "competitionRate", "applicationPeriod", "firstStageDate", "interviewDate",
@@ -22350,9 +22598,10 @@
       return [university, college, department].map(value => encodeURIComponent(value)).join("|");
     }
 
-    function isApplicationSelected(university, college, department) {
+    function isApplicationSelected(university, college, department, target = "susi") {
       const key = applicationSelectionKey(university, college, department);
-      return applicationSelections.some(item => item.key === key);
+      const selections = target === "jeongsi" ? jeongsiCandidates : applicationSelections;
+      return selections.some(item => item.key === key);
     }
 
     function isSpecialPurposeSelection(item) {
@@ -22386,6 +22635,216 @@
       } catch (error) {
         console.warn("저장된 원서현황을 불러오지 못했습니다.", error);
       }
+    }
+
+    function saveJeongsiSelections() {
+      try {
+        localStorage.setItem(jeongsiStorageKey, JSON.stringify({ candidates: jeongsiCandidates, slots: jeongsiSlots }));
+      } catch (error) {
+        console.warn("정시 원서현황을 브라우저에 저장하지 못했습니다.", error);
+      }
+    }
+
+    function loadJeongsiSelections() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(jeongsiStorageKey) || "{}");
+        const uniqueCandidates = new Map();
+        (Array.isArray(saved.candidates) ? saved.candidates : []).forEach(item => {
+          if (!item || typeof item.university !== "string" || typeof item.college !== "string" || typeof item.department !== "string") return;
+          const key = applicationSelectionKey(item.university, item.college, item.department);
+          uniqueCandidates.set(key, { key, university: item.university, college: item.college, department: item.department });
+        });
+        jeongsiCandidates.splice(0, jeongsiCandidates.length, ...uniqueCandidates.values());
+        jeongsiGroups.forEach(([group]) => {
+          const key = saved.slots?.[group];
+          jeongsiSlots[group] = uniqueCandidates.has(key) ? key : null;
+        });
+      } catch (error) {
+        console.warn("저장된 정시 원서현황을 불러오지 못했습니다.", error);
+      }
+    }
+
+    function setApplicationMode(mode) {
+      applicationMode = mode === "jeongsi" ? "jeongsi" : "susi";
+      expandedJeongsiKey = null;
+      renderApplicationSelections();
+    }
+
+    function updateApplicationModeControls() {
+      const jeongsi = applicationMode === "jeongsi";
+      applicationModeSwitch.querySelectorAll(".application-mode-option").forEach(option => {
+        const active = option.dataset.mode === applicationMode;
+        option.classList.toggle("active", active);
+        option.setAttribute("aria-pressed", String(active));
+      });
+      document.querySelector("#applicationStatusTitle").textContent = jeongsi ? "정시 원서현황" : "수시 원서현황";
+      excelExportButton.hidden = jeongsi;
+      pdfExportButton.hidden = jeongsi;
+    }
+
+    function jeongsiGroupOf(key) {
+      return jeongsiGroups.find(([group]) => jeongsiSlots[group] === key) || null;
+    }
+
+    function assignJeongsiGroup(key, group) {
+      if (!jeongsiCandidates.some(item => item.key === key) || !(group in jeongsiSlots)) return;
+      jeongsiGroups.forEach(([other]) => {
+        if (jeongsiSlots[other] === key) jeongsiSlots[other] = null;
+      });
+      jeongsiSlots[group] = key;
+      expandedJeongsiKey = null;
+      saveJeongsiSelections();
+      renderApplicationSelections();
+    }
+
+    function clearJeongsiGroup(group) {
+      if (!(group in jeongsiSlots)) return;
+      jeongsiSlots[group] = null;
+      saveJeongsiSelections();
+      renderApplicationSelections();
+    }
+
+    function removeJeongsiCandidate(key) {
+      const index = jeongsiCandidates.findIndex(item => item.key === key);
+      if (index < 0) return;
+      jeongsiCandidates.splice(index, 1);
+      jeongsiGroups.forEach(([group]) => {
+        if (jeongsiSlots[group] === key) jeongsiSlots[group] = null;
+      });
+      if (expandedJeongsiKey === key) expandedJeongsiKey = null;
+      saveJeongsiSelections();
+      renderApplicationSelections();
+      if (state.selectedUniversity) renderDepartmentPanel(state.selectedUniversity);
+    }
+
+    function resetJeongsiSelections() {
+      if (!jeongsiCandidates.length) return;
+      if (!window.confirm(`정시 원서현황 ${jeongsiCandidates.length}개를 모두 초기화할까요?`)) return;
+      jeongsiCandidates.splice(0, jeongsiCandidates.length);
+      jeongsiGroups.forEach(([group]) => { jeongsiSlots[group] = null; });
+      expandedJeongsiKey = null;
+      saveJeongsiSelections();
+      renderApplicationSelections();
+      if (state.selectedUniversity) renderDepartmentPanel(state.selectedUniversity);
+    }
+
+    function jeongsiGuideLink(item) {
+      const offices = window.ADMISSION_OFFICES || {};
+      const officeUrl = offices[item.university] || offices[baseUniversityName(item.university)] || "";
+      return officeUrl
+        ? `<a class="susi-guide-link jeongsi-guide-link" href="${escapeHtml(officeUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(`${item.university} 입학처 열기`)}">입학처</a>`
+        : `<span class="susi-guide-link missing jeongsi-guide-link" aria-label="입학처 링크 없음">링크 없음</span>`;
+    }
+
+    function renderJeongsiSelections() {
+      const placedCount = jeongsiGroups.filter(([group]) => jeongsiSlots[group]).length;
+      applicationCount.textContent = `후보 ${jeongsiCandidates.length}개 · 배치 ${placedCount}/3`;
+      const percentileMarkup = item => {
+        const score = admissionScoreFor(item.university, item.department);
+        return score?.percentile != null ? `<span class="admission-score">${escapeHtml(score.percentile)}</span>` : "";
+      };
+
+      const slots = jeongsiGroups.map(([group, label]) => {
+        const item = jeongsiCandidates.find(candidate => candidate.key === jeongsiSlots[group]);
+        const body = item
+          ? `<strong>${escapeHtml(item.university)}</strong>
+             <span class="jeongsi-slot-department">${escapeHtml(item.department)}${percentileMarkup(item)}</span>
+             <button class="jeongsi-slot-clear" type="button" data-group="${group}" aria-label="${escapeHtml(`${label} 배치 해제`)}">×</button>`
+          : `<span class="jeongsi-slot-empty">아래 목록에서 대학을 눌러 배치하세요</span>`;
+        return `<div class="jeongsi-slot${item ? " filled" : ""}"><h3>${label}</h3>${body}</div>`;
+      }).join("");
+
+      const percentileOf = item => admissionScoreFor(item.university, item.department)?.percentile ?? -Infinity;
+      const orderedCandidates = jeongsiSort === "percentile"
+        ? [...jeongsiCandidates].sort((a, b) => percentileOf(b) - percentileOf(a))
+        : jeongsiCandidates;
+      const sortButton = (value, label) =>
+        `<button class="jeongsi-sort-button${jeongsiSort === value ? " active" : ""}" type="button" data-sort="${value}" aria-pressed="${jeongsiSort === value}">${label}</button>`;
+
+      const candidates = jeongsiCandidates.length
+        ? orderedCandidates.map(item => {
+          const placed = jeongsiGroupOf(item.key);
+          const expanded = expandedJeongsiKey === item.key;
+          const groupButtons = expanded
+            ? `<div class="jeongsi-group-picker" role="group" aria-label="${escapeHtml(`${item.university} ${item.department} 군 선택`)}">${jeongsiGroups.map(([group, label]) => {
+              const occupied = jeongsiSlots[group] && jeongsiSlots[group] !== item.key;
+              return `<button class="jeongsi-group-button${placed?.[0] === group ? " active" : ""}" type="button" data-selection-key="${escapeHtml(item.key)}" data-group="${group}" title="${occupied ? "배치된 대학을 이 대학으로 바꿉니다" : ""}">${label}${occupied ? " (교체)" : ""}</button>`;
+            }).join("")}</div>`
+            : "";
+          return `
+            <div class="jeongsi-candidate${expanded ? " expanded" : ""}${placed ? " placed" : ""}">
+              <button class="jeongsi-candidate-main" type="button" data-selection-key="${escapeHtml(item.key)}" aria-expanded="${expanded}">
+                <strong>${escapeHtml(item.university)}</strong>
+                <span>${escapeHtml(item.department)}${percentileMarkup(item)}</span>
+                ${placed ? `<em class="jeongsi-candidate-badge">${placed[1]}</em>` : ""}
+              </button>
+              ${jeongsiGuideLink(item)}
+              <button class="jeongsi-candidate-remove" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">×</button>
+              ${groupButtons}
+            </div>`;
+        }).join("")
+        : `<div class="application-selection-empty"><p>정시 후보로 고른 대학이 없습니다. 지도에서 학과의 "정시" 버튼을 누르면 이곳에 담깁니다.</p></div>`;
+
+      const previousScrollTop = applicationSelectionList.querySelector(".jeongsi-candidates")?.scrollTop || 0;
+      applicationSelectionList.innerHTML = `
+        <div class="jeongsi-layout">
+          <section class="jeongsi-board" aria-label="정시 가·나·다군 배치">
+            <div class="jeongsi-slots">${slots}</div>
+          </section>
+          <section class="jeongsi-candidates-section" aria-labelledby="jeongsiCandidatesTitle">
+            <div class="jeongsi-candidates-heading">
+              <h3 id="jeongsiCandidatesTitle">정시 후보 목록</h3>
+              <div class="jeongsi-sort" role="group" aria-label="후보 정렬">${sortButton("added", "담은 순")}${sortButton("percentile", "백분위순")}</div>
+              <button class="application-selection-reset-button jeongsi-reset-button" type="button" ${jeongsiCandidates.length ? "" : "disabled"}>초기화</button>
+              <p class="jeongsi-candidates-help">대학을 누르면 가·나·다군을 고를 수 있습니다. 이미 배치된 군을 고르면 새 대학으로 바뀝니다.</p>
+            </div>
+            <div class="jeongsi-candidates">${candidates}</div>
+          </section>
+        </div>
+      `;
+      const candidateList = applicationSelectionList.querySelector(".jeongsi-candidates");
+      candidateList.scrollTop = previousScrollTop;
+      const expanded = candidateList.querySelector(".jeongsi-candidate.expanded");
+      if (expanded) {
+        const overflow = expanded.offsetTop + expanded.offsetHeight - (candidateList.scrollTop + candidateList.clientHeight);
+        if (overflow > 0) candidateList.scrollTop += overflow + 4;
+      }
+    }
+
+    function handleJeongsiClick(event) {
+      const groupButton = event.target.closest(".jeongsi-group-button");
+      if (groupButton) {
+        assignJeongsiGroup(groupButton.dataset.selectionKey, groupButton.dataset.group);
+        return true;
+      }
+      const clearButton = event.target.closest(".jeongsi-slot-clear");
+      if (clearButton) {
+        clearJeongsiGroup(clearButton.dataset.group);
+        return true;
+      }
+      const removeButton = event.target.closest(".jeongsi-candidate-remove");
+      if (removeButton) {
+        removeJeongsiCandidate(removeButton.dataset.selectionKey);
+        return true;
+      }
+      const sortButton = event.target.closest(".jeongsi-sort-button");
+      if (sortButton) {
+        jeongsiSort = sortButton.dataset.sort === "percentile" ? "percentile" : "added";
+        renderApplicationSelections();
+        return true;
+      }
+      if (event.target.closest(".jeongsi-reset-button")) {
+        resetJeongsiSelections();
+        return true;
+      }
+      const candidate = event.target.closest(".jeongsi-candidate-main");
+      if (candidate) {
+        const key = candidate.dataset.selectionKey;
+        expandedJeongsiKey = expandedJeongsiKey === key ? null : key;
+        renderApplicationSelections();
+        return true;
+      }
+      return false;
     }
 
     function studentProfile() {
@@ -22709,6 +23168,11 @@
     }
 
     function renderApplicationSelections() {
+      updateApplicationModeControls();
+      if (applicationMode === "jeongsi") {
+        renderJeongsiSelections();
+        return;
+      }
       const generalSelections = applicationSelections.filter(item => !isSpecialPurposeSelection(item));
       const specialSelections = applicationSelections.filter(isSpecialPurposeSelection);
       applicationCount.textContent = `전체 ${applicationSelections.length}개`;
@@ -22720,12 +23184,13 @@
           : `<input ${attributes} type="text" value="${escapeHtml(item[field] || "")}">`;
       };
 
+      if (!applicationSelections.some(item => item.key === selectedSusiKey)) {
+        selectedSusiKey = (generalSelections[0] || specialSelections[0])?.key || null;
+      }
+
       const tableHeader = `
         <div class="application-table-header" aria-hidden="true">
-          <span>모집요강</span><span>순서</span><span>대학명</span><span>지원학과</span><span>전형유형</span>
-          <span>세부전형명</span><span>선발인원</span><span>전형방법</span><span>수능최저</span><span>등급컷</span>
-          <span>경쟁률</span><span>원서접수</span><span>1단계</span><span>면접일/논술일</span>
-          <span>최종발표일</span><span>기타 참고사항</span>
+          <span>순서</span><span>대학명</span><span>지원학과</span><span>전형유형</span><span>세부전형명</span>
         </div>`;
 
       const renderItems = (items, specialPurpose = false) => items.length
@@ -22733,8 +23198,8 @@
           const rank = specialPurpose ? "" : `<span class="application-rank${index >= 6 ? " over-limit" : ""}">${index < 6 ? index + 1 : "초과"}</span>`;
           const admissionUrl = admissionLinks[item.university] || admissionLinks[baseUniversityName(item.university)] || "";
           const admissionGuide = admissionUrl
-            ? `<a class="application-guide-link" href="${escapeHtml(admissionUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(`${item.university} 모집요강 열기`)}">보기</a>`
-            : `<span class="application-guide-missing" aria-label="모집요강 링크 없음">없음</span>`;
+            ? `<a class="susi-guide-link" href="${escapeHtml(admissionUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(`${item.university} 모집요강 열기`)}">모집요강</a>`
+            : `<span class="susi-guide-link missing" aria-label="모집요강 링크 없음">요강 없음</span>`;
           const orderControls = `
             ${rank}
             <div class="application-order-controls" aria-label="${escapeHtml(`${item.university} 순서 변경`)}">
@@ -22742,53 +23207,34 @@
               <button class="application-order-button" type="button" data-selection-key="${escapeHtml(item.key)}" data-direction="down" aria-label="아래로 이동" ${index === items.length - 1 ? "disabled" : ""}>▼</button>
             </div>`;
           return `
-        <div class="application-selection-item application-table-row${specialPurpose ? " special-purpose" : " general-purpose"}" data-selection-key="${escapeHtml(item.key)}">
-          <div class="application-guide-cell">${admissionGuide}</div>
+        <div class="application-selection-item application-table-row${specialPurpose ? " special-purpose" : " general-purpose"}${item.key === selectedSusiKey ? " selected" : ""}" data-selection-key="${escapeHtml(item.key)}">
           ${orderControls}
-          <div class="application-university-cell"><strong>${escapeHtml(item.university)}</strong><small>${escapeHtml(item.college)}</small><button class="application-university-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">×</button></div>
+          <div class="application-university-cell"><div class="application-university-name"><strong>${escapeHtml(item.university)}</strong><small>${escapeHtml(item.college)}</small></div>${admissionGuide}<button class="application-university-remove-button" type="button" data-selection-key="${escapeHtml(item.key)}" aria-label="${escapeHtml(`${item.university} ${item.department} 삭제`)}">×</button></div>
           ${detailInput(item, "department", "지원학과")}
           ${detailInput(item, "admissionType", "예: 학생부종합")}
           ${detailInput(item, "detailedAdmission", "예: 학업우수형")}
-          ${detailInput(item, "recruitmentCount", "선발인원")}
-          ${detailInput(item, "method", "단계별 전형방법", true)}
-          ${detailInput(item, "csatMinimum", "수능최저")}
-          ${detailInput(item, "gradeCut", "등급컷")}
-          ${detailInput(item, "competitionRate", "경쟁률")}
-          ${detailInput(item, "applicationPeriod", "원서접수 기간")}
-          ${detailInput(item, "firstStageDate", "1단계 발표")}
-          ${detailInput(item, "interviewDate", "면접일/논술일")}
-          ${detailInput(item, "finalAnnouncement", "최종발표일")}
-          ${detailInput(item, "notes", "기타 참고사항", true)}
         </div>
       `;
         }).join("")
         : `<div class="application-selection-empty"><p>선택한 대학이 없습니다.</p></div>`;
 
-      const directInput = (name, placeholder, multiline = false) => multiline
-        ? `<textarea class="application-detail-input" name="${name}" placeholder="${placeholder}" aria-label="${placeholder}" rows="1"></textarea>`
-        : `<input class="application-detail-input" name="${name}" type="text" placeholder="${placeholder}" aria-label="${placeholder}">`;
+      const directInput = name => `<input class="application-detail-input" name="${name}" type="text" placeholder="${name === "admissionType" ? "전형유형" : "세부전형명"}" aria-label="${name === "admissionType" ? "전형유형" : "세부전형명"}">`;
 
       const renderDirectAddRow = category => `
         <form class="application-direct-add-form application-table-row" data-category="${category}" hidden>
-          <button class="application-direct-add-close" type="button" aria-label="직접추가 입력란 닫기">×</button>
-          <button class="application-direct-add-submit" type="submit" aria-label="직접 입력한 대학 추가">+</button>
+          <div class="application-direct-add-actions">
+            <button class="application-direct-add-submit" type="submit" aria-label="직접 입력한 대학 추가">+</button>
+            <button class="application-direct-add-close" type="button" aria-label="직접추가 입력란 닫기">×</button>
+          </div>
           <input class="application-detail-input" name="university" type="text" placeholder="대학교명" aria-label="대학교명" required>
           <input class="application-detail-input" name="department" type="text" placeholder="지원학과" aria-label="지원학과" required>
-          ${directInput("admissionType", "전형유형")}
-          ${directInput("detailedAdmission", "세부전형명")}
-          ${directInput("recruitmentCount", "선발인원")}
-          ${directInput("method", "단계별 전형방법", true)}
-          ${directInput("csatMinimum", "수능최저")}
-          ${directInput("gradeCut", "등급컷")}
-          ${directInput("competitionRate", "경쟁률")}
-          ${directInput("applicationPeriod", "원서접수 기간")}
-          ${directInput("firstStageDate", "1단계 발표")}
-          ${directInput("interviewDate", "면접일/논술일")}
-          ${directInput("finalAnnouncement", "최종발표일")}
-          ${directInput("notes", "기타 참고사항", true)}
+          ${directInput("admissionType")}
+          ${directInput("detailedAdmission")}
         </form>`;
 
       applicationSelectionList.innerHTML = `
+        <div class="susi-layout">
+        <div class="susi-tables">
         <section class="application-selection-section" aria-labelledby="generalUniversityTitle">
           <div class="application-selection-section-heading">
             <h3 id="generalUniversityTitle">일반대학</h3>
@@ -22811,7 +23257,56 @@
           </div>
           <div class="application-table-scroll"><div class="application-table-content">${tableHeader}<div class="application-selection-items">${renderItems(specialSelections, true)}${renderDirectAddRow("special")}</div></div></div>
         </section>
+        </div>
+        <div id="susiDetailPanel" class="susi-detail" role="region" aria-label="선택한 대학 세부 정보"></div>
+        </div>
       `;
+      renderSusiDetailPanel();
+    }
+
+    function renderSusiDetailPanel() {
+      const panel = applicationSelectionList.querySelector("#susiDetailPanel");
+      if (!panel) return;
+      const item = applicationSelections.find(selection => selection.key === selectedSusiKey);
+      if (!item) {
+        panel.innerHTML = `<p class="susi-detail-empty">표에서 대학을 고르면 이곳에 세부 정보를 입력할 수 있습니다.</p>`;
+        return;
+      }
+      const field = (name, label, multiline = false) => {
+        const attributes = `class="application-detail-input" data-selection-key="${escapeHtml(item.key)}" data-field="${name}" placeholder="${label}"`;
+        const control = multiline
+          ? `<textarea ${attributes} rows="3">${escapeHtml(item[name] || "")}</textarea>`
+          : `<input ${attributes} type="text" value="${escapeHtml(item[name] || "")}">`;
+        return `<label class="susi-detail-field${multiline ? " wide" : ""}"><span>${label}</span>${control}</label>`;
+      };
+      panel.innerHTML = `
+        <div class="susi-detail-heading">
+          <small>세부 정보</small>
+          <strong>${escapeHtml(item.university)}</strong>
+          <span>${escapeHtml([item.department, item.admissionType, item.detailedAdmission].filter(Boolean).join(" · "))}</span>
+        </div>
+        <div class="susi-detail-grid">
+          ${field("recruitmentCount", "선발인원")}
+          ${field("csatMinimum", "수능최저")}
+          ${field("gradeCut", "등급컷")}
+          ${field("competitionRate", "경쟁률")}
+          ${field("applicationPeriod", "원서접수")}
+          ${field("firstStageDate", "1단계 발표")}
+          ${field("interviewDate", "면접일/논술일")}
+          ${field("finalAnnouncement", "최종발표일")}
+          ${field("method", "전형방법", true)}
+          ${field("notes", "기타 참고사항", true)}
+        </div>`;
+    }
+
+    function selectSusiRow(key) {
+      if (!key || key === selectedSusiKey) return;
+      selectedSusiKey = key;
+      applicationSelectionList.querySelectorAll(".application-table-row.selected").forEach(row => row.classList.remove("selected"));
+      applicationSelectionList.querySelectorAll(".application-selection-item[data-selection-key]").forEach(row => {
+        if (row.dataset.selectionKey === key) row.classList.add("selected");
+      });
+      renderSusiDetailPanel();
     }
 
     function addApplicationSelection(button) {
@@ -22819,11 +23314,16 @@
       const college = button.dataset.college;
       const department = button.dataset.department;
       const key = applicationSelectionKey(university, college, department);
-      if (!applicationSelections.some(item => item.key === key)) {
+      if (button.dataset.target === "jeongsi") {
+        if (!jeongsiCandidates.some(item => item.key === key)) {
+          jeongsiCandidates.push({ key, university, college, department });
+          saveJeongsiSelections();
+        }
+      } else if (!applicationSelections.some(item => item.key === key)) {
         applicationSelections.push({ key, university, college, department });
         saveApplicationSelections();
       }
-      button.textContent = "선택됨";
+      button.textContent = `${button.dataset.label} ✓`;
       button.classList.add("selected");
       button.setAttribute("aria-pressed", "true");
       renderApplicationSelections();
@@ -22841,7 +23341,7 @@
       if (existing) {
         existing.category = category;
         applicationDetailFields.forEach(field => {
-          existing[field] = String(formData.get(field) || "").trim();
+          if (formData.has(field)) existing[field] = String(formData.get(field) || "").trim();
         });
       } else {
         const newSelection = { key, university, college, department, category };
@@ -22850,6 +23350,7 @@
         });
         applicationSelections.push(newSelection);
       }
+      selectedSusiKey = key;
       saveApplicationSelections();
       renderApplicationSelections();
     }
@@ -22902,6 +23403,20 @@
       if (state.selectedUniversity) renderDepartmentPanel(state.selectedUniversity);
     }
 
+    function admissionScoreFor(universityName, departmentName) {
+      const source = window.ADMISSION_SCORES || {};
+      return source.universities?.[departmentKey({ name: universityName })]?.departments?.[departmentName] || null;
+    }
+
+    function admissionScoreMarkup(d, departmentName) {
+      const source = window.ADMISSION_SCORES || {};
+      const university = source.universities?.[departmentKey(d)];
+      const score = admissionScoreFor(d.name, departmentName);
+      if (score?.percentile == null) return "";
+      const title = `${university.year || ""} 정시 ${source.basis || ""} 국·수·탐 백분위 평균${score.note ? ` (${score.note})` : ""}`.trim();
+      return `<span class="admission-score" title="${escapeHtml(title)}">${escapeHtml(score.percentile)}</span>`;
+    }
+
     function renderDepartmentPanel(d) {
       const data = departmentData[departmentKey(d)] || [];
       const departmentQuery = departmentSearch.value.trim().toLowerCase();
@@ -22917,9 +23432,11 @@
               const matched = departmentQuery && name.toLowerCase().includes(departmentQuery);
               const favoriteMatched = !departmentQuery && favoriteDepartmentMatched(name);
               const departmentName = departmentNameMarkup(name, departmentQuery, favoriteMatched);
-              const buttonLabel = `${d.name} ${name} 선택`;
-              const selected = isApplicationSelected(d.name, group.college, name);
-              return `<li class="${matched || favoriteMatched ? "highlighted-department" : ""}"><span>${departmentName}</span><button class="department-select-button${selected ? " selected" : ""}" type="button" data-university="${escapeHtml(d.name)}" data-college="${escapeHtml(group.college)}" data-department="${escapeHtml(name)}" aria-label="${escapeHtml(buttonLabel)}" aria-pressed="${selected}">${selected ? "선택됨" : "선택"}</button></li>`;
+              const selectButton = (target, label) => {
+                const selected = isApplicationSelected(d.name, group.college, name, target);
+                return `<button class="department-select-button ${target}${selected ? " selected" : ""}" type="button" data-target="${target}" data-label="${label}" data-university="${escapeHtml(d.name)}" data-college="${escapeHtml(group.college)}" data-department="${escapeHtml(name)}" aria-label="${escapeHtml(`${d.name} ${name} ${label} 선택`)}" aria-pressed="${selected}">${selected ? `${label} ✓` : label}</button>`;
+              };
+              return `<li class="${matched || favoriteMatched ? "highlighted-department" : ""}"><span class="department-line"><span>${departmentName}</span>${admissionScoreMarkup(d, name)}</span><span class="department-select-actions">${selectButton("susi", "수시")}${selectButton("jeongsi", "정시")}</span></li>`;
             }).join("")}</ul>
           `).join("")
         : `<p class="department-empty">학과정보 데이터가 아직 준비되지 않았습니다. 나중에 <code>departmentData</code>에 이 대학의 학과를 추가하면 이곳에 표시됩니다.</p>`;
@@ -25044,9 +25561,35 @@
         applicationStatusTab.addEventListener("click", openApplicationStatus);
         departmentPanel.addEventListener("click", event => {
           const button = event.target.closest(".department-select-button");
-          if (button) addApplicationSelection(button);
+          const item = event.target.closest(".department-panel li");
+          if (button) {
+            addApplicationSelection(button);
+            button.blur();
+            item.classList.remove("actions-open");
+            item.classList.add("actions-confirming");
+            window.setTimeout(() => {
+              item.classList.remove("actions-confirming");
+              item.classList.add("actions-dismissed");
+              if (!item.matches(":hover")) window.setTimeout(() => item.classList.remove("actions-dismissed"), 400);
+            }, 600);
+            return;
+          }
+          if (!item || !window.matchMedia("(hover: none)").matches) return;
+          const open = !item.classList.contains("actions-open");
+          departmentPanel.querySelectorAll("li.actions-open").forEach(other => other.classList.remove("actions-open"));
+          item.classList.remove("actions-dismissed");
+          item.classList.toggle("actions-open", open);
+        });
+        departmentPanel.addEventListener("mouseout", event => {
+          const item = event.target.closest(".department-panel li.actions-dismissed");
+          if (item && !item.contains(event.relatedTarget)) item.classList.remove("actions-dismissed");
+        });
+        applicationModeSwitch.addEventListener("click", event => {
+          const option = event.target.closest(".application-mode-option");
+          if (option && option.dataset.mode !== applicationMode) setApplicationMode(option.dataset.mode);
         });
         applicationSelectionList.addEventListener("click", event => {
+          if (applicationMode === "jeongsi" && handleJeongsiClick(event)) return;
           const orderButton = event.target.closest(".application-order-button");
           if (orderButton) {
             moveApplicationSelection(orderButton.dataset.selectionKey, orderButton.dataset.direction);
@@ -25070,7 +25613,12 @@
             return;
           }
           const button = event.target.closest(".application-university-remove-button");
-          if (button) removeApplicationSelection(button.dataset.selectionKey);
+          if (button) {
+            removeApplicationSelection(button.dataset.selectionKey);
+            return;
+          }
+          const row = event.target.closest(".application-selection-item[data-selection-key]");
+          if (row) selectSusiRow(row.dataset.selectionKey);
         });
         applicationSelectionList.addEventListener("submit", event => {
           const form = event.target.closest(".application-direct-add-form");
@@ -25080,7 +25628,18 @@
         });
         applicationSelectionList.addEventListener("input", event => {
           const input = event.target.closest(".application-detail-input");
-          if (input) updateApplicationDetail(input.dataset.selectionKey, input.dataset.field, input.value);
+          if (!input || !input.dataset.selectionKey) return;
+          updateApplicationDetail(input.dataset.selectionKey, input.dataset.field, input.value);
+          if (input.closest(".application-table-row") && input.dataset.selectionKey === selectedSusiKey) {
+            const item = applicationSelections.find(selection => selection.key === selectedSusiKey);
+            const summary = applicationSelectionList.querySelector(".susi-detail-heading span");
+            if (item && summary) summary.textContent = [item.department, item.admissionType, item.detailedAdmission].filter(Boolean).join(" · ");
+          }
+        });
+        applicationSelectionList.addEventListener("focusin", event => {
+          if (applicationMode !== "susi") return;
+          const row = event.target.closest(".application-selection-item[data-selection-key]");
+          if (row) selectSusiRow(row.dataset.selectionKey);
         });
         [studentGrade, studentClass, studentNumber, studentName].forEach(input => {
           input.addEventListener("input", saveStudentProfile);
@@ -25089,6 +25648,7 @@
         pdfExportButton.addEventListener("click", printApplicationsToPdf);
         loadStudentProfile();
         loadApplicationSelections();
+        loadJeongsiSelections();
         renderApplicationSelections();
         draw();
         window.addEventListener("resize", () => draw());
