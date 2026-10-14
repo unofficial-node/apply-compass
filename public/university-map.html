@@ -1570,6 +1570,7 @@
     .department-title-row { margin-bottom: 12px; }
     .department-title-text { min-width: 0; }
     .department-title-text .meta { margin-bottom: 0; }
+    .admission-score-missing { margin: 3px 0 0; color: #8a999d; font-size: 11px; }
     .admission-actions { display: flex; flex: 0 0 auto; flex-direction: column; gap: 5px; min-width: 64px; }
     .admission-link.office-link,
     .susi-guide-link.office-link { background: #5b4e8c; }
@@ -3634,6 +3635,7 @@
           <div class="department-title-text">
             <h2>${escapeHtml(d.name)}</h2>
             <p class="meta">${meta}</p>
+            ${data.length && !window.ADMISSION_SCORES?.universities?.[departmentKey(d)] ? `<p class="admission-score-missing">정시 백분위 자료 준비 중</p>` : ""}
           </div>
           ${admissionButton}
         </div>
