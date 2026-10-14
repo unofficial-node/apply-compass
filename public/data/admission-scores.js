@@ -405,6 +405,26 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 97,
           "note": "건축학과 모집단위; 대학 환산점수 70%컷 401.4"
+        },
+        "약학과(6년제)": {
+          "standard": null,
+          "percentile": 95,
+          "note": "약학계열(6년제) 모집단위; 대학 환산점수 70%컷 408.2"
+        },
+        "약학대학": {
+          "standard": null,
+          "percentile": 95,
+          "note": "약학계열(6년제) 모집단위 (약학대학 유일 정시 모집단위); 대학 환산점수 70%컷 408.2"
+        },
+        "제약학과(6년제)": {
+          "standard": null,
+          "percentile": 95,
+          "note": "약학계열(6년제) 모집단위; 대학 환산점수 70%컷 408.2"
+        },
+        "의학과": {
+          "standard": null,
+          "percentile": 100,
+          "note": "2026 모집단위명: 의예과; 대학 환산점수 70%컷 425.7"
         }
       }
     },
@@ -734,6 +754,31 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 90,
           "note": "언더우드학부 모집단위; 대학 환산점수 70%컷 633.92"
+        },
+        "건축공학(4년제)": {
+          "standard": null,
+          "percentile": 93,
+          "note": "건축공학과 모집단위"
+        },
+        "건축학(5년제)": {
+          "standard": null,
+          "percentile": 93,
+          "note": "건축공학과 모집단위"
+        },
+        "컴퓨터과학과": {
+          "standard": null,
+          "percentile": 94,
+          "note": "첨단컴퓨팅학부 모집단위"
+        },
+        "인공지능학과": {
+          "standard": null,
+          "percentile": 94,
+          "note": "첨단컴퓨팅학부 모집단위"
+        },
+        "인공지능시스템학과": {
+          "standard": null,
+          "percentile": 94,
+          "note": "첨단컴퓨팅학부 모집단위"
         }
       }
     },
@@ -1242,6 +1287,16 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 90,
           "note": "다군; 어디가 공시 최종등록자 70% 국수탐 평균백분위(정수로 공시); 표준점수 합 미공개(대학 환산점수만 공개)"
+        },
+        "글로벌한국학전공": {
+          "standard": null,
+          "percentile": 90,
+          "note": "글로벌한국학부 모집단위"
+        },
+        "한국어교육전공": {
+          "standard": null,
+          "percentile": 90,
+          "note": "글로벌한국학부 모집단위 (2026년 한국언어문화전공으로 개칭 보도)"
         }
       }
     },
@@ -1695,6 +1750,11 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 89,
           "note": "국어·수학·탐구1과목 기준; 어디가 공시 최종등록자 70% 국수탐 평균백분위(정수로 공시); 표준점수 합 미공개(대학 환산점수만 공개)"
+        },
+        "심리뇌과학전공": {
+          "standard": null,
+          "percentile": 92,
+          "note": "데이터사이언스학부 모집단위 (입학 후 세부전공 데이터사이언스전공·심리뇌과학전공 결정); 어디가 2026 나군 일반 70% 평균백분위"
         }
       }
     },
@@ -2490,6 +2550,11 @@ window.ADMISSION_SCORES = {
         "첨단융합학부 지능형반도체전공": {
           "standard": null,
           "percentile": 90.5
+        },
+        "스포츠과학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "2026 정시(나) 일반전형, 실기 반영 전형"
         }
       }
     },
@@ -2936,6 +3001,16 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 88.2,
           "note": "컴퓨터·AI학부(자연) 모집단위 값; (인문)은 국77·수96·탐(99,95) → 89.0"
+        },
+        "뉴미디어한국어문화전공": {
+          "standard": null,
+          "percentile": 87.2,
+          "note": "국어국문문예창작학부 모집단위 (전공: 국어국문학·문예창작학·뉴미디어한국어문화); 값은 동일 모집단위 기존 값과 동일(어디가 70% 국·수·탐평균 산출)"
+        },
+        "조소전공": {
+          "standard": null,
+          "percentile": 49.2,
+          "note": "2026 모집단위 미술학부 조소전공 (나군 일반-조소전공, 실기 포함); 어디가 70% 국64·수19·탐(62,67) 평균 — 체육교육과와 같은 산출 방식"
         }
       }
     },
@@ -3139,6 +3214,11 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 82,
           "note": "디자인학부 모집단위; 미술계열(나군): 1단계 수능100%, 2단계 수능60%+서류40%; 국수탐 중 2개 영역 반영이라 3영역 평균백분위가 낮게 나옴; adiga 2026학년도 수능(수능우수자전형) 최종등록자 70% 국수탐 평균백분위; 표준점수 미공개(대학 환산점수만 공개)"
+        },
+        "건축학부": {
+          "standard": null,
+          "percentile": 90,
+          "note": "건축학부 모집단위(건축학전공(5년제)·실내건축학전공) 2026 70% 평균백분위 모두 90"
         }
       }
     },
@@ -3696,6 +3776,31 @@ window.ADMISSION_SCORES = {
         "SW융합학부 컴퓨터과학전공": {
           "standard": null,
           "percentile": 85
+        },
+        "지능·데이터융합학부 빅데이터융합전공": {
+          "standard": null,
+          "percentile": 80,
+          "note": "지능·데이터융합학부 모집단위 (핀테크전공·빅데이터융합전공·스마트생산전공 통합 모집)"
+        },
+        "지능·데이터융합학부 스마트생산전공": {
+          "standard": null,
+          "percentile": 80,
+          "note": "지능·데이터융합학부 모집단위 (핀테크전공·빅데이터융합전공·스마트생산전공 통합 모집)"
+        },
+        "지능·데이터융합학부 핀테크전공": {
+          "standard": null,
+          "percentile": 80,
+          "note": "지능·데이터융합학부 모집단위 (핀테크전공·빅데이터융합전공·스마트생산전공 통합 모집)"
+        },
+        "자유전공(경영경제계열)": {
+          "standard": null,
+          "percentile": 83,
+          "note": "2026 모집단위명: 자유전공(인문계열) (자유전공(인문사회계열)·(경영경제계열) 전공통합)"
+        },
+        "자유전공(IT계열)": {
+          "standard": null,
+          "percentile": 85,
+          "note": "2026 모집단위명: 자유전공(이공계열) (자유전공(IT계열)·(이공계열) 통합)"
         }
       }
     },
@@ -4039,6 +4144,51 @@ window.ADMISSION_SCORES = {
         "경제학과": {
           "standard": null,
           "percentile": 80
+        },
+        "식품공학과": {
+          "standard": null,
+          "percentile": 78,
+          "note": "2026 모집단위명: 식품생명공학과 (학과 개편: 식품공학과 → 식품생명공학과)"
+        },
+        "소프트웨어융합학과": {
+          "standard": null,
+          "percentile": 81,
+          "note": "2026 모집단위명: 소프트웨어학과 (학과 개편: 소프트웨어융합학과 → 소프트웨어학과)"
+        },
+        "개인정보보호전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "지능정보보호학부 모집단위 (지능정보보호학부(사이버보안전공, 개인정보보호전공))"
+        },
+        "사이버보안전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "지능정보보호학부 모집단위 (지능정보보호학부(사이버보안전공, 개인정보보호전공))"
+        },
+        "디지털영상전공": {
+          "standard": null,
+          "percentile": 77,
+          "note": "언론영상학부 모집단위 (언론영상학부(디지털영상·저널리즘·비즈니스커뮤니케이션전공))"
+        },
+        "저널리즘전공": {
+          "standard": null,
+          "percentile": 77,
+          "note": "언론영상학부 모집단위 (언론영상학부(디지털영상·저널리즘·비즈니스커뮤니케이션전공))"
+        },
+        "비즈니스커뮤니케이션전공": {
+          "standard": null,
+          "percentile": 77,
+          "note": "언론영상학부 모집단위 (언론영상학부(디지털영상·저널리즘·비즈니스커뮤니케이션전공))"
+        },
+        "응용심리전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "심리·인지과학학부 모집단위 (심리·인지과학학부(인지학습과학전공, 응용심리전공))"
+        },
+        "인지학습과학전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "심리·인지과학학부 모집단위 (심리·인지과학학부(인지학습과학전공, 응용심리전공))"
         }
       }
     },
@@ -4437,6 +4587,166 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 86,
           "note": "대학 환산점수 70%컷 699.78"
+        },
+        "국어국문학과": {
+          "standard": null,
+          "percentile": 84,
+          "note": "인문사회계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "국제학부": {
+          "standard": null,
+          "percentile": 84,
+          "note": "인문사회계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "역사학과": {
+          "standard": null,
+          "percentile": 84,
+          "note": "인문사회계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "행정학과": {
+          "standard": null,
+          "percentile": 84,
+          "note": "인문사회계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "미디어커뮤니케이션학과": {
+          "standard": null,
+          "percentile": 84,
+          "note": "인문사회계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "법학과": {
+          "standard": null,
+          "percentile": 84,
+          "note": "인문사회계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "영어데이터융합전공": {
+          "standard": null,
+          "percentile": 84,
+          "note": "인문사회계열 모집단위 (국제학부 소속 전공) - 계열(유형2) 선택가능 전공"
+        },
+        "중국통상학전공/국제학부": {
+          "standard": null,
+          "percentile": 84,
+          "note": "인문사회계열 모집단위 (국제학부 소속 전공) - 계열(유형2) 선택가능 전공"
+        },
+        "경영학부": {
+          "standard": null,
+          "percentile": 87,
+          "note": "경상호텔관광계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "경제학과": {
+          "standard": null,
+          "percentile": 87,
+          "note": "경상호텔관광계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "호텔관광외식경영학부": {
+          "standard": null,
+          "percentile": 87,
+          "note": "경상호텔관광계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "외식경영학전공/호텔관광외식경영학부": {
+          "standard": null,
+          "percentile": 87,
+          "note": "경상호텔관광계열 모집단위 (호텔관광외식경영학부 소속 전공) - 계열(유형2) 선택가능 전공"
+        },
+        "호텔관광경영학전공/호텔관광외식경영학부": {
+          "standard": null,
+          "percentile": 87,
+          "note": "경상호텔관광계열 모집단위 (호텔관광외식경영학부 소속 전공) - 계열(유형2) 선택가능 전공"
+        },
+        "수학통계학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연생명계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "물리천문학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연생명계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "화학과": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연생명계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "생명시스템학부": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연생명계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "바이오산업자원공학전공": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연생명계열 모집단위 (생명시스템학부 소속 전공) - 계열(유형2) 선택가능 전공"
+        },
+        "바이오융합공학전공/생명시스템학부": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연생명계열 모집단위 (생명시스템학부 소속 전공) - 계열(유형2) 선택가능 전공"
+        },
+        "식품생명공학전공/생명시스템학부": {
+          "standard": null,
+          "percentile": 83,
+          "note": "자연생명계열 모집단위 (생명시스템학부 소속 전공) - 계열(유형2) 선택가능 전공"
+        },
+        "AI융합전자공학과": {
+          "standard": null,
+          "percentile": 82,
+          "note": "IT계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "컴퓨터공학과": {
+          "standard": null,
+          "percentile": 82,
+          "note": "IT계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "정보보호학과": {
+          "standard": null,
+          "percentile": 82,
+          "note": "IT계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "건축공학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "공과계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "건축학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "공과계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "건설환경공학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "공과계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "환경융합공학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "공과계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "기계공학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "공과계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "나노신소재공학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "공과계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "양자원자력공학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "공과계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "우주항공시스템공학부(우주항공공학전공)": {
+          "standard": null,
+          "percentile": 85,
+          "note": "공과계열 모집단위 - 계열(유형2) 선택가능 전공"
+        },
+        "지구자원시스템공학과": {
+          "standard": null,
+          "percentile": 85,
+          "note": "2026 모집단위명: 에너지자원공학과 - 공과계열 모집단위"
         }
       }
     },
@@ -4922,6 +5232,16 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 90,
           "note": "대학 환산점수 70%컷 911.08"
+        },
+        "소프트웨어학부": {
+          "standard": null,
+          "percentile": 88,
+          "note": "2026 모집단위명: AI소프트웨어학부 (모집단위 신설(통합): 소프트웨어학부, AI융합학부 → AI소프트웨어학부)"
+        },
+        "AI융합학부": {
+          "standard": null,
+          "percentile": 88,
+          "note": "2026 모집단위명: AI소프트웨어학부 (모집단위 신설(통합): 소프트웨어학부, AI융합학부 → AI소프트웨어학부)"
         }
       }
     },
@@ -5158,6 +5478,26 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 72,
           "note": "대학 환산점수 70%컷 825.55"
+        },
+        "미래융합사회과학대학": {
+          "standard": null,
+          "percentile": 71,
+          "note": "2026 모집단위명: 미래융합사회과학대학(주) (어디가 표기 사회과학부; 주간, 야간 68)"
+        },
+        "기계전자공학부": {
+          "standard": null,
+          "percentile": 72,
+          "note": "IT공과대학 모집단위 (주간; 야간 69)"
+        },
+        "산업시스템공학부": {
+          "standard": null,
+          "percentile": 72,
+          "note": "IT공과대학 모집단위 (주간; 야간 69)"
+        },
+        "컴퓨터공학부": {
+          "standard": null,
+          "percentile": 72,
+          "note": "IT공과대학 모집단위 (주간; 야간 69)"
         }
       }
     },
@@ -5291,6 +5631,76 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 82,
           "note": "자율전공학부(인문)·(자연) 모집단위 모두 82"
+        },
+        "국제금융전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "국제통상학부 모집단위"
+        },
+        "글로벌비즈니스전공": {
+          "standard": null,
+          "percentile": 79,
+          "note": "국제통상학부 모집단위"
+        },
+        "데이터사이언스전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "정보융합학부 모집단위"
+        },
+        "비주얼테크놀로지전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "정보융합학부 모집단위"
+        },
+        "소프트웨어전공": {
+          "standard": null,
+          "percentile": 84,
+          "note": "소프트웨어학부 모집단위"
+        },
+        "인공지능전공": {
+          "standard": null,
+          "percentile": 84,
+          "note": "소프트웨어학부 모집단위"
+        },
+        "지능정보전공": {
+          "standard": null,
+          "percentile": 83,
+          "note": "컴퓨터정보공학부 모집단위"
+        },
+        "지능컴퓨팅시스템전공": {
+          "standard": null,
+          "percentile": 83,
+          "note": "컴퓨터정보공학부 모집단위"
+        },
+        "문화교류전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "동북아문화산업학부 모집단위"
+        },
+        "문화콘텐츠개발전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "동북아문화산업학부 모집단위"
+        },
+        "과학기술법무전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "법학부 모집단위"
+        },
+        "국제지역전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "국제학부 모집단위"
+        },
+        "기업법무전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "법학부 모집단위"
+        },
+        "일반법학전공": {
+          "standard": null,
+          "percentile": 81,
+          "note": "법학부 모집단위"
         }
       }
     },
@@ -5447,6 +5857,56 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 86,
           "note": "미래융합전공(A) 모집단위 기준; (B) 83, (C) 78"
+        },
+        "경영정보전공": {
+          "standard": null,
+          "percentile": 86,
+          "note": "2026 모집단위명: 경영정보학부(비즈니스IT전공) - 2026 요강 경영정보전공→비즈니스IT전공 명칭변경; 경영정보학부(자연)은 3명 이하 미공개"
+        },
+        "바이오발효융합학과": {
+          "standard": null,
+          "percentile": 86,
+          "note": "2026 모집단위명: 융합바이오공학과"
+        },
+        "중국정경전공": {
+          "standard": null,
+          "percentile": 88,
+          "note": "2026 모집단위명: 동아시아국제학부(중국학전공) - 동아시아국제학부 모집단위"
+        },
+        "일본학과": {
+          "standard": null,
+          "percentile": 88,
+          "note": "2026 모집단위명: 동아시아국제학부(일본학전공) - 동아시아국제학부 모집단위"
+        },
+        "International Business 전공": {
+          "standard": null,
+          "percentile": 86,
+          "note": "KMU International Business School 모집단위"
+        },
+        "공법학전공": {
+          "standard": null,
+          "percentile": 87,
+          "note": "법학부 모집단위 (법과대학 전공자율선택제 유형2)"
+        },
+        "사법학전공": {
+          "standard": null,
+          "percentile": 87,
+          "note": "법학부 모집단위 (법과대학 전공자율선택제 유형2)"
+        },
+        "소프트웨어전공": {
+          "standard": null,
+          "percentile": 82,
+          "note": "소프트웨어학부 모집단위"
+        },
+        "인공지능전공": {
+          "standard": null,
+          "percentile": 88,
+          "note": "인공지능학부 모집단위"
+        },
+        "기계공학전공": {
+          "standard": null,
+          "percentile": 86,
+          "note": "기계공학부 모집단위"
         }
       }
     },
@@ -5661,6 +6121,131 @@ window.ADMISSION_SCORES = {
           "standard": null,
           "percentile": 78,
           "note": "수능우수자전형(일반) 기준"
+        },
+        "인문학부": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택); 학부 내 정시 모집 전공 모두 해당"
+        },
+        "인문학부 국사학전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "인문학부 국어국문학전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "인문학부 문예창작전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "글로벌지역학부": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택); 학부 내 정시 모집 전공 모두 해당"
+        },
+        "글로벌지역학부 영어전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "글로벌지역학부 유러피언스터디즈전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "글로벌지역학부 일어일본학전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "글로벌지역학부 중어중국학전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "사회과학부": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택); 학부 내 정시 모집 전공 모두 해당"
+        },
+        "사회과학부 문헌정보학전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "사회과학부 사회복지학전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "사회과학부 아동학전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택); 학과 자체 수능우수자 모집(1명)은 3명 이하 미공개"
+        },
+        "경영융합학부": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택); 학과 자체 수능우수자 모집(3명)은 3명 이하 미공개"
+        },
+        "문화지식융합학부 커뮤니케이션콘텐츠전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "문화지식융합학부 HCI사이언스전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "앙트러프러너리얼리더십학부 글로벌MICE융합전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "앙트러프러너리얼리더십학부 문화예술경영전공": {
+          "standard": null,
+          "percentile": 76,
+          "note": "인문사회문화학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "자연과학부 보건관리학전공": {
+          "standard": null,
+          "percentile": 78,
+          "note": "자연정보융합학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "자연과학부 식품영양학전공": {
+          "standard": null,
+          "percentile": 78,
+          "note": "자연정보융합학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택); 학과 자체 수능우수자 모집(3명)은 3명 이하 미공개"
+        },
+        "자연과학부 응용화학전공": {
+          "standard": null,
+          "percentile": 78,
+          "note": "자연정보융합학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "자연과학부 화장품학전공": {
+          "standard": null,
+          "percentile": 78,
+          "note": "자연정보융합학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "정보학부": {
+          "standard": null,
+          "percentile": 78,
+          "note": "자연정보융합학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택); 학부 내 정시 모집 전공 모두 해당"
+        },
+        "정보학부 정보통계학전공": {
+          "standard": null,
+          "percentile": 78,
+          "note": "자연정보융합학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
+        },
+        "정보학부 컴퓨터학전공": {
+          "standard": null,
+          "percentile": 78,
+          "note": "자연정보융합학부 모집단위 (수능우수자전형; 입학 후 ○표시 전공 선택)"
         }
       }
     },
