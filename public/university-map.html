@@ -33,6 +33,9 @@
     }
 
     .app { min-height: 100vh; display: grid; grid-template-rows: auto 1fr; }
+    @media (min-width: 941px) {
+      .app:has(> main:not(.application-mode)) { height: 100vh; }
+    }
 
     header {
       display: flex;
@@ -48,14 +51,13 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr) 320px;
       gap: 22px;
-      height: calc(100vh - 96px);
-      min-height: 650px;
+      min-height: 460px;
       padding: 0 clamp(18px, 4vw, 56px) 12px;
     }
     .map-wrap {
       position: relative;
       margin-top: 26px;
-      min-height: 650px;
+      min-height: 420px;
       border: 1px solid rgba(23, 33, 43, 0.1);
       background: rgba(226, 236, 238, 0.82);
       box-shadow: var(--shadow);
@@ -768,9 +770,14 @@
       display: flex;
       flex-direction: column;
       flex-wrap: nowrap;
-      gap: 6px;
-      width: 150px;
+      gap: clamp(4px, 0.6vh, 6px);
+      width: 176px;
       max-width: calc(100% - 28px);
+      max-height: calc(100% - 94px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
       padding: 10px;
       background: rgba(255, 255, 255, 0.88);
       border: 1px solid rgba(23, 33, 43, 0.1);
@@ -780,8 +787,9 @@
     }
 
     .line-button {
+      flex: none;
       width: 100%;
-      height: 34px;
+      height: clamp(24px, 3.6vh, 34px);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -806,6 +814,42 @@
     .line-icon { width: 72px; height: 24px; flex: 0 0 72px; }
     .line-name { flex: 1; text-align: left; white-space: nowrap; }
     .line-button svg { width: 72px; height: 24px; min-height: 0; display: block; }
+    .line-badge { display: none; }
+
+    @media (max-width: 1599px) and (min-width: 941px), (max-height: 700px) and (min-width: 941px) {
+      .line-picker { align-items: center; width: 46px; padding: 6px; gap: clamp(3px, 0.5vh, 5px); }
+      .line-button {
+        justify-content: center;
+        width: 32px;
+        height: clamp(24px, 3.6vh, 30px);
+        padding: 0;
+        border-radius: 50%;
+        background: transparent;
+        box-shadow: none;
+      }
+      .line-button:hover .line-badge, .line-button:focus-visible .line-badge { transform: scale(1.12); }
+      .line-button.active { outline: none; background: transparent; }
+      .line-button.active .line-badge { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--line-color); }
+      .line-icon, .line-name { display: none; }
+      .line-badge {
+        display: grid;
+        place-items: center;
+        width: clamp(22px, 3.2vh, 28px);
+        height: clamp(22px, 3.2vh, 28px);
+        border-radius: 50%;
+        color: #fff;
+        background: var(--line-color);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: -0.5px;
+        text-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
+        transition: transform 120ms ease;
+      }
+      .map-wrap .landmark-panel { width: 46px; padding: 6px; }
+      .map-wrap .landmark-toggle { min-height: 32px; padding: 0; }
+      .map-wrap .landmark-toggle span:not(.landmark-star) { display: none; }
+      .map-wrap .landmark-star { font-size: 18px; }
+    }
 
     .favorite-picker {
       position: absolute;
@@ -920,7 +964,7 @@
       top: 558px;
       left: 14px;
       z-index: 2;
-      width: 150px;
+      width: 176px;
       max-width: calc(100% - 28px);
       padding: 10px;
       background: rgba(255, 255, 255, 0.88);
@@ -930,7 +974,11 @@
       backdrop-filter: blur(8px);
     }
 
-    svg { display: block; width: 100%; height: 100%; min-height: 650px; }
+    svg { display: block; width: 100%; height: 100%; min-height: 420px; }
+    @media (max-height: 760px) and (min-width: 941px) {
+      h1 { font-size: 30px; }
+      .subtitle { font-size: 13px; }
+    }
 
     .district {
       fill: var(--district);
@@ -1448,6 +1496,9 @@
       backdrop-filter: blur(8px);
     }
 
+    aside > .map-search { position: static; flex: none; width: auto; }
+    aside > .map-search input { min-height: 36px; }
+
     label { display: block; margin-bottom: 7px; color: #344552; font-size: 13px; font-weight: 700; }
     input { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid #bfccd4; border-radius: 8px; color: var(--ink); background: #fff; font: inherit; font-size: 14px; }
     .map-search label + input + label { margin-top: 10px; }
@@ -1508,13 +1559,22 @@
       padding: 5px 8px;
       border-radius: 6px;
       color: #fff;
-      background: #1f66d1;
+      background: #4a78b8;
       text-decoration: none;
+      text-align: center;
       font-size: 12px;
       font-weight: 800;
       line-height: 1.2;
     }
-    .admission-link:hover, .admission-link:focus { background: #174d9f; outline: none; }
+    .admission-link:hover, .admission-link:focus { background: #395f94; outline: none; }
+    .department-title-row { margin-bottom: 12px; }
+    .department-title-text { min-width: 0; }
+    .department-title-text .meta { margin-bottom: 0; }
+    .admission-actions { display: flex; flex: 0 0 auto; flex-direction: column; gap: 5px; min-width: 64px; }
+    .admission-link.office-link,
+    .susi-guide-link.office-link { background: #5b4e8c; }
+    .admission-link.office-link:hover, .admission-link.office-link:focus,
+    .susi-guide-link.office-link:hover, .susi-guide-link.office-link:focus { background: #463b6e; }
     .department-panel .meta { margin: 6px 0 12px; color: var(--muted); font-size: 12px; line-height: 1.45; }
     .department-panel h3 { margin: 14px 0 8px; color: #2d3e4b; font-size: 13px; }
     .department-panel ul { margin: 0; padding-left: 18px; color: #263843; font-size: 12px; line-height: 1.55; }
@@ -1768,7 +1828,7 @@
         <div id="linePicker" class="line-picker" aria-label="지하철 노선 선택"></div>
         <div id="favoritePicker" class="favorite-picker" aria-label="전국 즐겨찾기 선택"></div>
         <div id="landmarkPanel" class="landmark-panel">
-          <button id="landmarkToggle" class="landmark-toggle" type="button" aria-pressed="false"><span class="landmark-star">★</span><span>서울에 가면</span></button>
+          <button id="landmarkToggle" class="landmark-toggle" type="button" aria-pressed="false" title="서울에 가면"><span class="landmark-star">★</span><span>서울에 가면</span></button>
         </div>
         <div id="districtNameBadge" class="district-name-badge" aria-live="polite" hidden></div>
         <div class="map-search">
@@ -22728,11 +22788,15 @@
       if (state.selectedUniversity) renderDepartmentPanel(state.selectedUniversity);
     }
 
-    function jeongsiGuideLink(item) {
+    function admissionOfficeUrl(universityName) {
       const offices = window.ADMISSION_OFFICES || {};
-      const officeUrl = offices[item.university] || offices[baseUniversityName(item.university)] || "";
+      return offices[universityName] || offices[baseUniversityName(universityName)] || "";
+    }
+
+    function jeongsiGuideLink(item) {
+      const officeUrl = admissionOfficeUrl(item.university);
       return officeUrl
-        ? `<a class="susi-guide-link jeongsi-guide-link" href="${escapeHtml(officeUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(`${item.university} 입학처 열기`)}">입학처</a>`
+        ? `<a class="susi-guide-link office-link jeongsi-guide-link" href="${escapeHtml(officeUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(`${item.university} 입학처 열기`)}">입학처</a>`
         : `<span class="susi-guide-link missing jeongsi-guide-link" aria-label="입학처 링크 없음">링크 없음</span>`;
     }
 
@@ -23422,8 +23486,12 @@
       const departmentQuery = departmentSearch.value.trim().toLowerCase();
       const meta = universityMeta(d);
       const admissionUrl = admissionLinkFor(d);
-      const admissionButton = admissionUrl
-        ? `<a class="admission-link" href="${escapeHtml(admissionUrl)}" target="_blank" rel="noopener noreferrer">모집요강</a>`
+      const officeUrl = admissionOfficeUrl(d.name);
+      const admissionButton = admissionUrl || officeUrl
+        ? `<div class="admission-actions">
+            ${admissionUrl ? `<a class="admission-link" href="${escapeHtml(admissionUrl)}" target="_blank" rel="noopener noreferrer">모집요강</a>` : ""}
+            ${officeUrl ? `<a class="admission-link office-link" href="${escapeHtml(officeUrl)}" target="_blank" rel="noopener noreferrer">입학처</a>` : ""}
+          </div>`
         : "";
       const content = data.length
         ? data.map(group => `
@@ -23442,10 +23510,12 @@
         : `<p class="department-empty">학과정보 데이터가 아직 준비되지 않았습니다. 나중에 <code>departmentData</code>에 이 대학의 학과를 추가하면 이곳에 표시됩니다.</p>`;
       departmentPanel.innerHTML = `
         <div class="department-title-row">
-          <h2>${escapeHtml(d.name)}</h2>
+          <div class="department-title-text">
+            <h2>${escapeHtml(d.name)}</h2>
+            <p class="meta">${meta}</p>
+          </div>
           ${admissionButton}
         </div>
-        <p class="meta">${meta}</p>
         ${content}
       `;
     }
@@ -23535,8 +23605,8 @@
       return d.lines || [d.name];
     }
 
-    function landmarkLabelWidth(d) {
-      return Math.max(34, Math.max(...landmarkLabelLines(d).map(line => line.length)) * 10.2);
+    function landmarkLabelWidth(d, scale = 1) {
+      return Math.max(34, Math.max(...landmarkLabelLines(d).map(line => line.length)) * 10.2) * scale;
     }
 
     function labelBox(x, y, width, anchor) {
@@ -23544,10 +23614,18 @@
       return { left, right: left + width, top: y - 12, bottom: y + 5 };
     }
 
-    function landmarkLabelBox(x, y, width, anchor, lines) {
+    function landmarkLabelBox(x, y, width, anchor, lines, scale = 1) {
       const left = anchor === "end" ? x - width : anchor === "middle" ? x - width / 2 : x;
       const lineCount = Math.max(1, lines.length);
-      return { left, right: left + width, top: y - 12, bottom: y + 5 + (lineCount - 1) * 14 };
+      return { left, right: left + width, top: y - 12 * scale, bottom: y + (5 + (lineCount - 1) * 14) * scale };
+    }
+
+    // 지도가 기준 크기(100% 배율에서 서울 지도 폭 약 940px)보다 작게 그려질 때 장소 이름을 함께 줄인다.
+    function landmarkLabelScale() {
+      if (!state.path || !state.mapGeo) return 1;
+      const [[x0], [x1]] = state.path.bounds(state.mapGeo);
+      const ratio = (x1 - x0) / 940;
+      return ratio >= 0.97 ? 1 : clamp(ratio, 0.75, 1);
     }
 
     function overlapArea(a, b) {
@@ -23998,8 +24076,13 @@
       return [x + (d.pointDx || 0), y + (d.pointDy || 0)];
     }
 
-    function layoutLandmarkLabels(width, height) {
-      const candidates = [
+    const iconicLandmarkNames = [
+      "남산서울타워", "63빌딩", "롯데월드타워", "경복궁", "광화문", "강남역", "명동", "홍대", "신촌",
+      "코엑스", "DDP", "여의도 한강공원", "성수동", "이태원", "잠실야구장", "청계천", "대학로", "롯데월드"
+    ];
+
+    function layoutLandmarkLabels(width, height, scale = 1) {
+      const baseCandidates = [
         { dx: 10, dy: -10, anchor: "start" },
         { dx: 10, dy: 18, anchor: "start" },
         { dx: -10, dy: -10, anchor: "end" },
@@ -24023,28 +24106,35 @@
         { dx: 0, dy: -48, anchor: "middle" },
         { dx: 0, dy: 58, anchor: "middle" }
       ];
+      const candidates = baseCandidates.map(candidate => ({ ...candidate, dx: candidate.dx * scale, dy: candidate.dy * scale }));
       const placed = [];
+      // 작은 화면에서 이름을 줄여 보여줄 때도 서울을 대표하는 장소는 먼저 자리를 잡게 한다.
+      const iconicOrder = scale < 1 ? iconicLandmarkNames : [];
+      const priority = d => {
+        const index = iconicOrder.indexOf(d.name);
+        return index < 0 ? iconicOrder.length : index;
+      };
       return seoulLandmarks
         .map(d => ({ ...d, xy: landmarkXY(d) }))
-        .sort((a, b) => a.xy[1] - b.xy[1] || a.xy[0] - b.xy[0])
+        .sort((a, b) => priority(a) - priority(b) || a.xy[1] - b.xy[1] || a.xy[0] - b.xy[0])
         .map(d => {
           const lines = landmarkLabelLines(d);
-          const textWidth = landmarkLabelWidth(d);
-          if (d.forceLabel) {
-            const x = clamp(d.xy[0] + (d.dx || 8), 12, width - 12);
-            const y = clamp(d.xy[1] + (d.dy || -8), 18, height - 12);
+          const textWidth = landmarkLabelWidth(d, scale);
+          if (d.forceLabel && scale === 1) {
+            const x = clamp(d.xy[0] + (d.dx || 8) * scale, 12, width - 12);
+            const y = clamp(d.xy[1] + (d.dy || -8) * scale, 18, height - 12);
             const anchor = d.anchor || "start";
-            const box = landmarkLabelBox(x, y, textWidth, anchor, lines);
+            const box = landmarkLabelBox(x, y, textWidth, anchor, lines, scale);
             const fixed = { ...d, labelX: x, labelY: y, anchor, box, score: -1 };
             placed.push({ box });
             return fixed;
           }
-          const candidateSet = d.dx || d.dy ? [{ dx: d.dx || 8, dy: d.dy || -8, anchor: d.anchor || "start" }, ...candidates] : candidates;
+          const candidateSet = d.dx || d.dy ? [{ dx: (d.dx || 8) * scale, dy: (d.dy || -8) * scale, anchor: d.anchor || "start" }, ...candidates] : candidates;
           let best = null;
           candidateSet.forEach((candidate, index) => {
             const x = clamp(d.xy[0] + candidate.dx, 12, width - 12);
             const y = clamp(d.xy[1] + candidate.dy, 18, height - 12);
-            const box = landmarkLabelBox(x, y, textWidth, candidate.anchor, lines);
+            const box = landmarkLabelBox(x, y, textWidth, candidate.anchor, lines, scale);
             const boundsPenalty =
               Math.max(0, 12 - box.left) * 16 +
               Math.max(0, box.right - (width - 12)) * 16 +
@@ -24059,9 +24149,12 @@
             const score = boundsPenalty + overlapPenalty + pointPenalty + distancePenalty;
             if (!best || score < best.score) best = { ...d, labelX: x, labelY: y, anchor: candidate.anchor, box, score };
           });
+          // 작은 화면에서는 다른 이름과 겹칠 수밖에 없는 이름을 숨기고 점만 남긴다(마우스를 올리면 이름이 보임).
+          if (scale < 1 && placed.some(item => overlapArea(paddedBox(best.box, 4), item.box) > 0)) return null;
           placed.push({ box: best.box });
           return best;
-        });
+        })
+        .filter(Boolean);
     }
 
     function renderLandmarks() {
@@ -24069,7 +24162,9 @@
       const node = svg.node();
       const width = node.clientWidth || 900;
       const height = node.clientHeight || 620;
-      const labeled = visible ? layoutLandmarkLabels(width, height) : [];
+      const scale = landmarkLabelScale();
+      const labeled = visible ? layoutLandmarkLabels(width, height, scale) : [];
+      const labeledNames = new Set(labeled.map(d => d.name));
       if (state.landmarkRiver) {
         state.landmarkRiver.attr("display", visible ? null : "none");
       }
@@ -24094,7 +24189,8 @@
       }
       if (state.landmarkLabels) {
         state.landmarkLabels
-          .attr("display", visible ? null : "none")
+          .attr("display", d => visible && labeledNames.has(d.name) ? null : "none")
+          .style("font-size", `${12 * scale}px`)
           .data(labeled, d => d.name)
           .attr("x", d => d.labelX)
           .attr("y", d => d.labelY)
@@ -24106,7 +24202,7 @@
               .data(lines)
               .join("tspan")
               .attr("x", d.labelX)
-              .attr("dy", (line, index) => index === 0 ? 0 : 14)
+              .attr("dy", (line, index) => index === 0 ? 0 : 14 * scale)
               .text(line => line);
           });
       }
@@ -25222,6 +25318,11 @@
       </svg>`;
     }
 
+    function lineBadgeLabel(name) {
+      const number = name.match(/^(\d+)호선$/);
+      return number ? number[1] : name.slice(0, 2);
+    }
+
     function renderLinePicker() {
       linePicker.selectAll(".line-button")
         .data(Object.keys(lineMeta))
@@ -25230,7 +25331,8 @@
         .attr("type", "button")
         .attr("title", d => d)
         .attr("aria-label", d => `${d} 표시`)
-        .html(d => `<span class="line-icon">${miniLineSvg(d)}</span><span class="line-name">${d}</span>`)
+        .style("--line-color", d => lineMeta[d].color)
+        .html(d => `<span class="line-icon">${miniLineSvg(d)}</span><span class="line-name">${d}</span><span class="line-badge" aria-hidden="true">${lineBadgeLabel(d)}</span>`)
         .on("click", (event, d) => selectLine(d));
       updateLandmarkToggle();
     }
@@ -25394,8 +25496,43 @@
       updateRegionTabs();
     }
 
+    const mapSearchBox = document.querySelector(".map-search");
+    const mapSearchAnchor = document.querySelector("#districtInset");
+    const wideMapQuery = window.matchMedia("(min-width: 1600px), (max-width: 940px)");
+
+    function layoutMapOverlays() {
+      const aside = mainEl.querySelector("aside");
+      if (wideMapQuery.matches || !aside) {
+        if (mapSearchBox.parentElement !== mapWrap) mapWrap.insertBefore(mapSearchBox, mapSearchAnchor);
+      } else if (mapSearchBox.parentElement !== aside) {
+        aside.prepend(mapSearchBox);
+      }
+      const picker = linePicker.node();
+      if (landmarkPanel && picker && picker.getClientRects().length) {
+        landmarkPanel.style.top = `${picker.offsetTop + picker.offsetHeight + 8}px`;
+      } else if (landmarkPanel) {
+        landmarkPanel.style.top = "";
+      }
+    }
+
+    if (window.ResizeObserver) {
+      new ResizeObserver(() => {
+        const picker = linePicker.node();
+        if (landmarkPanel && picker && picker.getClientRects().length) {
+          landmarkPanel.style.top = `${picker.offsetTop + picker.offsetHeight + 8}px`;
+        }
+      }).observe(linePicker.node());
+    }
+
+    function mapLeftOverlayEdge() {
+      return [linePicker.node(), favoritePicker.node()]
+        .filter(element => element && element.getClientRects().length)
+        .reduce((edge, element) => Math.max(edge, element.offsetLeft + element.offsetWidth + 12), 0);
+    }
+
     function draw() {
       if (!state.geo) return;
+      layoutMapOverlays();
       const node = svg.node();
       const width = node.clientWidth || 900;
       const height = node.clientHeight || 620;
@@ -25415,6 +25552,10 @@
         ? [[-30, fitPadding], [width - 178, height - fitPadding]]
         : [[fitPadding, fitPadding], [width - fitPadding, height - fitPadding]];
       state.projection = d3.geoMercator().fitExtent(fitExtent, fitGeo);
+      const leftOverlayEdge = mapLeftOverlayEdge();
+      if (leftOverlayEdge && d3.geoPath(state.projection).bounds(fitGeo)[0][0] < leftOverlayEdge) {
+        state.projection = d3.geoMercator().fitExtent([[leftOverlayEdge, fitExtent[0][1]], fitExtent[1]], fitGeo);
+      }
       state.path = d3.geoPath(state.projection);
       state.jejuInsetProjection = null;
       preparePointOffsets(currentUniversities);
