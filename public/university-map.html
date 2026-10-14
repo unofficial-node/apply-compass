@@ -5415,7 +5415,12 @@
       const jejuCollection = { type: "FeatureCollection", features: jejuFeatures };
       const boxWidth = state.currentRegion === "national" ? 164 : 210;
       const boxHeight = state.currentRegion === "national" ? 112 : 154;
-      const x = state.currentRegion === "national" ? Math.max(18, width - 520) : Math.max(18, width - 410);
+      let x = state.currentRegion === "national" ? Math.max(18, width - 520) : Math.max(18, width - 410);
+      if (state.currentRegion === "national" && state.path && state.mapGeo) {
+        // 좁은 화면에서 제주 상자가 본토 남해안을 덮지 않도록 본토 오른쪽 끝 근처로 옮긴다(넓은 화면 위치는 그대로).
+        const mainlandRight = state.path.bounds(state.mapGeo)[1][0];
+        x = Math.min(Math.max(x, mainlandRight + 8), width - boxWidth - 14);
+      }
       const y = Math.max(48, height - boxHeight - 42);
       const inset = svg.append("g").attr("class", "jeju-inset");
       inset.append("rect")
